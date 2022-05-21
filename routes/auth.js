@@ -14,7 +14,7 @@ router.post('/', async(req, res) => {
     //validation data before creating user 
     const {error} = loginValidation(req.body)
     if(error) return res.status(400).send(error.details[0].message)
-
+    
     //checking if the email exists
     const user = await User.findOne({email: req.body.email});
     if(!user) return res.status(400).send('Email or password is wrong');

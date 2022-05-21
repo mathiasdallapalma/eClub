@@ -18,9 +18,8 @@ const registerUserValidation = (data) => {
             .max(255)
             .required(),
         a_type: Joi.number()
-            .max(1)
             .required(),
-        zip: Joi.number()
+        zip: Joi.string()
             .max(20),
         city: Joi.string()
             .max(255),
@@ -30,7 +29,7 @@ const registerUserValidation = (data) => {
             .max(255),
         street: Joi.string()
             .max(255),
-        phone: Joi.number()
+        phone: Joi.string()
             .max(30),
         added_by: Joi.string()
             .required(),
@@ -53,7 +52,7 @@ const loginValidation = (data) => {
     return schema.validate(data);
 }
 
-/* --- VALIDATION: login user schema --- */
+/* --- VALIDATION: team user schema --- */
 const teamValidation = (data) => {
     const schema = Joi.object({
         category: Joi.string()

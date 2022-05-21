@@ -25,10 +25,9 @@ const UserSchema = new mongoose.Schema({
     a_type:{
         type: Number,
         required: true,
-        max: 1
     },
     zip:{
-        type: Number,
+        type: String,
         max: 20
     }, 
     city:{
@@ -52,8 +51,7 @@ const UserSchema = new mongoose.Schema({
         max: 30
     },
     assign_squad:{
-        type: Number, //mettere stringa
-        max: 255
+        type: Buffer,
     },
     status:{
         type: Number,
