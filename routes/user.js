@@ -67,7 +67,7 @@ router.delete('/:userId', verify, getUser, async (req, res) => {
 })
 
 /* --- PATCH: update User --- */
-router.patch('/:userId', async(req,res)=>{
+router.patch('/:userId', verify, async(req,res)=>{
     console.log(req.body);
 
     //hashing password

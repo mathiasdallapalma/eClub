@@ -1,27 +1,21 @@
 const express = require('express');
 const req = require('express/lib/request');
-const UserType = require('../models/UserType');
 const router = express.Router();
-const User = require('../models/UserType')
-const {teamValidation}= require('../validation')
+const UserType = require('../models/UserType')
+const bcrypt = require('bcryptjs')
+const {userTypeValidation}= require('../validation')
 const verify = require('./verifyToken');
-
 
 /* --- GET: all userType --- */
 router.get('/', verify, async(req, res) => {
     try{
+        //loading all userType
         const userType = await UserType.find();
         res.json(userType);
     }catch(err){
         res.status(500).json({ message: err });
     }
 })
-
-/* --- GET: specific UserType --- */
-router.get('/:userTypeId', verify, getUserType, async (req, res) => {
-    res.json(res.userType)
-})
-
 /* --- POST: creating one UserType --- */
 router.post('/', verify, async (req, res) => {
 
@@ -30,7 +24,7 @@ router.post('/', verify, async (req, res) => {
     if(error) return res.status(400).send(error.details[0].message)
 
     //checking if the user type is already in the database
-    const userTypeExist = await User.findOne({type: req.body.type});
+    const userTypeExist = await UserType.findOne({type: req.body.type});
     if(userTypeExist) return res.status(400).send('User Type already exists')
 
     //create new user type
@@ -39,7 +33,7 @@ router.post('/', verify, async (req, res) => {
         type: req.body.type
     })
     try{
-        const savedUserType = await team.save();
+        const savedUserType = await userType.save();
         res.status(201).json({ userType: userType._id })
     }catch(err){
         res.status(400).json({ message: err });
@@ -56,21 +50,30 @@ router.delete('/:userTypeId', verify, getUserType, async (req, res) => {
     }
 })
 
-/* --- UPDATE: specific Team --- */
-router.patch('/:userTypeId', verify, getUserType, async (req, res) => {
-    try{ 
-        const updatedUserType = await res.userType.updateOne();
-        res.json(updatedUserType);
-    }catch(err){
-        res.status(400).json({ message: err });
-    }
-})
+/* --- PATCH: update User --- */
+router.patch('/:userTypeId', verify, async(req,res)=>{
+    console.log(req.body);
+
+    //checking if the userType is already in the database
+    const typeExist = await UserType.findOne({type: req.body.type});
+    if(typeExist) return res.status(400).send('Type already exists')
+
+    UserType.findByIdAndUpdate({
+        _id:req.params.userTypeId
+    },{
+        $set:req.body
+    }).then(()=>{
+        res.sendStatus({message:"Success"});
+    }).catch(err => {
+       res.status(500).send(err.message);
+    })
+});
 
 /* --- FUNCTION: get Team --- */
 async function getUserType(req, res, next) {
     let userType
     try {
-        userType = await Team.findById(req.params.userTypeId)
+        userType = await UserType.findById(req.params.userTypeId)
         if (userType == null) {
             return res.status(404).json({ message: 'Cannot find userType' })
         }
