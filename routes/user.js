@@ -66,41 +66,30 @@ router.delete('/:userId', verify, getUser, async (req, res) => {
     }
 })
 
-/* --- PUT: update specific User --- */
-router.put('/:userId', verify, async (req, res) => {
-        let user = await User.findById(req.params.userId)
-        
-        //if there is a password --> hash
-        if(req.body.password != ""){
-            const salt = await bcrypt.genSalt(10);
-            req.body.password = await bcrypt.hash(req.body.password, salt);
-        }
+/* --- PATCH: update User --- */
+router.patch('/:userId', async(req,res)=>{
+    console.log(req.body);
 
-        if(user) {
-            user.name = req.body.name,
-            user.surname = req.body.surname,
-            user.email = req.body.email, 
-            user.password = req.body.password,
-            user.a_type = req.body.a_type, 
-            user.zip = req.body.zip, 
-            user.city = req.body.city, 
-            user.province = req.body.province, 
-            user.nation = req.body.nation, 
-            user.street = req.body.street, 
-            user.phone = req.body.phone,
-            user.assign_squad = req.body.assign_squad,
-            user.hidden = req.body.hidden,
-            user.status = req.body.status,
-            user.added_by = req.body.added_by,
-            user.updated_at = Date.now,
-            user.deleted_at = req.body.deleted_at
-            user.save()
-                .then(() => res.status(201).json({message: "Successfully modified user"}))
-                .catch(() => res.status(500).json({message: "Error modifiyng user"}))
-        } else {
-            return res.status(404).json({message: "User not found"})
-        }    
-})
+    //hashing password
+    if(req.body.password != ""){
+        const salt = await bcrypt.genSalt(10);
+        req.body.password = await bcrypt.hash(req.body.password, salt);
+    }
+
+    //checking if the user is already in the database
+    const emailExist = await User.findOne({email: req.body.email});
+    if(emailExist) return res.status(400).send('Email already exists')
+
+    User.findByIdAndUpdate({
+        _id:req.params.userId
+    },{
+        $set:req.body
+    }).then(()=>{
+        res.sendStatus({message:"Success"});
+    }).catch(err => {
+       res.status(500).send(err.message);
+    })
+});
 
 /* --- FUNCTION: get User --- */
 async function getUser(req, res, next) {

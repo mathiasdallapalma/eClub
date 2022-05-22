@@ -8,7 +8,7 @@ const {loginValidation}= require('../validation')
 const jwt = require('jsonwebtoken');
 
 
-
+/* --- POST: login User --- */
 router.post('/', async(req, res) => {
     
     //validation data before creating user 
@@ -27,6 +27,5 @@ router.post('/', async(req, res) => {
     const token = jwt.sign({ _id: user._id , a_type: user.a_type}, process.env.TOKEN_SECRET);
     res.header('auth-token', token).send(token);
  })
-
 
 module.exports = router;
