@@ -5,7 +5,6 @@ const User = require('../models/Team')
 const {teamValidation}= require('../validation')
 const verify = require('./verifyToken');
 
-
 /* --- GET: all Team --- */
 router.get('/', verify, async(req, res) => {
     try{
@@ -14,11 +13,6 @@ router.get('/', verify, async(req, res) => {
     }catch(err){
         res.status(500).json({ message: err });
     }
-})
-
-/* --- GET: specific Team --- */
-router.get('/:teamId', verify, getTeam, async (req, res) => {
-    res.json(res.team)
 })
 
 /* --- POST: creating one Team --- */

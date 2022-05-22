@@ -66,7 +66,7 @@ router.delete('/:userId', verify, getUser, async (req, res) => {
     }
 })
 
-/* --- UPDATE: specific User --- */
+/* --- PUT: update specific User --- */
 router.put('/:userId', verify, async (req, res) => {
         let user = await User.findById(req.params.userId)
         
@@ -88,12 +88,17 @@ router.put('/:userId', verify, async (req, res) => {
             user.nation = req.body.nation, 
             user.street = req.body.street, 
             user.phone = req.body.phone,
+            user.assign_squad = req.body.assign_squad,
+            user.hidden = req.body.hidden,
+            user.status = req.body.status,
             user.added_by = req.body.added_by,
+            user.updated_at = Date.now,
+            user.deleted_at = req.body.deleted_at
             user.save()
-                .then(() => res.status(201).send("Successfully modified user"))
-                .catch(() => res.status(500).send('Error modifiyng user'));
+                .then(() => res.status(201).json({message: "Successfully modified user"}))
+                .catch(() => res.status(500).json({message: "Error modifiyng user"}))
         } else {
-            return res.status(404).send('User not found');
+            return res.status(404).json({message: "User not found"})
         }    
 })
 
