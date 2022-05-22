@@ -14,11 +14,11 @@ const userRoute = require('./routes/User');
 const userTypeRoute = require('./routes/UserType');
 const teamRoute = require('./routes/Team');
 const passwordResetRoute = require('./routes/password_reset');
-app.use("api/v1/user", userRoute)
-app.use("api/v1/userType", userTypeRoute)
-app.use("api/v1/team", teamRoute)
-app.use("api/v1/login", authRoute)
-app.use("api/v1/password_reset", passwordResetRoute)
+app.use("/api/v1/user", userRoute)
+app.use("/api/v1/userType", userTypeRoute)
+app.use("/api/v1/team", teamRoute)
+app.use("/api/v1/auth", authRoute)
+app.use("/api/v1/password_reset", passwordResetRoute)
 
 
 /* --- DB Connection --- */

@@ -67,41 +67,34 @@ router.delete('/:userId', verify, getUser, async (req, res) => {
 })
 
 /* --- UPDATE: specific User --- */
-//TODO: da sistemare
-router.patch('/:userId', verify, getUser, async (req, res) => {
-    try{ 
-        //validation data before updating user 
-        const {error} = registerUserValidation(req.body)
-        if(error) return res.status(400).send(error.details[0].message)
-        //if there is a password --> hash
+router.put('/:userId', verify, async (req, res) => {
+        let user = await User.findById(req.params.userId)
         
-        if(req.body.password != null){
+        //if there is a password --> hash
+        if(req.body.password != ""){
             const salt = await bcrypt.genSalt(10);
             req.body.password = await bcrypt.hash(req.body.password, salt);
         }
 
-        //update specific field
-        const updatedUser = await res.user.updateOne({_id: req.params.userId},
-        { $set: 
-            { 
-                name: req.body.name,
-                surname: req.body.surname,
-                email: req.body.email, 
-                password: req.body.password,
-                a_type: req.body.a_type, 
-                zip: req.body.zip, 
-                city: req.body.city, 
-                province: req.body.province, 
-                nation: req.body.nation, 
-                street: req.body.street, 
-                phone: req.body.phone,
-                added_by: req.body.added_by,
-            }
-        });
-        res.json(updatedUser);
-    }catch(err){
-        res.status(500).json({ message: err });
-    }
+        if(user) {
+            user.name = req.body.name,
+            user.surname = req.body.surname,
+            user.email = req.body.email, 
+            user.password = req.body.password,
+            user.a_type = req.body.a_type, 
+            user.zip = req.body.zip, 
+            user.city = req.body.city, 
+            user.province = req.body.province, 
+            user.nation = req.body.nation, 
+            user.street = req.body.street, 
+            user.phone = req.body.phone,
+            user.added_by = req.body.added_by,
+            user.save()
+                .then(() => res.status(201).send("Successfully modified user"))
+                .catch(() => res.status(500).send('Error modifiyng user'));
+        } else {
+            return res.status(404).send('User not found');
+        }    
 })
 
 /* --- FUNCTION: get User --- */

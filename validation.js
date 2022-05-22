@@ -82,9 +82,20 @@ const userTypeValidation = (data) => {
     return schema.validate(data);
 }
 
+/* --- VALIDATION: password reset schema --- */
+const passwordResetValidation = (data) => {
+    const schema = Joi.object({
+        email: Joi.string()
+            .required()
+            .max(255),
+    });
+    return schema.validate(data);
+}
+
 module.exports.registerUserValidation = registerUserValidation;
 module.exports.loginValidation = loginValidation;
 module.exports.teamValidation = teamValidation;
 module.exports.userTypeValidation = userTypeValidation;
+module.exports.passwordResetValidation = passwordResetValidation;
 
     
