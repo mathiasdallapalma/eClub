@@ -51,7 +51,7 @@ router.post('/', getUser, async (req, res) =>{
     transporter.sendMail(mailOptions, function(error, info){
         if (error) {
           console.log(error);
-          res.status(401).send('Error');
+          res.status(401).send('Error sending email');
         } else {
           console.log('Email sent: ' + info.response);
           console.log(`token: ${token}`);
