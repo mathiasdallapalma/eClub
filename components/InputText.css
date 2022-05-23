@@ -1,0 +1,47 @@
+
+input {
+    height: 50px;
+    width: 300px;
+    border: 3px solid #E97537; 
+    border-radius: 15px; 
+    
+    outline: none;
+
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 24px;
+    margin-bottom: 10px;
+    padding-left: 5px;
+}
+
+label{
+    position: relative;
+    top:10px;
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 16px;
+    color:#E97537; 
+    background-color: white;
+    margin-bottom: 0;
+    z-index: 1;
+    margin-left:15px
+}
+#via{
+    width:320px;
+    margin-right: 45px;
+}
+#zip, #provincia{
+    width: 100px;
+    text-align: center;
+    margin-right: 20px;
+
+}
+
+#comune, #nazione{
+    width: 200px;
+    margin-right: 20px;
+}
