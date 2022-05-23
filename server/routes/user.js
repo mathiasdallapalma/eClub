@@ -17,6 +17,12 @@ router.get('/', verify, async(req, res) => {
     }
 })
 
+/* --- GET: specific User --- */
+router.get('/:userId', verify, getUser, async (req, res) => {
+    res.json(res.user)
+})
+
+
 /* --- POST: creating one User --- */
 router.post('/', verify, async (req, res) => {
 
@@ -85,7 +91,7 @@ router.patch('/:userId', verify, async(req,res)=>{
     },{
         $set:req.body
     }).then(()=>{
-        res.sendStatus({message:"Success"});
+        res.status(201).send({message: "Success"});
     }).catch(err => {
        res.status(500).send(err.message);
     })
