@@ -3,11 +3,14 @@ import {BrowserRouter as Router,Route,Switch} from 'react-router-dom';
 
 import './App.css';
 
+import Login from './Login/Login';
+import Recupero from './Login/Recupero';
+import Home from './Home/Home';
+
 function App() {
 
   
-  import Login from './Login/Login';
-  import Recupero from './Login/Recupero';
+  
  
   return (
     <Router>
@@ -22,6 +25,9 @@ function App() {
           <Route exact path="/recupero">
             <Recupero />
           </Route>
+          <Route exact path="/home">
+          <Home />
+        </Route>
         </Switch>
       </div>
     </Router>
