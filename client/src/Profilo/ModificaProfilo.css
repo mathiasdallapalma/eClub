@@ -1,0 +1,78 @@
+.ModificaProfilo{
+    position: absolute;
+    top: 0;
+    display: flex;
+    flex-direction: row;
+}
+
+.ModificaProfilo .title{
+    flex-direction: row;
+    display: flex;
+}
+
+#btn{
+    width: 150px;
+    margin-left: 300px;
+}
+
+h2{
+    margin-top: 0;
+    margin-bottom: 0;
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 100%;
+    padding: 5px;
+  }
+
+  h1{
+    margin-top: 0;
+    margin-bottom: 0;
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 18px;
+    line-height: 100%;
+    padding: 5px;
+  }
+
+  .title h1{
+      margin-top:10px;
+     
+  }
+
+  label{
+    position: relative;
+    top:10px;
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 16px;
+    color:#E97537; 
+    background-color: white;
+    margin-bottom: 0;
+
+    z-index: 1;
+}
+#nome ,#cognome ,#indirizzo, #telefono, #email,#data_nascita {
+    height: 50px;
+    width: 300px;
+    border: 3px solid #E97537; 
+    border-radius: 15px; 
+    padding-right: 30px;
+    outline: none;
+
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 24px;
+    margin-bottom: 10px;
+}
+
+
+#indirizzo{
+    width: 500px;
+}
