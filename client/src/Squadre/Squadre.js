@@ -14,7 +14,7 @@ import session from '../index.js'
 const Squadre = ()=>{
     const [squadreList,setSquadreList]=useState([]);
     useEffect(()=>{
-        Axios.get('http://localhost:3001/squadre').then((response)=>{
+        Axios.get('http://localhost:3001/api/v1/team').then((response)=>{
             if(response.status=="200"){
                 setSquadreList(response.data);
             }else{
@@ -22,7 +22,7 @@ const Squadre = ()=>{
             }
         });
 
-        switch(session.utente.tipo){
+        switch(session.user.tipo){
             case "0": //ga
                 
                 break;
@@ -40,10 +40,10 @@ const Squadre = ()=>{
 
     squadreList.push({
         id:"asdw2212",
-        name:"AC Super",
+        category:"AC Super",
         tm:"Giorgio Penna",
-        ch:"Aldo",
-        tesserati:"22"
+        coach:"Aldo",
+        players:"22"
     })
 
     const crea=()=>{
@@ -67,7 +67,7 @@ const Squadre = ()=>{
                             <tr id="row" onClick={()=>{const path="/squadra/"+val.id;
                                 window.location.pathname=path}}>
                                 {" "}
-                                <td><h2>{val.name}</h2></td> <td><h2>{val.tm}</h2></td> <td><h2>{val.ch}</h2></td> <td><h2>{val.tesserati}</h2></td>{" "}
+                                <td><h2>{val.category}</h2></td> <td><h2>{val.tm}</h2></td> <td><h2>{val.coach}</h2></td> <td><h2>{val.players}</h2></td>{" "}
                             </tr>
                         );
                     })}

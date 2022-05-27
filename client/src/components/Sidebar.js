@@ -7,12 +7,11 @@ import session from '../index.js';
 import "./Sidebar.css"
 
 const Sidebar = ()=>{
-    const profileLink="anagrafica/"+session.utente.id;
+    const profileLink="anagrafica/"+session.user.id;
     
     useEffect(() => {
 
-        
-        switch(session.utente.tipo){
+        switch(session.user.tipo){
             case "0": //ga
                 document.getElementById("anagrafica").style.display="none";
                 document.getElementById("squadre").style.display="none";
@@ -27,6 +26,7 @@ const Sidebar = ()=>{
                 document.getElementById("meds").style.display="none";
                 document.getElementById("squadra").style.display="none";
                 break;
+                
         }
     });
 
@@ -34,7 +34,7 @@ const Sidebar = ()=>{
         <div className="Sidebar">
             <div className='SidebarHeader'>
                 <img src="img.jpg" id="profileImg"></img>
-                <a href={profileLink}><h3 >{session.utente.nome}</h3></a>
+                <a href={profileLink}><h3 >{session.user.nome} {session.user.cognome}</h3></a>
             </div>
             <ul className="SidebarList" id="SidebarList"> 
                 {SidebarData.map((val, key) => {

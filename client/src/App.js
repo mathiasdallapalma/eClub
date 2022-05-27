@@ -14,6 +14,7 @@ import Profilo from './Profilo/Profilo';
 import Squadra from './Squadre/Squadra';
 import ModificaProfilo from './Profilo/ModificaProfilo';
 import ModificaSquadra from './Squadre/ModificaSquadra';
+import NuovaPass from './Login/NuovaPass'
 
 
 function App() {
@@ -30,8 +31,11 @@ function App() {
           <Route exact path="/login">
             <Login />
           </Route>
-            <Route exact path="/recupero">
+          <Route exact path="/recupero">
             <Recupero />
+          </Route>
+          <Route exact path="/nuovaPass/:token">
+            <NuovaPass />
           </Route>
           <Route exact path="/home">
             <Home />

@@ -29,7 +29,7 @@ const Profilo = ()=>{
             };
     
     useEffect(()=>{
-        switch(session.utente.tipo){
+        switch(session.user.tipo){
             case "0": //ga
                 document.getElementById("eliminaBtn").style.display="none";
                 break;

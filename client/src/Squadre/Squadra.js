@@ -57,7 +57,7 @@ const Squadra = ()=>{
             iscritto: "iscrizione effettuata"
         });
 
-        switch(session.utente.tipo){
+        switch(session.user.tipo){
             case "0": //ga
                 document.getElementById("modificaBtn").style.display="none";
                 document.getElementById("eliminaBtn").style.display="none";

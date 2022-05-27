@@ -8,9 +8,18 @@ const Recupero = ()=>{
 
     const recupero=()=>{
         console.log(email);
-        Axios.post('http://localhost:3001/recupero',{
+        Axios.post('http://localhost:3001/api/v1/password_reset',{
             user: email,
-           
+        }).then((response)=>{
+            if(response.status=="201"){
+                window.alert("Utente trovato, controlla la casella di posta");
+            }else{
+                window.alert("Utente non trovato");
+                console.log(response);
+            }
+        }).catch((error)=>{
+            window.alert("Utente non trovato");
+            console.log(error);
         });
     };
     const annulla=()=>{

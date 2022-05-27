@@ -1,14 +1,14 @@
 import Axios  from 'axios';
 import React, { useEffect, useState } from 'react';
 
-
+/* Components*/
 import Sidebar from '../components/Sidebar';
 import Topbar from '../components/Topbar';
-
 import PersonIcon from '@mui/icons-material/Person';
 
-//import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+/*Style*/
 import "./Anagrafica.css";
+
 import session from '../index.js';
 
 const Anagrafica = ()=>{
@@ -35,10 +35,20 @@ const Anagrafica = ()=>{
     });
 
     useEffect(()=>{
-        Axios.get('http://localhost:3001/squadre').then((response)=>{
-            
-        })
-        switch(session.utente.tipo){
+        Axios.get('http://localhost:3001/api/v1/user/'+session.user.id,{
+            headers: {
+                token:session.token
+            }
+         }).then((response)=>{
+                if(response.status=="200"){
+                    
+                }else{
+                    //TODO mostra popup
+                    console.log(response.value);
+                }
+            });
+
+        switch(session.user.tipo){
             case "0": //ga
                 
                 break;

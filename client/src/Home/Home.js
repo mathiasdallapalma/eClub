@@ -1,15 +1,22 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 
+/* Components*/
 import Sidebar from '../components/Sidebar';
 import Topbar from '../components/Topbar';
-//import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+
+/*Style*/
 import "./Home.css"
 
-
-
+import session from '../index';
 
 const Home = ()=>{
+
+    useEffect(()=>{
+        console.log(session);
+    });
+
+    
     return (
         <div className="home">
             <Sidebar />

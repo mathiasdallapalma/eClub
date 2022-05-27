@@ -1,11 +1,16 @@
 import React, {useState,} from 'react';
 import Axios from 'axios';
+import jwt_decode from 'jwt-decode';
 
+/*Components*/
 import MailIcon from '@mui/icons-material/LocalPostOffice';
 import KeyIcon from '@mui/icons-material/Key';
-
-import './Login.css';
 import { Checkbox } from '@mui/material';
+
+/*Style*/
+import './Login.css';
+
+import session from '../index.js';
 
 const Login = ()=>{
     const[email,setEmail]=useState("");
@@ -13,10 +18,26 @@ const Login = ()=>{
 
     const login=()=>{
         console.log(email+' '+password);
-        Axios.post('http://localhost:3001/login',{
-            user: email,
+        Axios.post('http://localhost:3001/api/v1/auth',{
+            email: email,
             password: password,
-        });
+        }).then((response)=>{
+                if(response.status=="200"){
+                    session.token=response.data;
+                    const user_data=jwt_decode(session.token);
+                    session.user.id=user_data._id;
+                    session.user.tipo=user_data.a_type;
+
+                    console.log(session)
+                    //window.location.href="/home";
+                }else{
+                    window.alert("Email o password errate, riprova");
+                    console.log(response);
+                }
+            }).catch((error)=>{
+                window.alert("Email o password errate, riprova");
+                console.log(error);
+            });
     };
 
 

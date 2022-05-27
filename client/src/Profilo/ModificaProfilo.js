@@ -93,7 +93,7 @@ const ModificaProfilo = ()=>{
         
 
 
-        switch(session.utente.tipo){
+        switch(session.user.tipo){
             case "0": //ga
                 document.getElementById("anagrafic").style.display="none";
                 document.getElementById("indirizzo").style.display="none";

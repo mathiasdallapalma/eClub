@@ -1,15 +1,15 @@
-import React from 'react';
+import React, { useState } from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
 
 const session={
-    token:"asd",
-    utente:{
-        id:"001",
-        nome:"nome",
-        cognome:"cognome",
-        tipo:"1",
-        squadra:"100"
+    token:"",
+    user:{
+        id:"",
+        nome:"",
+        cognome:"",
+        tipo:"",
+        squadra:""
     }
 }
 
