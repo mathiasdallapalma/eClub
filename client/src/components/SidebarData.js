@@ -9,10 +9,6 @@ import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import LogoutIcon from '@mui/icons-material/Logout';
 import ContactMailIcon from '@mui/icons-material/ContactMail';
 
-import session from '../index.js';
-
-console.log(session)
-
 
 const SidebarData=[
     {

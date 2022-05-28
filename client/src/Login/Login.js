@@ -23,13 +23,16 @@ const Login = ()=>{
             password: password,
         }).then((response)=>{
                 if(response.status=="200"){
-                    session.token=response.data;
-                    const user_data=jwt_decode(session.token);
-                    session.user.id=user_data._id;
-                    session.user.tipo=user_data.a_type;
+                    const token=response.data;
+                    const user_data=jwt_decode(token);
+                    
+                    sessionStorage.setItem("token",token);
+                    sessionStorage.setItem("loggedIn",true);
+                    sessionStorage.setItem("user_id",user_data._id);
+                    sessionStorage.setItem("user_a_type",user_data.a_type);
 
-                    console.log(session)
-                    //window.location.href="/home";
+
+                    window.location.href="/home";
                 }else{
                     window.alert("Email o password errate, riprova");
                     console.log(response);

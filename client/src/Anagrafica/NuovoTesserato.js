@@ -9,13 +9,14 @@ import Topbar from '../components/Topbar';
 import InputText from '../components/InputText';
 //import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import "./NuovoTesserato.css"
+import axios from 'axios';
 
 
 const NuovoTesserato = ()=>{
     const[nome,setNome]=useState("");
     const[cognome,setCognome]=useState("");
     const[dataNascita,setDataNascita]=useState("");
-    const[indirizzo,setIndirizzo]=useState("");
+    
     const[telefono,setTelefono]=useState("");
     const[email,setEmail]=useState("");
     const[comune,setComune]=useState([]);
@@ -25,26 +26,36 @@ const NuovoTesserato = ()=>{
     const[zip,setZip]=useState([]);
     var tipo;
 
-
     const[ruoliOptions,setRuoliOptions]=useState([]);
 
-   
-
-
-
     const salva=()=>{
-        console.log(nome+" "+cognome+" "+dataNascita+" "+indirizzo+" "+telefono+" "+email+" "+tipo+" z:"+zip+" v:"+via+" c:"+comune+" n:"+nazione+" p:"+provincia)
-        /*
-        Axios.post('http://localhost:3001/',{
-           
-        });
-        */
+        Axios.post('http://localhost:3001/api/v1/user',{
+                email: email,
+                name: nome,
+                surname: cognome,
+                password: "1234567",
+                a_type:tipo,
+                zip:zip,
+                city:comune,
+                province:provincia,
+                nation:nazione,
+                street:via,
+                phone:telefono,
+                added_by:sessionStorage.getItem("user_id")},
+        {headers:{
+            "auth-token":sessionStorage.getItem('token')}
+        }).then((response)=>{
+            window.alert("Tesserato inserito correttamente");
+        }).catch((error)=>{
+            console.log(error.response.data)
+            window.alert(error.response.data);
+        })
     };
 
     useEffect(()=>{
-        ruoliOptions.push({ value: 'tm', label: 'TeamManager' });
-        ruoliOptions.push({ value: 'ch', label: 'Coach' });
-        ruoliOptions.push({ value: 'ga', label: 'Genitore/Atleta' });
+        ruoliOptions.push({ value: '2', label: 'TeamManager' });
+        ruoliOptions.push({ value: '3', label: 'Coach' });
+        ruoliOptions.push({ value: '0', label: 'Genitore/Atleta' });
         /*Axios.get('http://localhost:3001/squadre').then((response)=>{
             setSquadreList(response.data);
         })*/
@@ -79,9 +90,6 @@ const NuovoTesserato = ()=>{
       };
 
     const handleChangeInputText = (event) => {
-        console.log(event.target.value);
-        console.log(event.target.id);
-
         switch(event.target.id){
             case "nome":
                 setNome(event.target.value);

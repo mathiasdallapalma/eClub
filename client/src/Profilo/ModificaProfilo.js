@@ -10,7 +10,7 @@ import Topbar from '../components/Topbar';
 import InputText from '../components/InputText';
 //import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import "./ModificaProfilo.css"
-import session from '../index.js'
+
 
 
 const ModificaProfilo = ()=>{
@@ -26,21 +26,9 @@ const ModificaProfilo = ()=>{
     const[zip,setZip]=useState([]);
     const[tipo,setTipo]=useState([]);
 
-    const utente={
-        nome:"nome",
-        cognome:"cognome",
-        dataNascita:"2000-01-01",
-        telefono:"telefono",
-        email:"email",
-        comune:"comune",
-        via:"via",
-        provincia:"provincia",
-        nazione:"nazione",
-        zip:"zip",
-        ruolo:"ga"
-    }
-
     const[ruoliOptions,setRuoliOptions]=useState([]);
+
+    const user=JSON.parse(sessionStorage.getItem("user"))
 
     const salva=()=>{
         console.log(nome+" "+cognome+" "+dataNascita+" "+telefono+" "+email+" "+tipo+" z:"+zip+" v:"+via+" c:"+comune+" n:"+nazione+" p:"+provincia)
@@ -57,43 +45,40 @@ const ModificaProfilo = ()=>{
         ruoliOptions.push({ value: 'ch', label: 'Coach' });
         ruoliOptions.push({ value: 'ga', label: 'Genitore/Atleta' });
 
-        setNome(utente.nome);
-        document.getElementById('nome').value = utente.nome;
+        setNome(user.nome);
+        document.getElementById('nome').value = user.name;
 
-        setCognome(utente.cognome);
-        document.getElementById('cognome').value = utente.cognome;
+        setCognome(user.cognome);
+        document.getElementById('cognome').value = user.surname;
 
-        setDataNascita(utente.dataNascita);
-        document.getElementById('data_nascita').value = utente.dataNascita;
+        setDataNascita(user.dataNascita);
+        document.getElementById('data_nascita').value = user.dataNascita;
 
-        setTelefono(utente.telefono);
-        document.getElementById('telefono').value = utente.telefono;
+        setTelefono(user.telefono);
+        document.getElementById('telefono').value = user.phone;
 
-        setEmail(utente.email);
-        document.getElementById('email').value = utente.email;
+        setEmail(user.email);
+        document.getElementById('email').value = user.email;
 
-        setComune(utente.comune);
-        document.getElementById('comune').value = utente.comune;
+        setComune(user.comune);
+        document.getElementById('comune').value = user.city;
 
-        setVia(utente.via);
-        document.getElementById('via').value = utente.via;
+        setVia(user.via);
+        document.getElementById('via').value = user.street;
 
-        setProvincia(utente.provincia);
-        document.getElementById('provincia').value = utente.provincia;
+        setProvincia(user.provincia);
+        document.getElementById('provincia').value = user.province;
 
-        setNazione(utente.nazione);
-        document.getElementById('nazione').value = utente.nazione;
+        setNazione(user.nazione);
+        document.getElementById('nazione').value = user.nation;
 
-        setZip(utente.zip);
-        document.getElementById('zip').value = utente.zip;
+        setZip(user.zip);
+        document.getElementById('zip').value = user.zip;
 
-        setTipo(utente.tipo);
-        document.getElementById('ruolo').value = utente.tipo; // TODO Non funziona bene 
+        setTipo(user.tipo);
+        document.getElementById('ruolo').value = user.a_type; // TODO Non funziona bene 
 
-        
-
-
-        switch(session.user.tipo){
+        switch(sessionStorage.getItem('user_a_type')){
             case "0": //ga
                 document.getElementById("anagrafic").style.display="none";
                 document.getElementById("indirizzo").style.display="none";

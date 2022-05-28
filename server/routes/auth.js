@@ -20,7 +20,8 @@ router.post('/', async(req, res) => {
     if(!user) return res.status(400).send('Email or password is wrong');
 
     //password is correct
-    const validPass = await bcrypt.compare(req.body.password, user.password) //controlla hash
+    //const validPass = await bcrypt.compare(req.body.password, user.password) //controlla hash
+    const validPass = (req.body.password==user.password)
     if(!validPass) res.status(400).send('Email or password is wrong');
 
     //create and assign a token (TODO: durata token)

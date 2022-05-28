@@ -6,7 +6,7 @@ import Sidebar from '../components/Sidebar';
 import Topbar from '../components/Topbar';
 //import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import "./Squadra.css";
-import session from '../index.js'
+
 
 /* Icons */
 import PersonIcon from '@mui/icons-material/Person';
@@ -57,7 +57,7 @@ const Squadra = ()=>{
             iscritto: "iscrizione effettuata"
         });
 
-        switch(session.user.tipo){
+        switch(sessionStorage.getItem('user_a_type')){
             case "0": //ga
                 document.getElementById("modificaBtn").style.display="none";
                 document.getElementById("eliminaBtn").style.display="none";

@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react';
-
+import React, { useEffect,useState } from 'react';
+import Axios from 'axios';
 
 /* Components*/
 import Sidebar from '../components/Sidebar';
@@ -8,15 +8,17 @@ import Topbar from '../components/Topbar';
 /*Style*/
 import "./Home.css"
 
-import session from '../index';
-
 const Home = ()=>{
-
-    useEffect(()=>{
-        console.log(session);
-    });
-
     
+    
+    
+    useEffect( () => {
+        if(sessionStorage.getItem('loggedIn')==false){
+            window.location.href="/login";
+        }
+        
+    });
+ 
     return (
         <div className="home">
             <Sidebar />

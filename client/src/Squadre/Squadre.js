@@ -6,45 +6,58 @@ import Sidebar from '../components/Sidebar';
 import Topbar from '../components/Topbar';
 //import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import "./Squadre.css"
-import session from '../index.js'
+
 
 
 
 
 const Squadre = ()=>{
     const [squadreList,setSquadreList]=useState([]);
-    useEffect(()=>{
-        Axios.get('http://localhost:3001/api/v1/team').then((response)=>{
-            if(response.status=="200"){
-                setSquadreList(response.data);
-            }else{
-                //TODO mostra popup
+    const [tms,setTms]=useState([]);
+
+
+    const getSquadre = async(handler) => {
+        let response= await Axios.get('http://localhost:3001/api/v1/team',{
+            headers:{
+                "auth-token":sessionStorage.getItem('token')}
+            })
+            handler(response.data);
+        };
+    const getTms = async(handler) => {
+        for(var i=0;i<squadreList[i];i++){
+            let response= await Axios.get('http://localhost:3001/api/v1/user/'+squadreList[i].tm,{
+                headers:{
+                    "auth-token":sessionStorage.getItem('token')}
+                })
+            handler(response.data);
+        }};
+    
+    useEffect( () => {
+        if(sessionStorage.getItem('loggedIn')==false){
+            window.location.href="/login";
+        }else{
+            if(squadreList.length==0){
+                getSquadre(setSquadreList);
             }
-        });
 
-        switch(session.user.tipo){
-            case "0": //ga
+            switch(sessionStorage.getItem('user_a_type')){
+                case "0": //ga
+                    
+                    break;
+                case "1": //dd
                 
-                break;
-            case "1": //dd
-               
-                break;
-            case "2": //tm
-                document.getElementById("CreaBtn").style.display="none";
-                break;
-            case"3": //ch
-                document.getElementById("CreaBtn").style.display="none";
-                break;
+                    break;
+                case "2": //tm
+                    document.getElementById("CreaBtn").style.display="none";
+                    break;
+                case"3": //ch
+                    document.getElementById("CreaBtn").style.display="none";
+                    break;
+            }
         }
-    },[]);
+    },[squadreList]);
 
-    squadreList.push({
-        id:"asdw2212",
-        category:"AC Super",
-        tm:"Giorgio Penna",
-        coach:"Aldo",
-        players:"22"
-    })
+   
 
     const crea=()=>{
         window.location.href = "/creaSquadra";
@@ -58,9 +71,9 @@ const Squadre = ()=>{
                 <Topbar />
                 <div className='title'>
                     <h1>Squadre amministrate:</h1>
-                    <div class="btnContainer"><button id="CreaBtn" onClick={crea}>Crea Squadra</button></div>
+                    <div className="btnContainer"><button id="CreaBtn" onClick={crea}>Crea Squadra</button></div>
                 </div>
-                <table cellspacing ="0" className='SquadreList'>
+                <table cellSpacing ="0" className='SquadreList'>
                     <tr id="header"><td><h1>Nome</h1></td><td><h1>Team Manager</h1></td><td><h1>Coach</h1></td><td><h1>Tesserati</h1></td></tr>
                     {squadreList.map((val,key) => {
                         return( 

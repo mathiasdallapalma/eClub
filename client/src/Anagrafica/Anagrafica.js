@@ -9,48 +9,36 @@ import PersonIcon from '@mui/icons-material/Person';
 /*Style*/
 import "./Anagrafica.css";
 
-import session from '../index.js';
+
 
 const Anagrafica = ()=>{
 
     const [tesseratiList,settesseratiList]=useState([]);
 
-    tesseratiList.push({
-        id:"001",
-        name: "Giorgio Vanni",
-        birth: "01/01/2000",
-        address: "CASA",
-        iscritto: "iscrizione effettuata",
-        email:"asd@fas.da",
-        telefono:"samsun"
-    });
-    tesseratiList.push({
-        id:"003",
-        name: "Giorgio Scarpa",
-        birth: "23/54/3000",
-        address: "home",
-        iscritto: "iscrizione effettuata",
-        email:"asd@fas.da",
-        telefono:"nokia"
-    });
+    
+    //setUser(JSON.parse(sessionStorage.getItem("user")));
+
+    const fetchData = async(handler) => {
+        let response= await Axios.get('http://localhost:3001/api/v1/user',{
+        headers:{
+            "auth-token":sessionStorage.getItem('token')}
+        })
+        
+        handler(response.data);
+    }
 
     useEffect(()=>{
-        Axios.get('http://localhost:3001/api/v1/user/'+session.user.id,{
-            headers: {
-                token:session.token
+        if(sessionStorage.getItem('loggedIn')==false){
+            window.location.href="/login";
+        }else{
+            if(tesseratiList.length==0){
+                fetchData(settesseratiList);
             }
-         }).then((response)=>{
-                if(response.status=="200"){
-                    
-                }else{
-                    //TODO mostra popup
-                    console.log(response.value);
-                }
-            });
+        }
 
-        switch(session.user.tipo){
+        switch(sessionStorage.getItem('user_a_type')){
             case "0": //ga
-                
+                window.location.href="/login";
                 break;
             case "1": //dd
                
@@ -62,17 +50,11 @@ const Anagrafica = ()=>{
                 document.getElementById("CreaBtn1").style.display="none";
                 break;
         }
-
-
-    },[]);
+    },[tesseratiList]);
 
     const crea=()=>{
         window.location.href = "/creaTesserato";   
     };
-
-    const gotoProfile=(key)=>{
-        console.log(key);
-    }
 
     return (
         <div className="Anagrafica">
@@ -87,10 +69,10 @@ const Anagrafica = ()=>{
                 <tr id="header"> <td><h1></h1></td> <td><h1>Nome</h1></td> <td><h1>Data nascita</h1></td> <td><h1>Indirizzo</h1></td> <td><h1>Iscirizione</h1></td> <td><h1>Email</h1></td> <td><h1>Telefono</h1></td></tr>
                     {tesseratiList.map((val,key) => {
                         return( 
-                            <tr id="row" onClick={()=>{const path="/anagrafica/"+val.id;
+                            <tr id="row" onClick={()=>{const path="/anagrafica/"+val._id;
                                 window.location.pathname=path}}>
                                 {" "}
-                                <td style={{width:"20px"}}><PersonIcon id="icon"/></td> <td><h2>{val.name}</h2></td> <td><h2>{val.birth}</h2></td> <td><h2>{val.address}</h2></td> <td><h2>{val.iscritto}</h2></td> <td><h2>{val.email}</h2></td> <td><h2>{val.telefono}</h2></td>{" "}
+                                <td style={{width:"20px"}}><PersonIcon id="icon"/></td> <td><h2>{val.name} {val.surname}</h2></td> <td><h2>{val.birth}</h2></td> <td><h2>{val.street} {val.city}</h2></td> <td><h2>{val.iscritto}</h2></td> <td><h2>{val.email}</h2></td> <td><h2>{val.phone}</h2></td>{" "}
                             </tr>
                         );
                     })}
