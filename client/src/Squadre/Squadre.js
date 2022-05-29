@@ -13,8 +13,6 @@ import "./Squadre.css"
 
 const Squadre = ()=>{
     const [squadreList,setSquadreList]=useState([]);
-    const [tms,setTms]=useState([]);
-
 
     const getSquadre = async(handler) => {
         let response= await Axios.get('http://localhost:3001/api/v1/team',{
@@ -23,14 +21,6 @@ const Squadre = ()=>{
             })
             handler(response.data);
         };
-    const getTms = async(handler) => {
-        for(var i=0;i<squadreList[i];i++){
-            let response= await Axios.get('http://localhost:3001/api/v1/user/'+squadreList[i].tm,{
-                headers:{
-                    "auth-token":sessionStorage.getItem('token')}
-                })
-            handler(response.data);
-        }};
     
     useEffect( () => {
         if(sessionStorage.getItem('loggedIn')==false){
@@ -42,7 +32,7 @@ const Squadre = ()=>{
 
             switch(sessionStorage.getItem('user_a_type')){
                 case "0": //ga
-                    
+
                     break;
                 case "1": //dd
                 
@@ -57,11 +47,8 @@ const Squadre = ()=>{
         }
     },[squadreList]);
 
-   
-
     const crea=()=>{
         window.location.href = "/creaSquadra";
-        
     };
 
     return (
@@ -77,7 +64,7 @@ const Squadre = ()=>{
                     <tr id="header"><td><h1>Nome</h1></td><td><h1>Team Manager</h1></td><td><h1>Coach</h1></td><td><h1>Tesserati</h1></td></tr>
                     {squadreList.map((val,key) => {
                         return( 
-                            <tr id="row" onClick={()=>{const path="/squadra/"+val.id;
+                            <tr id="row" onClick={()=>{const path="/squadra/"+val._id;
                                 window.location.pathname=path}}>
                                 {" "}
                                 <td><h2>{val.category}</h2></td> <td><h2>{val.tm}</h2></td> <td><h2>{val.coach}</h2></td> <td><h2>{val.players}</h2></td>{" "}

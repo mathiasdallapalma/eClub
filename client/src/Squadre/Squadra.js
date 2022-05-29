@@ -1,5 +1,6 @@
 import Axios  from 'axios';
 import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 
 
 import Sidebar from '../components/Sidebar';
@@ -12,50 +13,52 @@ import "./Squadra.css";
 import PersonIcon from '@mui/icons-material/Person';
 import DeleteIcon from '@mui/icons-material/Delete';
 
-import { useParams } from 'react-router-dom';
+
 
 
 
 
 const Squadra = ()=>{
     //const [squadra,setSquadreList]=useState([]);
-    const squadra={id:"id",categoria:"cat",teamManager:"Pierpaolo",coach:"Gilberto"};
-    const [tesseratiList,setTesseratiList]=useState([]);
+
+    const [squadra,setSquadra]=useState([]);
+    const [players,setPlayersList]=useState([]);
 
     const params=useParams();
+
+    const getSquadra = async(handler) => {/*
+        let response= await Axios.get('http://localhost:3001/api/v1/team/'+params.id,{
+            headers:{
+                "auth-token":sessionStorage.getItem('token')}
+            })
+            handler(response.data);
+            */
+           handler({
+            _id: "62927ddbc8a1c137d5e6cc23",
+            category: "Super22",
+            players: "[62927a8fc8a1c137d5e6cbf6,62927a8fc8a1c137d5e6cgb4]",
+            coach: "629272f3c8a1c137d5e6ca6c",
+            tm: "62927232c8a1c137d5e6ca4f",
+            status: 0,
+            hidden: 0,
+            added_by: "629096428ac032433daba53e",
+            created_at: "2022-05-22T19:12:13.819Z",
+            __v: 0
+          })
+          console.log(squadra.players)
+          //settesseratiList(JSON.parse(squadra.players))
+        };
 
 
     
     useEffect(()=>{
-        Axios.get('http://localhost:3001/squadra/'+params.id).then((response)=>{
-            if(response.status=="200"){
-                //setSquadra(response.data);
-            }else{
-                //TODO mostra popup
+        if(sessionStorage.getItem('loggedIn')==false){
+            window.location.href="/login";
+        }else{
+            if(squadra.length==0){
+                getSquadra(setSquadra);
             }
-        });
-        Axios.get('http://localhost:3001/squadra/'+params.id+"/tesserati").then((response)=>{
-            if(response.status=="200"){
-                //setTesseratiList(response.data);
-            }else{
-                //TODO mostra popup
-            }
-        });
-
-        tesseratiList.push({
-            id:"001",
-            name: "Giorgio Vanni",
-            birth: "01/01/2000",
-            address: "CASA",
-            iscritto: "iscrizione effettuata"
-        });
-        tesseratiList.push({
-            id:"003",
-            name: "Giorgio Scarpa",
-            birth: "23/54/3000",
-            address: "home",
-            iscritto: "iscrizione effettuata"
-        });
+        }
 
         switch(sessionStorage.getItem('user_a_type')){
             case "0": //ga
@@ -75,7 +78,17 @@ const Squadra = ()=>{
                 document.getElementById("eliminaBtn").style.display="none";
                 break;
         }
-    },[]);
+        
+        if(squadra.length!=0){
+            var temp=squadra.players
+            temp=temp.replace("[","[\"");
+            temp=temp.replace("]","\"]");
+            temp=temp.replace(",","\",\"");
+            console.log(temp)
+            
+            setPlayersList(JSON.parse(temp));
+        }
+    },[squadra]);
 
     const modifica=()=>{
         const path=params.id+"/modifica"
@@ -83,12 +96,18 @@ const Squadra = ()=>{
     };
 
     const elimina=()=>{
-        console.log(squadra.id);
-        /*
-        Axios.post('http://localhost:3001/',{
-           
+        console.log(params.id);
+        Axios.delete('http://localhost:3001/api/v1/team/'+params.id,{
+        headers:{
+            "auth-token":sessionStorage.getItem('token')},
+        params:{
+            _id:params.id}
+        }).then((response)=>{
+            window.alert("Squadra eliminata correttamente");
+        }).catch((error)=>{
+            console.log(error.response.data)
+            window.alert(error.response.data);
         });
-        */
         window.location.href = "javascript:history.back()";
     };
 
@@ -106,19 +125,19 @@ const Squadra = ()=>{
                     <img src="img.jpg" id="profileImg"></img>
                     <div className='datiSquadra'>
                         <h3>INFORMAZIONI GENERALI</h3>
-                        <h1> {squadra.categoria}</h1>
-                        <h2> TM: {squadra.teamManager} | CH: {squadra.coach} </h2>
+                        <h1> {squadra.category}</h1>
+                        <h2> TM: {squadra.tm} | CH: {squadra.coach} </h2>
                     </div>
                 </div> 
                 <h1 className="tabellaTitle">Tesserati</h1>
                 <table cellspacing ="0" className='AnagraficaList' id="AnagraficaList">
                 <tr id="header"> <td><h1></h1></td> <td><h1>Nome</h1></td> <td><h1>Data nascita</h1></td><td><h1>Indirizzo</h1></td><td><h1>Iscirizione</h1></td></tr>
-                    {tesseratiList.map((val,key) => {
+                    {players.map((val,key) => {
                         return( 
                             <tr id="row" onClick={()=>{const path="/anagrafica/"+val.id;
                                 window.location.pathname=path}}>
                                 {" "}
-                                <td><PersonIcon id="icon"/></td> <td><h2>{val.name}</h2></td> <td><h2>{val.birth}</h2></td> <td><h2>{val.address}</h2></td> <td><h2>{val.iscritto}</h2></td>{" "}
+                                <td><PersonIcon id="icon"/></td> <td><h2>{val}{val.name} {val.surname}</h2></td> <td><h2>{val.birth}</h2></td> <td><h2>{val.address}</h2></td> <td><h2>{val.iscritto}</h2></td>{" "}
                             </tr>
                         );
                     })}

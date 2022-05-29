@@ -28,22 +28,36 @@ const ModificaProfilo = ()=>{
 
     const[ruoliOptions,setRuoliOptions]=useState([]);
 
-    const user=JSON.parse(sessionStorage.getItem("user"))
+    const user=JSON.parse(sessionStorage.getItem("user_toModify"))
 
     const salva=()=>{
-        console.log(nome+" "+cognome+" "+dataNascita+" "+telefono+" "+email+" "+tipo+" z:"+zip+" v:"+via+" c:"+comune+" n:"+nazione+" p:"+provincia)
-        /*
-        Axios.post('http://localhost:3001/',{
-           TODO api salva modifiche
-        });
-        */
+        Axios.patch('http://localhost:3001/api/v1/user/'+user._id,{
+                email: email,
+                name: nome,
+                surname: cognome,
+                password: "1234567",
+                a_type:tipo,
+                zip:zip,
+                city:comune,
+                province:provincia,
+                nation:nazione,
+                street:via,
+                phone:telefono,
+                added_by:sessionStorage.getItem("user_id")},
+        {headers:{
+            "auth-token":sessionStorage.getItem('token')}
+        }).then((response)=>{
+            window.alert("Profilo modificato correttamente");
+        }).catch((error)=>{
+            console.log(error.response.data)
+            window.alert(error.response.data);
+        })
     };
 
-    useEffect(()=>{
-              
-        ruoliOptions.push({ value: 'tm', label: 'TeamManager' });
-        ruoliOptions.push({ value: 'ch', label: 'Coach' });
-        ruoliOptions.push({ value: 'ga', label: 'Genitore/Atleta' });
+    useEffect(()=>{     
+        ruoliOptions.push({ value: '2', label: 'TeamManager' });
+        ruoliOptions.push({ value: '3', label: 'Coach' });
+        ruoliOptions.push({ value: '0', label: 'Genitore/Atleta' });
 
         setNome(user.nome);
         document.getElementById('nome').value = user.name;

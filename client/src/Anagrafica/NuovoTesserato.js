@@ -56,16 +56,7 @@ const NuovoTesserato = ()=>{
         ruoliOptions.push({ value: '2', label: 'TeamManager' });
         ruoliOptions.push({ value: '3', label: 'Coach' });
         ruoliOptions.push({ value: '0', label: 'Genitore/Atleta' });
-        /*Axios.get('http://localhost:3001/squadre').then((response)=>{
-            setSquadreList(response.data);
-        })*/
     },[]);
-
-   
-
-    
-
-   
 
     const customStyles = {
         option: (provided, state) => ({

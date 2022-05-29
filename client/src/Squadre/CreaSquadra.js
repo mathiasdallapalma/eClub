@@ -16,20 +16,45 @@ import "./CreaSquadra.css"
 
 
 const CreaSquadra = ()=>{
-    const [coachNames,setcoachNames]=useState([]);
-    const [teamMNames,setteamMNames]=useState([]);
-    const [tesseratiList,settesseratiList]=useState([]);
 
-    coachNames.push({ value: 'blue', label: 'Blue' });
-    coachNames.push({ value: 'red', label: 'Red' });
-    teamMNames.push({ value: 'green', label: 'Green' });
-    teamMNames.push({ value: 'yellow', label: 'Yellow' });
-    tesseratiList.push({
-        name: "Giorgio Vanni",
-        birth: "01/01/2000",
-        address: "CASA",
-        iscritto: "iscrizione effettuata"
-    });
+    const [tesseratiList,settesseratiList]=useState([]);
+    const [coaches,setCoaches]=useState([]);
+    const [tms,setTms]=useState([]);
+    const [gas,setGas]=useState([]);
+
+    const fetchData = async(handler) => {
+        let response= await Axios.get('http://localhost:3001/api/v1/user',{
+        headers:{
+            "auth-token":sessionStorage.getItem('token')}
+        })
+        handler(response.data);
+    }
+
+    useEffect(()=>{
+        var temp=[];
+        if(sessionStorage.getItem('loggedIn')==false){
+            window.location.href="/login";
+        }else{
+            if(tesseratiList.length==0){
+                fetchData(settesseratiList);  
+            } else{
+                for(var i=0;i<tesseratiList.length;i++){
+                    switch(tesseratiList[i].a_type){
+                        case 0: //ga
+                            temp.push(tesseratiList[i]);
+                            break;
+                        case 2: //tm
+                            tms.push({ value: tesseratiList[i]._id, label: tesseratiList[i].name+" "+tesseratiList[i].surname });
+                            break;
+                        case 3: //ch
+                            coaches.push({ value: tesseratiList[i]._id, label: tesseratiList[i].name+" "+tesseratiList[i].surname });
+                            break;
+                    }
+                }
+                setGas(temp); 
+            }
+        }
+    },[tesseratiList]);
 
     const[categoria,setCategoria]=useState("");
     const [checked,setchecked]=useState([]);
@@ -37,14 +62,20 @@ const CreaSquadra = ()=>{
     var teamManager="";
 
     const salva=()=>{
-        
-        console.log(categoria+" "+coach+" "+teamManager);
-        console.log(checked);
-        /*
-        Axios.post('http://localhost:3001/',{
-           //TODO api inserisci squadra
-        });
-        */
+        Axios.post('http://localhost:3001/api/v1/team',{
+                category: categoria,
+                players: JSON.stringify(checked),
+                coach:coach,
+                tm:teamManager,
+                added_by:sessionStorage.getItem("user_id")},
+        {headers:{
+            "auth-token":sessionStorage.getItem('token')}
+        }).then((response)=>{
+            window.alert("Squadra inserita correttamente");
+        }).catch((error)=>{
+            console.log(error.response.data)
+            window.alert(error.response.data);
+        })
     };
 
     
@@ -77,17 +108,14 @@ const CreaSquadra = ()=>{
           teamManager=event.value;
         } else if (selector === "coach") {
           coach= event.value;
-        } else {
-          // Other logic
         }
-        // Here you trigger whatever you want
       };
 
-    const handleCheckBox = (key,event) => {
-        if(checked.includes(key)){
-            setchecked(arrayRemove(checked, key));
+    const handleCheckBox = (id,event) => {
+        if(checked.includes(id)){
+            setchecked(arrayRemove(checked, id));
         }else{
-            checked.push(key);
+            checked.push(id);
         }
 
     };
@@ -99,9 +127,6 @@ const CreaSquadra = ()=>{
         });
     }
     const handleChangeInputText = (event) => {
-        console.log(event.target.value);
-        console.log(event.target.id);
-
         switch(event.target.id){
             case "categoria":
                 setCategoria(event.target.value);
@@ -124,7 +149,7 @@ const CreaSquadra = ()=>{
                         <label>Coach</label>
                         <div className='chInput'>        
                             <Select id="coach" styles={customStyles} 
-                            options={coachNames} 
+                            options={coaches} 
                             placeholder={" "} 
                             onChange={event => handleChange("coach", event)
                         } />
@@ -135,7 +160,7 @@ const CreaSquadra = ()=>{
                         <div className='tmInput'>        
                             <Select id="teamM" 
                             styles={customStyles} 
-                            options={teamMNames} 
+                            options={tms} 
                             placeholder={" "} 
                             onChange={event => handleChange("teamManager", event)
                         } />
@@ -144,13 +169,13 @@ const CreaSquadra = ()=>{
                 </div> 
                 <table cellSpacing ="0" className='tesseratiList'>
                     <tr id="header"> <td><h1></h1></td> <td><h1>Nome</h1></td> <td><h1>Data nascita</h1></td><td><h1>Indirizzo</h1></td><td><h1>Iscirizione</h1></td></tr>
-                    {tesseratiList.map((val,key) => {
+                    {gas.map((val,key) => {
                         return( 
                             <tr id="row">
                                 {" "}
                                 <td><h1><Checkbox
-                                    onChange={event =>handleCheckBox(key,event)} />
-                                </h1></td> <td><h2>{val.name}</h2></td> <td><h2>{val.birth}</h2></td> <td><h2>{val.address}</h2></td> <td><h2>{val.iscritto}</h2></td>{" "}
+                                    onChange={event =>handleCheckBox(val._id,event)} />
+                                </h1></td> <td><h2>{val.name}</h2></td> <td><h2>{val.birth}</h2></td> <td><h2>{val.street},{val.city}</h2></td> <td><h2>{val.iscritto}</h2></td>{" "}
                             </tr>
                         );
                     })}

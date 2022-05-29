@@ -40,6 +40,7 @@ const Profilo = ()=>{
                 fetchData(setUser);
             }
         }
+        sessionStorage.setItem('user_toModify', JSON.stringify(user));
 
 
         switch(sessionStorage.getItem('user_a_type')){
@@ -72,7 +73,12 @@ const Profilo = ()=>{
             "auth-token":sessionStorage.getItem('token')},
         params:{
             _id:params.id}
-        })
+        }).then((response)=>{
+            window.alert("Profilo modificato correttamente");
+        }).catch((error)=>{
+            console.log(error.response.data)
+            window.alert(error.response.data);
+        });
         window.location.href = "javascript:history.back()";
     };
 
