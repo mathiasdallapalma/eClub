@@ -16,6 +16,11 @@ router.get('/', verify, async(req, res) => {
     }
 })
 
+/* --- GET: specific Team --- */
+router.get('/:teamId', verify, getTeam, async (req, res) => {
+    res.json(res.team)
+})
+
 /* --- POST: creating one Team --- */
 router.post('/', verify, async (req, res) => {
 
