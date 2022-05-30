@@ -14,6 +14,7 @@ const registerUserValidation = (data) => {
         name: Joi.string()
             .max(255)
             .required(),
+        birth: Joi.date(),
         surname: Joi.string()
             .max(255)
             .required(),

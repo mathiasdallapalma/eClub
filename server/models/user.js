@@ -22,6 +22,9 @@ const UserSchema = new mongoose.Schema({
         required: true,
         max: 255
     },
+    birth:{
+        type: Date,
+    },
     a_type:{
         type: mongoose.Schema.Types.ObjectId, ref: 'UserType',
         required: true
