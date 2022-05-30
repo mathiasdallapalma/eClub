@@ -23,8 +23,8 @@ const UserSchema = new mongoose.Schema({
         max: 255
     },
     a_type:{
-        type: Number,
-        required: true,
+        type: mongoose.Schema.Types.ObjectId, ref: 'UserType',
+        required: true
     },
     zip:{
         type: String,
