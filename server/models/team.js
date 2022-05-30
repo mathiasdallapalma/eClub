@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+const User = require('./User')
 const TeamSchema = new mongoose.Schema({
     category:{
         type: String,
@@ -6,16 +7,13 @@ const TeamSchema = new mongoose.Schema({
         min: 3,
         max: 255
     }, 
-    players:{
-        type: String, //TODO: da modificare
+    players: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }], //nested array of users reference ids
+    coach:{ 
+        type: mongoose.Schema.Types.ObjectId, ref: 'User',
         required: true
     },
-    coach:{
-        type: String,
-        required: true,
-    },
     tm:{
-        type: String,
+        type: mongoose.Schema.Types.ObjectId, ref: 'User',
         required: true
     },
     status:{

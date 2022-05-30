@@ -65,10 +65,10 @@ router.patch('/:teamId', async(req,res)=>{
     console.log(req.body);
 
     //checking if the team is already in the database
-    const categoryExist = await User.findOne({category: req.body.category});
+    const categoryExist = await Team.findOne({category: req.body.category});
     if(categoryExist) return res.status(400).send('Category already exists')
 
-    User.findByIdAndUpdate({
+    Team.findByIdAndUpdate({
         _id:req.params.teamId
     },{
         $set:req.body
