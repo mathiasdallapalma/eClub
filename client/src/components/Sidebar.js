@@ -8,7 +8,7 @@ import 'typeface-roboto';
 import "./Sidebar.css"
 
 const Sidebar = ()=>{
-    const profileLink="anagrafica/"+sessionStorage.getItem('user_id');
+    const profileLink="/anagrafica/"+sessionStorage.getItem('user_id');
     
 
 
@@ -64,7 +64,11 @@ const Sidebar = ()=>{
                 {SidebarData.map((val, key) => {
                     return(
                         <li key={key} className="row" 
-                            onClick={()=>{window.location.pathname=val.link}}
+                            onClick={()=>{window.location.pathname=val.link
+                                if(val.id=="logout"){
+                                    sessionStorage.clear();
+                                    sessionStorage.setItem("loggedIn",false);
+                                }}}
                             id={val.id}>
                             {" "}
                             <div id="icon">

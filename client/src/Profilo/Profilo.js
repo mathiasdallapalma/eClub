@@ -35,6 +35,7 @@ const Profilo = ()=>{
     useEffect(()=>{
         if(params.id==sessionStorage.getItem("user_id")){
             setUser(JSON.parse(sessionStorage.getItem("user")));
+            document.getElementById("eliminaBtn").style.display="none";
         }else{
             if(!user){
                 fetchData(setUser);
@@ -59,7 +60,7 @@ const Profilo = ()=>{
                 document.getElementById("modificaBtn").style.display="none";
                 break;
         }
-    },[user]);
+    },[user]); //TODO useffect keeps calling
 
     const modifica=()=>{
         const path=params.id+"/modifica"
@@ -67,7 +68,6 @@ const Profilo = ()=>{
     };
 
     const elimina=()=>{
-        console.log(user.id);
         Axios.delete('http://localhost:3001/api/v1/user/'+params.id,{
         headers:{
             "auth-token":sessionStorage.getItem('token')},
@@ -79,7 +79,7 @@ const Profilo = ()=>{
             console.log(error.response.data)
             window.alert(error.response.data);
         });
-        window.location.href = "javascript:history.back()";
+        window.location.href = "/anagrafica";
     };
 
     return (

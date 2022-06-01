@@ -16,6 +16,7 @@ const Home = ()=>{
         if(sessionStorage.getItem('loggedIn')==false){
             window.location.href="/login";
         }
+        console.log(sessionStorage.getItem('loggedIn')==false)
         
     });
  

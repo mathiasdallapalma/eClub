@@ -108,7 +108,7 @@ const Squadra = ()=>{
             console.log(error.response.data)
             window.alert(error.response.data);
         });
-        window.location.href = "javascript:history.back()";
+        window.location.href = "/squadre";
     };
 
     return (
