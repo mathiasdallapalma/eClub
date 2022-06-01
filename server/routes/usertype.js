@@ -5,9 +5,11 @@ const UserType = require('../models/UserType')
 const bcrypt = require('bcryptjs')
 const {userTypeValidation}= require('../validation')
 const verify = require('./verifyToken');
+const authorization = require('./authToken');
+
 
 /* --- GET: all userType --- */
-router.get('/', verify, async(req, res) => {
+router.get('/', verify, authorization, async(req, res) => {
     try{
         //loading all userType
         const userType = await UserType.find();
@@ -17,7 +19,7 @@ router.get('/', verify, async(req, res) => {
     }
 })
 /* --- POST: creating one UserType --- */
-router.post('/', verify, async (req, res) => {
+router.post('/', verify, authorization, async (req, res) => {
 
     //validation data before creating UserType 
     const {error} = userTypeValidation(req.body)
@@ -41,7 +43,7 @@ router.post('/', verify, async (req, res) => {
 } )
 
 /* --- DELETE: specific UserType --- */
-router.delete('/:userTypeId', verify, getUserType, async (req, res) => {
+router.delete('/:userTypeId', verify, authorization, getUserType, async (req, res) => {
     try {
         const removedUserType = await res.userType.remove()
         res.status(200).json({ message: 'Deleted user type' })
@@ -51,7 +53,7 @@ router.delete('/:userTypeId', verify, getUserType, async (req, res) => {
 })
 
 /* --- PATCH: update User --- */
-router.patch('/:userTypeId', verify, async(req,res)=>{
+router.patch('/:userTypeId', verify, authorization, async(req,res)=>{
     console.log(req.body);
 
     //checking if the userType is already in the database
@@ -63,7 +65,7 @@ router.patch('/:userTypeId', verify, async(req,res)=>{
     },{
         $set:req.body
     }).then(()=>{
-        res.sendStatus({message:"Success"});
+        res.status(201).json({message:"Success"});
     }).catch(err => {
        res.status(500).send(err.message);
     })

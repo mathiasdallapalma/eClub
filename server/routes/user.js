@@ -5,9 +5,11 @@ const User = require('../models/User')
 const bcrypt = require('bcryptjs')
 const {registerUserValidation}= require('../validation')
 const verify = require('./verifyToken');
+const authorization = require('./authToken');
+
 
 /* --- GET: all User --- */
-router.get('/', verify, async(req, res) => {
+router.get('/', verify, authorization, async(req, res) => {
     try{
         //loading all users
         const user = await User.find();
@@ -18,13 +20,13 @@ router.get('/', verify, async(req, res) => {
 })
 
 /* --- GET: specific User --- */
-router.get('/:userId', verify, getUser, async (req, res) => {
+router.get('/:userId', verify, authorization, getUser, async (req, res) => {
     res.json(res.user)
 })
 
 
 /* --- POST: creating one User --- */
-router.post('/', verify, async (req, res) => {
+router.post('/', verify, authorization, async (req, res) => {
 
     //validation data before creating user 
     const {error} = registerUserValidation(req.body)
@@ -64,7 +66,7 @@ router.post('/', verify, async (req, res) => {
 } )
 
 /* --- DELETE: specific User --- */
-router.delete('/:userId', verify, getUser, async (req, res) => {
+router.delete('/:userId', verify, authorization, getUser, async (req, res) => {
     try {
         //removing user
         const removedUser = await res.user.remove()
@@ -75,7 +77,7 @@ router.delete('/:userId', verify, getUser, async (req, res) => {
 })
 
 /* --- PATCH: update User --- */
-router.patch('/:userId', verify, async(req,res)=>{
+router.patch('/:userId', verify, authorization, async(req,res)=>{
     console.log(req.body);
 
     //hashing password
@@ -93,7 +95,7 @@ router.patch('/:userId', verify, async(req,res)=>{
     },{
         $set:req.body
     }).then(()=>{
-        res.status(201).send({message: "Success"});
+        res.status(201).json({message:"Success"});
     }).catch(err => {
        res.status(500).send(err.message);
     })

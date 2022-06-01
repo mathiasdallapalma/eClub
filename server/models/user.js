@@ -65,7 +65,7 @@ const UserSchema = new mongoose.Schema({
         default: false
     },
     added_by:{
-        type: String,
+        type: mongoose.Schema.Types.ObjectId, ref: 'User',
         required: true
     },
     created_at:{
