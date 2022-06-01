@@ -9,15 +9,17 @@ const authorization = require('./authToken');
 
 
 /* --- GET: all User --- */
-router.get('/', verify, authorization, async(req, res) => {
+router.get('/', verify, authorization, async(req, res) => {    
+    
     try{
         //loading all users
-        const user = await User.find();
+        const user = await User.find().populate("id_team", ["_id", "category"]).populate("a_type", ["_id", "name"]).populate("added_by", ["_id", "name", "surname"])
         res.json(user);
     }catch(err){
         res.status(500).json({ message: err });
     }
 })
+
 
 /* --- GET: specific User --- */
 router.get('/:userId', verify, authorization, getUser, async (req, res) => {
@@ -81,7 +83,7 @@ router.patch('/:userId', verify, authorization, async(req,res)=>{
     console.log(req.body);
 
     //hashing password
-    if(req.body.password != ""){
+    if(req.body.password){
         const salt = await bcrypt.genSalt(10);
         req.body.password = await bcrypt.hash(req.body.password, salt);
     }
@@ -105,7 +107,7 @@ router.patch('/:userId', verify, authorization, async(req,res)=>{
 async function getUser(req, res, next) {
     let user
     try {
-        user = await User.findById(req.params.userId)
+        user = await User.findById(req.params.userId).populate("id_team", ["_id", "category"]).populate("a_type", ["_id", "name"]).populate("added_by", ["_id", "name", "surname"])
         if (user == null) {
             return res.status(404).json({ message: 'Cannot find user' })
         }
