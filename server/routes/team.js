@@ -36,9 +36,6 @@ router.post('/', verify, async (req, res) => {
     const team = new Team({
         name: req.body.name,
         category: req.body.category,
-        players: req.body.players, //importante formato pl1, pl2, pl3, pl4
-        coach: req.body.coach,
-        tm: req.body.tm,
         added_by: req.body.added_by,
     })
     try{

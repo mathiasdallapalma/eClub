@@ -7,15 +7,6 @@ const TeamSchema = new mongoose.Schema({
         min: 3,
         max: 255
     }, 
-    players: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }], //nested array of users reference ids
-    coach:{ 
-        type: mongoose.Schema.Types.ObjectId, ref: 'User',
-        required: true
-    },
-    tm:{
-        type: mongoose.Schema.Types.ObjectId, ref: 'User',
-        required: true
-    },
     status:{
         type: Number,
         default: '0'

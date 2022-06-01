@@ -46,6 +46,7 @@ router.post('/', verify, async (req, res) => {
         password: hashedPassword,
         birth: req.body.birth,
         a_type: req.body.a_type, 
+        id_team: req.body.id_team,
         zip: req.body.zip, 
         city: req.body.city, 
         province: req.body.province, 

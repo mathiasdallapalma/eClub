@@ -29,6 +29,9 @@ const UserSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId, ref: 'UserType',
         required: true
     },
+    id_team:{
+        type: mongoose.Schema.Types.ObjectId, ref: 'Team',
+    },
     zip:{
         type: String,
         max: 20
@@ -52,9 +55,6 @@ const UserSchema = new mongoose.Schema({
     phone:{
         type: String,
         max: 30
-    },
-    assign_squad:{
-        type: Buffer,
     },
     status:{
         type: Number,
