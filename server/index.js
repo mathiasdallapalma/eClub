@@ -8,7 +8,7 @@ const bodyParser = require("body-parser");
 /* --- Middlewares: Body Parser --- */
 app.use(bodyParser.json());
 
-/* --- Routes --- */
+/* --- Routes v1 --- */
 const authRoute = require('./routes/auth');
 const userRoute = require('./routes/User');
 const userTypeRoute = require('./routes/UserType');
@@ -20,6 +20,18 @@ app.use("/api/v1/team", teamRoute)
 app.use("/api/v1/auth", authRoute)
 app.use("/api/v1/password_reset", passwordResetRoute)
 
+
+/* --- Routes v2 --- */
+const eventRoute = require('./routes/event');
+const eventTypeRoute = require('./routes/EventType');
+const attendanceRoute = require('./routes/attendance');
+const evaluationRoute = require('./routes/evaluation');
+const summoningRoute = require('./routes/summoning');
+app.use("/api/v2/event", eventRoute);
+app.use("/api/v2/eventtype", eventTypeRoute);
+app.use("/api/v2/attendance", attendanceRoute);
+app.use("/api/v2/evaluation", evaluationRoute);
+app.use("/api/v2/summoning", summoningRoute);
 
 /* --- DB Connection --- */
 mongoose.connect(process.env.DATABASE_URL, { useNewUrlParser: true })
