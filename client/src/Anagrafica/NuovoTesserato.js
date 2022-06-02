@@ -9,13 +9,13 @@ import Topbar from '../components/Topbar';
 import InputText from '../components/InputText';
 //import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import "./NuovoTesserato.css"
+import axios from 'axios';
 
 
 const NuovoTesserato = ()=>{
     const[nome,setNome]=useState("");
     const[cognome,setCognome]=useState("");
     const[dataNascita,setDataNascita]=useState("");
-    const[indirizzo,setIndirizzo]=useState("");
     const[telefono,setTelefono]=useState("");
     const[email,setEmail]=useState("");
     const[comune,setComune]=useState([]);
@@ -25,36 +25,51 @@ const NuovoTesserato = ()=>{
     const[zip,setZip]=useState([]);
     var tipo;
 
-
     const[ruoliOptions,setRuoliOptions]=useState([]);
 
-   
-
-
-
     const salva=()=>{
-        console.log(nome+" "+cognome+" "+dataNascita+" "+indirizzo+" "+telefono+" "+email+" "+tipo+" z:"+zip+" v:"+via+" c:"+comune+" n:"+nazione+" p:"+provincia)
-        /*
-        Axios.post('http://localhost:3001/',{
-           
-        });
-        */
+        Axios.post('http://localhost:3001/api/v1/user',{
+                email: email,
+                name: nome,
+                surname: cognome,
+                password: "eClub2022",
+                birth:dataNascita,
+                a_type:tipo,
+                zip:zip,
+                city:comune,
+                province:provincia,
+                nation:nazione,
+                street:via,
+                phone:telefono,
+                added_by:sessionStorage.getItem("user_id")},
+        {headers:{
+            "auth-token":sessionStorage.getItem('token')}
+        }).then((response)=>{
+            window.alert("Tesserato inserito correttamente");
+        }).catch((error)=>{
+            console.log(error.response.data)
+            window.alert(error.response.data);
+            document.getElementById("ruolo").value="";
+            
+        })
     };
 
+    const fetchData = async(handler) => {
+        let response= await Axios.get('http://localhost:3001/api/v1/usertype',{
+        headers:{
+            "auth-token":sessionStorage.getItem('token')}
+        })
+        var temp=[]
+        response.data.forEach(element => {
+            temp.push({value:element._id, label:element.name})
+        });
+        console.log(temp)
+        handler(temp);
+    }
+
     useEffect(()=>{
-        ruoliOptions.push({ value: 'tm', label: 'TeamManager' });
-        ruoliOptions.push({ value: 'ch', label: 'Coach' });
-        ruoliOptions.push({ value: 'ga', label: 'Genitore/Atleta' });
-        /*Axios.get('http://localhost:3001/squadre').then((response)=>{
-            setSquadreList(response.data);
-        })*/
+        fetchData(setRuoliOptions)
     },[]);
-
-   
-
-    
-
-   
 
     const customStyles = {
         option: (provided, state) => ({
@@ -76,12 +91,10 @@ const NuovoTesserato = ()=>{
 
     const handleChange = (event) => {
         tipo=event.value;
+        console.log(tipo)
       };
 
     const handleChangeInputText = (event) => {
-        console.log(event.target.value);
-        console.log(event.target.id);
-
         switch(event.target.id){
             case "nome":
                 setNome(event.target.value);

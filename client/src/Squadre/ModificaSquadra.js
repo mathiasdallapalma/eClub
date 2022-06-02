@@ -1,6 +1,7 @@
 import { Checkbox } from '@mui/material';
 import Axios  from 'axios';
 import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 
 
 /* Components */
@@ -16,73 +17,126 @@ import "./ModificaSquadra.css"
 
 
 const ModificaSquadra = ()=>{
-    const [coachNames,setcoachNames]=useState([]);
-    const [teamMNames,setteamMNames]=useState([]);
+    const [tms,setTMs]=useState([]);
+    
+    const [tm_idSelected,setTM_idSelected]=useState("");
 
-    //const [squadra,setSquadra]=useState([]);
 
-    var squadra={
-        id:"id",
-        categoria:"Categoria",
-        tm:"Yellow",
-        ch:"Red"
-    }
+    const [chs,setCHs]=useState([]);
 
-    const [componentiSquadra,settesseratiList]=useState([]);    
+    const [ch_idSelected,setCH_idSelected]=useState("");
+
+
+    const [componentiList,setComponentiList]=useState([]);
+
+    const [squadra,setSquadra]=useState([]);
+    const [tesseratiList,settesseratiList]=useState([]);
+
+    const [categoria,setCategoria]=useState("");
+
+    const params=useParams();
+
     const[tesseratiNoSquadra,setTesseratiNoSquadra]=useState([]);
     
-    const[categoria,setCategoria]=useState("");
-    const [componentiChecked,setChecked]=useState([]);
-    const [noSquadChecked,setNoSquadChecked]=useState([]);
+    const [checked,setChecked]=useState([]);
+    const [unchecked,setUnchecked]=useState([]);
+    
 
-    var coach="";
-    var teamManager="";
+    const getSquadra = async(handler) => {
+        let response= await Axios.get('http://localhost:3001/api/v1/team/'+params.id,{
+            headers:{
+                "auth-token":sessionStorage.getItem('token')}
+            })
+         handler(response.data)   
+        };
+
+    useEffect(()=>{
+            if(squadra.length==0){
+                getSquadra(setSquadra);
+            }
+    
+
+        if(sessionStorage.getItem('user_a_type')!="1"){
+        window.location.href="/home";
+        }
+        
+        
+    },[squadra]);
+
+    const getTesserati = async(handler) => {
+        let response= await Axios.get('http://localhost:3001/api/v1/user',{
+            headers:{
+                "auth-token":sessionStorage.getItem('token')}
+            });
+            //settesseratiList(response.data);
+            handler(response.data);    
+    }
+
+    useEffect(()=>{
+        
+        if(tesseratiList.length==0){
+            getTesserati(settesseratiList);
+        }
+        else{
+            tesseratiList.forEach(element => {
+                if(element.team_id==params.id){
+                    checked.push(element._id)
+                    switch(element.a_type.type){
+                        case 0: //ga
+                            componentiList.push(element)
+                            
+                            break;
+                        case 2://tm
+                            tms.push({value:element._id,label:element.name+" "+element.surname});
+                            setTM_idSelected(element._id);
+                            break;
+                        case 3://ch
+                            chs.push({value:element._id,label:element.name+" "+element.surname});
+                            setCH_idSelected(element._id);
+                            break;
+                    }
+                }else{
+                    
+                    switch(element.a_type.type){
+                        case 0://ga
+                            unchecked.push(element._id)
+                            tesseratiNoSquadra.push(element)
+                            break;
+                        case 2://tm
+                            unchecked.push(element._id)
+
+                            tms.push({value:element._id,label:element.name+" "+element.surname});
+                            break;
+                        case 3://ch
+                            unchecked.push(element._id)
+                            chs.push({value:element._id,label:element.name+" "+element.surname});
+                            break;
+                    }
+
+                }                       
+            });
+        }
+
+        setCategoria(squadra.category);
+        document.getElementById('categoria').value = squadra.category;
+
+        
+
+   
+
+        //TODO settare valori dei selector
+
+    },[tesseratiList]);
 
     const salva=()=>{
-        
-        console.log(categoria+" "+coach+" "+teamManager);
-        console.log(componentiChecked);
-        console.log(noSquadChecked);
-        /*
-        Axios.post('http://localhost:3001/',{
-           //TODO api modifica squadra
-        });
-        */
+        console.log(categoria);
+        console.log("checked: "+checked);  
+        console.log("unchecked: "+unchecked);  
+        console.log("unchecked: "+unchecked.length);      
     };
     
-    useEffect(()=>{
-        coachNames.push({ value: 'blue', label: 'Blue' });
-        coachNames.push({ value: 'red', label: 'Red' });
-        teamMNames.push({ value: 'green', label: 'Green' });
-        teamMNames.push({ value: 'yellow', label: 'Yellow' });
+    
 
-        componentiChecked[0]="giorgi";
-
-        setCategoria(squadra.categoria);
-        document.getElementById('categoria').value = squadra.categoria;
-
-        teamManager =squadra.tm;
-        document.getElementById('teamM').value = squadra.tm;
-
-        coach =squadra.ch;
-        document.getElementById('coach').value = squadra.ch;
-    },[]);
-
-    tesseratiNoSquadra.push({
-        id:"giorgi",
-        name: "Giorgio Vanni",
-        birth: "01/01/2000",
-        address: "CASA",
-        iscritto: "iscrizione effettuata"
-    });
-
-    tesseratiNoSquadra.push({
-        id:"ns",
-        name: "No squadra",
-        birth: "01/01/2000",
-        address: "CASA",
-        iscritto: "iscrizione effettuata"
-    });
 
     const customStyles = {
         option: (provided, state) => ({
@@ -102,30 +156,47 @@ const ModificaSquadra = ()=>{
         }
     }
 
+    
     /*stuff to handle selectors*/
     const handleChange = (selector, event) => {
         if (selector === "teamManager") {
-          teamManager=event.value;
+            console.log(tm_idSelected)
+            console.log(event.value)
+
+            if(tm_idSelected!=event.value){
+                flipflopchecks(event.value);
+                flipflopchecks(tm_idSelected);
+                setTM_idSelected(event.value);
+            }
         } else if (selector === "coach") {
-          coach= event.value;
+            if(ch_idSelected!=event.value){
+                flipflopchecks(event.value);
+                flipflopchecks(ch_idSelected);
+                setCH_idSelected(event.value)
+            }
         }
       };
 
     const handleCheckBoxComponenti= (key,event) => {
-        if(componentiChecked.includes(componentiSquadra[key].id)){
-            setChecked(arrayRemove(componentiChecked, componentiSquadra[key].id));
-        }else{
-            componentiChecked.push(componentiSquadra[key].id);
-        }
+        flipflopchecks(componentiList[key]._id);
     };
 
     const handleCheckBoxNoSquadra= (key,event) => {
-        if(noSquadChecked.includes(tesseratiNoSquadra[key].id)){
-            setNoSquadChecked(arrayRemove(noSquadChecked, tesseratiNoSquadra[key].id));
-        }else{
-            noSquadChecked.push(tesseratiNoSquadra[key].id);
-        }
+        flipflopchecks(tesseratiNoSquadra[key]._id);
+    };
 
+    const flipflopchecks= (id) => { //TODO mettere apposto
+        console.log(id)
+        if(checked.includes(id)){
+            console.log("removed");
+            setUnchecked(unchecked=>[unchecked,id]);
+            setChecked(arrayRemove(checked,id));
+            
+        }else{
+            console.log("add")
+            setChecked(checked=>[checked,id]);
+            setUnchecked(arrayRemove(unchecked,id));
+        }
     };
 
     function arrayRemove(arr, value) { 
@@ -135,9 +206,6 @@ const ModificaSquadra = ()=>{
         });
     }
     const handleChangeInputText = (event) => {
-        console.log(event.target.value);
-        console.log(event.target.id);
-
         switch(event.target.id){
             case "categoria":
                 setCategoria(event.target.value);
@@ -160,7 +228,7 @@ const ModificaSquadra = ()=>{
                         <label>Coach</label>
                         <div className='chInput'>        
                             <Select id="coach" styles={customStyles} 
-                            options={coachNames} 
+                            options={chs} 
                             placeholder={" "} 
                             onChange={event => handleChange("coach", event)
                         } />
@@ -171,38 +239,38 @@ const ModificaSquadra = ()=>{
                         <div className='tmInput'>        
                             <Select id="teamM" 
                             styles={customStyles} 
-                            options={teamMNames} 
+                            options={tms} 
                             placeholder={" "} 
                             onChange={event => handleChange("teamManager", event)
                         } />
                         </div>
                     </div> 
                 </div> 
-                <h1 id="table_title">Componenti:</h1>
+                <h1 id="table_title" style={{"font-size":"22px"}}>Componenti:</h1>
                 <table cellSpacing ="0" className='tesseratiList'>
                     <tr id="header"> <td><h1></h1></td> <td><h1>Nome</h1></td> <td><h1>Data nascita</h1></td><td><h1>Indirizzo</h1></td><td><h1>Iscirizione</h1></td></tr>
-                    {componentiSquadra.map((val,key) => {
+                    {componentiList.map((val,key) => {
                         return( 
                             <tr id="row">
                                 {" "}
-                                <td><h1><Checkbox
+                                <td style={{width:"2%"}}><h1><Checkbox
                                     defaultChecked
                                     onChange={event =>handleCheckBoxComponenti(key,event)} />
-                                </h1></td> <td><h2>{val.name}</h2></td> <td><h2>{val.birth}</h2></td> <td><h2>{val.address}</h2></td> <td><h2>{val.iscritto}</h2></td>{" "}
+                                </h1></td> <td><h2>{val.name} {val.surname}</h2></td> <td><h2>{(val.birth).split("T")[0]}</h2></td> <td><h2>{val.street} {val.city}</h2></td> <td><h2>{val.iscritto}</h2></td>{" "}
                             </tr>
                         );
                     })}
                 </table>
-                <h1 id="table_title">Tesserati senza squadra:</h1>
+                <h1 id="table_title" style={{"font-size":"22px"}}>Tesserati senza squadra:</h1>
                 <table cellSpacing ="0" className='tesseratiList'>
                     <tr id="header"> <td><h1></h1></td> <td><h1>Nome</h1></td> <td><h1>Data nascita</h1></td><td><h1>Indirizzo</h1></td><td><h1>Iscirizione</h1></td></tr>
                     {tesseratiNoSquadra.map((val,key) => {
                         return( 
                             <tr id="row">
                                 {" "}
-                                <td><h1><Checkbox
+                                <td style={{width:"2%"}}><h1><Checkbox
                                     onChange={event =>handleCheckBoxNoSquadra(key,event)} />
-                                </h1></td> <td><h2>{val.name}</h2></td> <td><h2>{val.birth}</h2></td> <td><h2>{val.address}</h2></td> <td><h2>{val.iscritto}</h2></td>{" "}
+                                </h1></td> <td><h2>{val.name} {val.surname}</h2></td> <td><h2>{(val.birth).split("T")[0]}</h2></td> <td><h2>{val.street} {val.city}</h2></td> <td><h2>{val.iscritto}</h2></td>{" "}
                             </tr>
                         );
                     })}

@@ -17,6 +17,9 @@
 }
 
 h2{
+    display: inline;
+    padding:0;
+    margin:0;
     margin-top: 0;
     margin-bottom: 0;
     font-family: 'Inter';
@@ -25,6 +28,7 @@ h2{
     font-size: 18px;
     line-height: 100%;
     padding: 5px;
+    margin-right:0px;
   }
 
   
@@ -101,7 +105,7 @@ table{
 }
 
 td{
-    padding-right: 25px;
+    padding-right: 0px;
 }
 #row{
     padding-top: 100px;
@@ -111,4 +115,8 @@ td{
     height: 50px;
     width: 150px;
     margin-left: 400px;
+}
+
+#checbox_td{
+    width: 1%;
 }

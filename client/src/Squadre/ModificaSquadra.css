@@ -92,11 +92,12 @@ label{
 }
 
 .chInput{
-    margin-bottom: 40px;
+    margin-bottom: 50px;
 }
 
 .tesseratiList{
     margin-top: 10px;
+    margin-bottom: 50px;
 }
 
 .tesseratiList #header{
@@ -105,8 +106,9 @@ label{
     border-radius: 100%;
 }
 
-td{
+.ModificaSquadre td{
     padding-right: 25px;
+    width:2%;
 }
 #row{
     padding-top: 100px;

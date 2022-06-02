@@ -1,63 +1,51 @@
 import Axios  from 'axios';
 import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 
 
 import Sidebar from '../components/Sidebar';
 import Topbar from '../components/Topbar';
 //import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import "./Squadra.css";
-import session from '../index.js'
+
 
 /* Icons */
 import PersonIcon from '@mui/icons-material/Person';
 import DeleteIcon from '@mui/icons-material/Delete';
 
-import { useParams } from 'react-router-dom';
+
 
 
 
 
 const Squadra = ()=>{
     //const [squadra,setSquadreList]=useState([]);
-    const squadra={id:"id",categoria:"cat",teamManager:"Pierpaolo",coach:"Gilberto"};
-    const [tesseratiList,setTesseratiList]=useState([]);
+   
+
+    const [tm,setTM]=useState(0);
+    const [ch,setCH]=useState(0);
+    const [gas,setGas]=useState([]);
+
+    const [squadra,setSquadra]=useState([]);
+    const [tesseratiList,settesseratiList]=useState([]);
 
     const params=useParams();
 
+    const getSquadra = async(handler) => {
+        let response= await Axios.get('http://localhost:3001/api/v1/team/'+params.id,{
+            headers:{
+                "auth-token":sessionStorage.getItem('token')}
+            })
+            
+        };
 
-    
     useEffect(()=>{
-        Axios.get('http://localhost:3001/squadra/'+params.id).then((response)=>{
-            if(response.status=="200"){
-                //setSquadra(response.data);
-            }else{
-                //TODO mostra popup
+            if(squadra.length==0){
+                getSquadra(setSquadra);
             }
-        });
-        Axios.get('http://localhost:3001/squadra/'+params.id+"/tesserati").then((response)=>{
-            if(response.status=="200"){
-                //setTesseratiList(response.data);
-            }else{
-                //TODO mostra popup
-            }
-        });
+        
 
-        tesseratiList.push({
-            id:"001",
-            name: "Giorgio Vanni",
-            birth: "01/01/2000",
-            address: "CASA",
-            iscritto: "iscrizione effettuata"
-        });
-        tesseratiList.push({
-            id:"003",
-            name: "Giorgio Scarpa",
-            birth: "23/54/3000",
-            address: "home",
-            iscritto: "iscrizione effettuata"
-        });
-
-        switch(session.utente.tipo){
+        switch(sessionStorage.getItem('user_a_type')){
             case "0": //ga
                 document.getElementById("modificaBtn").style.display="none";
                 document.getElementById("eliminaBtn").style.display="none";
@@ -75,7 +63,44 @@ const Squadra = ()=>{
                 document.getElementById("eliminaBtn").style.display="none";
                 break;
         }
-    },[]);
+        
+        
+    },[squadra]);
+
+    const getTesserati = async(handler) => {
+        let response= await Axios.get('http://localhost:3001/api/v1/user',{
+            headers:{
+                "auth-token":sessionStorage.getItem('token')}
+            });
+            //settesseratiList(response.data);
+            handler(response.data);    
+    }
+
+    useEffect(()=>{
+        
+        if(tesseratiList.length==0){
+            getTesserati(settesseratiList);
+        }
+        else{
+            tesseratiList.forEach(element => {
+                console.log(element.name)
+                if(element.team_id==params.id){
+                    console.log("true")
+                    switch(element.a_type.type){
+                        case 0:
+                            gas.push(element)
+                            break;
+                        case 2:
+                            setTM(element);
+                            break;
+                        case 3:
+                            setCH(element);
+                            break;
+                    }
+                }                       
+            });
+        }
+    },[tesseratiList]);
 
     const modifica=()=>{
         const path=params.id+"/modifica"
@@ -83,13 +108,19 @@ const Squadra = ()=>{
     };
 
     const elimina=()=>{
-        console.log(squadra.id);
-        /*
-        Axios.post('http://localhost:3001/',{
-           
+        console.log(params.id);
+        Axios.delete('http://localhost:3001/api/v1/team/'+params.id,{
+        headers:{
+            "auth-token":sessionStorage.getItem('token')},
+        params:{
+            _id:params.id}
+        }).then((response)=>{
+            window.alert("Squadra eliminata correttamente");
+        }).catch((error)=>{
+            console.log(error.response.data)
+            window.alert(error.response.data);
         });
-        */
-        window.location.href = "javascript:history.back()";
+        window.location.href = "/squadre";
     };
 
     return (
@@ -106,19 +137,19 @@ const Squadra = ()=>{
                     <img src="img.jpg" id="profileImg"></img>
                     <div className='datiSquadra'>
                         <h3>INFORMAZIONI GENERALI</h3>
-                        <h1> {squadra.categoria}</h1>
-                        <h2> TM: {squadra.teamManager} | CH: {squadra.coach} </h2>
+                        <h1> {squadra.category}</h1>
+                        <div><h2> TM: {tm.name} {tm.surname}  |</h2><h2>CH: {ch.name} {ch.surname}  </h2></div>
                     </div>
                 </div> 
                 <h1 className="tabellaTitle">Tesserati</h1>
                 <table cellspacing ="0" className='AnagraficaList' id="AnagraficaList">
-                <tr id="header"> <td><h1></h1></td> <td><h1>Nome</h1></td> <td><h1>Data nascita</h1></td><td><h1>Indirizzo</h1></td><td><h1>Iscirizione</h1></td></tr>
-                    {tesseratiList.map((val,key) => {
+                <tr id="header"> <td><h1></h1></td> <td><h1>Nome</h1></td> <td><h1>Data nascita</h1></td><td><h1>Indirizzo</h1></td><td><h1>Telefono</h1></td></tr>
+                    {gas.map((val,key) => {
                         return( 
                             <tr id="row" onClick={()=>{const path="/anagrafica/"+val.id;
                                 window.location.pathname=path}}>
                                 {" "}
-                                <td><PersonIcon id="icon"/></td> <td><h2>{val.name}</h2></td> <td><h2>{val.birth}</h2></td> <td><h2>{val.address}</h2></td> <td><h2>{val.iscritto}</h2></td>{" "}
+                                <td style={{width:"2%"}}><PersonIcon id="icon"/></td> <td style={{width:"10%"}}><h2>{val.name} {val.surname}</h2></td > <td style={{width:"10%"}}><h2>{(val.birth).split("T")[0]}</h2></td> <td style={{width:"15%"}}><h2>{val.street} {val.city}</h2></td><td style={{width:"25%"}}><h2>{val.phone}</h2></td>{" "}
                             </tr>
                         );
                     })}
