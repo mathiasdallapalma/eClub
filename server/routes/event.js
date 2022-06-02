@@ -11,7 +11,7 @@ const verify = require('./verifyToken');
 router.get('/', verify, async(req, res) => {
     try{
         //loading all events
-        const events = await Event.find();
+        const events = await Event.find().populate("teams",["category"]).populate("e_type",["name"]);
         res.json(events);
     }catch(err){
         res.status(500).json({ message: err });
@@ -49,7 +49,7 @@ router.post('/', verify, async (req, res) => {
         date: req.body.date,
         description: req.body.description,
         teams:req.body.teams,
-        //e_type:req.body.e_type,
+        e_type:req.body.e_type,
         added_by: req.body.added_by,
     })
     try{
@@ -90,7 +90,7 @@ router.patch('/:eventId', verify, async(req,res)=>{
 async function getEvent(req, res, next) {
     let event
     try {
-        event = await Event.findById(req.params.eventId)
+        event = await Event.findById(req.params.eventId).populate("teams",["category"]).populate("e_type",["name"]);
         if (event == null) {
             return res.status(404).json({ message: 'Cannot find event' })
         }

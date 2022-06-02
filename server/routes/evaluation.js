@@ -10,7 +10,7 @@ const verify = require('./verifyToken');
 router.get('/', verify, async(req, res) => {
     try{
         //loading all evaluations
-        const evaluation = await Evaluation.find();
+        const evaluation = await Evaluation.find().populate("player",["name","surname"]).populate("event",["title","date"]);;
         res.json(evaluation);
     }catch(err){
         res.status(500).json({ message: err });
@@ -109,7 +109,7 @@ async function getEvaluation(req, res, next) {
 async function getEvaluationByEvent(req, res, next) {
     let evaluation
     try {
-        evaluation = await Evaluation.find({player : req.params.playerId})
+        evaluation = await Evaluation.find({player : req.params.eventId}).populate("player",["name","surname"]);
         if (evaluation == null) {
             return res.status(404).json({ message: 'Cannot find evaluation' })
         }
@@ -123,7 +123,7 @@ async function getEvaluationByEvent(req, res, next) {
 async function getEvaluationByPlayer(req, res, next) {
     let evaluation
     try {
-        evaluation = await Evaluation.find({player : req.params.playerId})
+        evaluation = await Evaluation.find({player : req.params.playerId}).populate("event",["title","date"]);
         if (evaluation == null) {
             return res.status(404).json({ message: 'Cannot find evaluation' })
         }

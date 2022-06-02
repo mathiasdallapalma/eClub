@@ -10,7 +10,7 @@ const verify = require('./verifyToken');
 router.get('/', verify, async(req, res) => {
     try{
         //loading all summonings
-        const summoning = await Summoning.find();
+        const summoning = await Summoning.find().populate("player",["name","surname"]).populate("event",["title","date"]);
         res.json(summoning);
     }catch(err){
         res.status(500).json({ message: err });
@@ -109,7 +109,7 @@ async function getSummoning(req, res, next) {
 async function getSummoningByEvent(req, res, next) {
     let summoning
     try {
-        summoning = await Summoning.find({player : req.params.playerId})
+        summoning = await Summoning.find({player : req.params.eventId}).populate("player",["name","surname"]);
         if (summoning == null) {
             return res.status(404).json({ message: 'Cannot find summoning' })
         }
@@ -123,12 +123,12 @@ async function getSummoningByEvent(req, res, next) {
 async function getSummoningByPlayer(req, res, next) {
     let summoning
     try {
-        summoning = await Summoning.find({player : req.params.playerId})
+        summoning = await Summoning.find({player : req.params.playerId}).populate("event",["title","date"]);
         if (summoning == null) {
             return res.status(404).json({ message: 'Cannot find summoning' })
         }
     } catch (err) {
-        return res.status(500).json({ message: err.message })
+        return res.status(500).json({ message: err.message})
     }
     res.summoning = summoning
     next()

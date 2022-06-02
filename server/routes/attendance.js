@@ -10,7 +10,7 @@ const verify = require('./verifyToken');
 router.get('/', verify, async(req, res) => {
     try{
         //loading all attendances
-        const attendance = await Attendance.find();
+        const attendance = await Attendance.find().populate("player",["name","surname"]).populate("event",["title","date"]);
         res.json(attendance);
     }catch(err){
         res.status(500).json({ message: err });
@@ -94,7 +94,7 @@ router.patch('/:attendanceId', async(req,res)=>{
 async function getAttendance(req, res, next) {
     let attendance
     try {
-        attendance = await Attendance.findById(req.params.attendanceId)
+        attendance = await Attendance.findById(req.params.attendanceId);
         if (attendance == null) {
             return res.status(404).json({ message: 'Cannot find attendance' })
         }
@@ -109,7 +109,7 @@ async function getAttendance(req, res, next) {
 async function getAttendanceByEvent(req, res, next) {
     let attendance
     try {
-        attendance = await Attendance.find({player : req.params.playerId})
+        attendance = await Attendance.find({player : req.params.eventId}).populate("player",["name","surname"]);
         if (attendance == null) {
             return res.status(404).json({ message: 'Cannot find attendance' })
         }
@@ -123,7 +123,7 @@ async function getAttendanceByEvent(req, res, next) {
 async function getAttendanceByPlayer(req, res, next) {
     let attendance
     try {
-        attendance = await Attendance.find({player : req.params.playerId})
+        attendance = await Attendance.find({player : req.params.playerId}).populate("event",["title","date"]);
         if (attendance == null) {
             return res.status(404).json({ message: 'Cannot find attendance' })
         }

@@ -107,8 +107,8 @@ const eventValidation = (data) => {
             .max(255),
         teams: Joi.array()
             .required(),
-        //e_type: Joi.number()
-        //    .required(),
+        e_type: Joi.string()
+            .required(),
         added_by: Joi.string()
             .required()
     });
