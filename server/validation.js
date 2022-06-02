@@ -14,11 +14,13 @@ const registerUserValidation = (data) => {
         name: Joi.string()
             .max(255)
             .required(),
+        birth: Joi.date(),
         surname: Joi.string()
             .max(255)
             .required(),
-        a_type: Joi.number()
+        a_type: Joi.string()
             .required(),
+        id_team: Joi.string(),
         zip: Joi.string()
             .max(20),
         city: Joi.string()
@@ -58,12 +60,6 @@ const teamValidation = (data) => {
         category: Joi.string()
             .min(3)
             .max(255)
-            .required(),
-        players: Joi.string()
-            .required(),
-        coach: Joi.string()
-            .required(),
-        tm: Joi.string()
             .required(),
         added_by: Joi.string()
             .required()

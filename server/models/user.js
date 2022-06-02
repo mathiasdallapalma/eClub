@@ -22,9 +22,15 @@ const UserSchema = new mongoose.Schema({
         required: true,
         max: 255
     },
+    birth:{
+        type: Date,
+    },
     a_type:{
-        type: Number,
-        required: true,
+        type: mongoose.Schema.Types.ObjectId, ref: 'UserType',
+        required: true
+    },
+    id_team:{
+        type: mongoose.Schema.Types.ObjectId, ref: 'Team',
     },
     zip:{
         type: String,
@@ -50,9 +56,6 @@ const UserSchema = new mongoose.Schema({
         type: String,
         max: 30
     },
-    assign_squad:{
-        type: Buffer,
-    },
     status:{
         type: Number,
         default: '0'
@@ -62,7 +65,7 @@ const UserSchema = new mongoose.Schema({
         default: false
     },
     added_by:{
-        type: String,
+        type: mongoose.Schema.Types.ObjectId, ref: 'User',
         required: true
     },
     created_at:{

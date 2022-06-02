@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+const User = require('./User')
 const TeamSchema = new mongoose.Schema({
     category:{
         type: String,
@@ -6,18 +7,6 @@ const TeamSchema = new mongoose.Schema({
         min: 3,
         max: 255
     }, 
-    players:{
-        type: String, //TODO: da modificare
-        required: true
-    },
-    coach:{
-        type: String,
-        required: true,
-    },
-    tm:{
-        type: String,
-        required: true
-    },
     status:{
         type: Number,
         default: '0'

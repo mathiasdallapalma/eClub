@@ -4,9 +4,11 @@ const router = express.Router();
 const Team = require('../models/Team')
 const {teamValidation}= require('../validation')
 const verify = require('./verifyToken');
+const authorization = require('./authToken');
+
 
 /* --- GET: all Team --- */
-router.get('/', verify, async(req, res) => {
+router.get('/', verify, authorization, async(req, res) => {
     try{
         //loading all teams
         const team = await Team.find();
@@ -16,8 +18,13 @@ router.get('/', verify, async(req, res) => {
     }
 })
 
+/* --- GET: specific Team --- */
+router.get('/:teamId', verify, authorization, getTeam, async (req, res) => {
+    res.json(res.team)
+})
+
 /* --- POST: creating one Team --- */
-router.post('/', verify, async (req, res) => {
+router.post('/', verify, authorization, async (req, res) => {
 
     //validation data before creating Team 
     const {error} = teamValidation(req.body)
@@ -31,9 +38,6 @@ router.post('/', verify, async (req, res) => {
     const team = new Team({
         name: req.body.name,
         category: req.body.category,
-        players: req.body.players, //importante formato pl1, pl2, pl3, pl4
-        coach: req.body.coach,
-        tm: req.body.tm,
         added_by: req.body.added_by,
     })
     try{
@@ -45,7 +49,7 @@ router.post('/', verify, async (req, res) => {
 } )
 
 /* --- DELETE: specific Team --- */
-router.delete('/:teamId', verify, getTeam, async (req, res) => {
+router.delete('/:teamId', verify, authorization, getTeam, async (req, res) => {
     try {
         //removing team
         const removedTeam = await res.team.remove()
@@ -56,19 +60,19 @@ router.delete('/:teamId', verify, getTeam, async (req, res) => {
 })
 
 /* --- PATCH: update Team --- */
-router.patch('/:teamId', async(req,res)=>{
+router.patch('/:teamId', verify, authorization, async(req,res)=>{
     console.log(req.body);
 
     //checking if the team is already in the database
-    const categoryExist = await User.findOne({category: req.body.category});
+    const categoryExist = await Team.findOne({category: req.body.category});
     if(categoryExist) return res.status(400).send('Category already exists')
 
-    User.findByIdAndUpdate({
+    Team.findByIdAndUpdate({
         _id:req.params.teamId
     },{
         $set:req.body
     }).then(()=>{
-        res.sendStatus({message:"Success"});
+        res.status(201).json({message:"Success"});
     }).catch(err => {
        res.status(500).send(err.message);
     })
