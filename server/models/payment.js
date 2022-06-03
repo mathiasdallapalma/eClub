@@ -4,13 +4,16 @@ const PaymentSchema = new mongoose.Schema({
         type: Number,
         required: true,
     },
+    description:{
+        type: String,
+    },
     paid_at:{
         type: Date,
         required: true,
         default: Date.now
     },
     player:{
-        type: String, //TODO: da modificare
+        type: mongoose.Schema.Types.ObjectId, ref: 'User',
         required: true,
     },
     //TODO PDF

@@ -93,6 +93,7 @@ const paymentValidation = (data) => {
     const schema = Joi.object({
         amount: Joi.number()
             .required(),
+        description: Joi.string(),
         paid_at: Joi.date()
             .required(),
         player: Joi.string()

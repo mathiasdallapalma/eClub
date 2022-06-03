@@ -10,7 +10,7 @@ const verify = require('./verifyToken');
 router.get('/', verify, async(req, res) => {
     try{
         //loading all payments
-        const payment = await Payment.find();
+        const payment = await Payment.find().populate("player", ["_id", "name", "surname"])
         res.json(payment);
     }catch(err){
         res.status(500).json({ message: err });
@@ -57,7 +57,7 @@ router.patch('/:paymentId', verify, async(req,res)=>{
     },{
         $set:req.body
     }).then(()=>{
-        res.sendStatus(200);
+        res.status(201).json({message:"Success"});
     }).catch(err => {
         res.status(500).send(err.message);
     })
@@ -67,7 +67,7 @@ router.patch('/:paymentId', verify, async(req,res)=>{
 async function getPayment(req, res, next) {
     let payment
     try {
-        payment = await Payment.findById(req.params.paymentId)
+        payment = await Payment.findById(req.params.paymentId).populate("player", ["_id", "name", "surname"])
         if (payment == null) {
             return res.status(404).json({ message: 'Cannot find payment' })
         }
