@@ -81,6 +81,8 @@ const ModificaSquadra = ()=>{
             tesseratiList.forEach(element => {
                 if(element.team_id==params.id){
                     checked.push(element._id)
+                    componentiList.push(element)
+                    /*
                     switch(element.a_type.type){
                         case 0: //ga
                             componentiList.push(element)
@@ -95,8 +97,14 @@ const ModificaSquadra = ()=>{
                             setCH_idSelected(element._id);
                             break;
                     }
+                    */
                 }else{
+                    if(element.a_type.type!=1){
+                        unchecked.push(element._id)
+                        tesseratiNoSquadra.push(element)
+                    }
                     
+                    /*
                     switch(element.a_type.type){
                         case 0://ga
                             unchecked.push(element._id)
@@ -112,7 +120,7 @@ const ModificaSquadra = ()=>{
                             chs.push({value:element._id,label:element.name+" "+element.surname});
                             break;
                     }
-
+                    */
                 }                       
             });
         }
@@ -120,19 +128,54 @@ const ModificaSquadra = ()=>{
         setCategoria(squadra.category);
         document.getElementById('categoria').value = squadra.category;
 
-        
-
-   
-
         //TODO settare valori dei selector
 
     },[tesseratiList]);
 
     const salva=()=>{
-        console.log(categoria);
-        console.log("checked: "+checked);  
-        console.log("unchecked: "+unchecked);  
-        console.log("unchecked: "+unchecked.length);      
+        if(categoria!=squadra.category){
+            Axios.patch('http://localhost:3001/api/v1/team/'+params.id,{
+                category:categoria
+            },
+            {headers:{
+                "auth-token":sessionStorage.getItem('token')}
+            }).then((response)=>{
+                //window.alert("Squadra correttamente");
+            }).catch((error)=>{
+                console.log(error.response.data)
+                window.alert(error.response.data);
+            })
+        }
+
+    checked.forEach(element => {
+        Axios.patch('http://localhost:3001/api/v1/user/'+element,{
+            team_id:params.id
+        },
+        {headers:{
+            "auth-token":sessionStorage.getItem('token')}
+        }).then((response)=>{
+            //window.alert("Profilo modificato correttamente");
+        }).catch((error)=>{
+            console.log(error.response.data)
+            window.alert(error.response.data);
+        })
+    });
+
+    unchecked.forEach(element => {
+        Axios.patch('http://localhost:3001/api/v1/user/'+element,{
+            team_id:"000000000000000000000000"
+        },
+        {headers:{
+            "auth-token":sessionStorage.getItem('token')}
+        }).then((response)=>{
+            //window.alert("Profilo modificato correttamente");
+        }).catch((error)=>{
+            console.log(error.response.data)
+            window.alert(error.response.data);
+        })
+    })
+    
+    window.location.href="/squadra/"+params.id
     };
     
     
@@ -160,13 +203,13 @@ const ModificaSquadra = ()=>{
     /*stuff to handle selectors*/
     const handleChange = (selector, event) => {
         if (selector === "teamManager") {
-            console.log(tm_idSelected)
             console.log(event.value)
+            console.log(tm_idSelected)
 
             if(tm_idSelected!=event.value){
                 flipflopchecks(event.value);
                 flipflopchecks(tm_idSelected);
-                setTM_idSelected(event.value);
+                setTM_idSelected(event.value)
             }
         } else if (selector === "coach") {
             if(ch_idSelected!=event.value){
@@ -186,15 +229,14 @@ const ModificaSquadra = ()=>{
     };
 
     const flipflopchecks= (id) => { //TODO mettere apposto
-        console.log(id)
         if(checked.includes(id)){
             console.log("removed");
-            setUnchecked(unchecked=>[unchecked,id]);
+            setUnchecked([...unchecked,id]);
             setChecked(arrayRemove(checked,id));
             
         }else{
             console.log("add")
-            setChecked(checked=>[checked,id]);
+            setChecked([...checked,id]);
             setUnchecked(arrayRemove(unchecked,id));
         }
     };
@@ -223,7 +265,7 @@ const ModificaSquadra = ()=>{
                     <div className="btnContainer"><button id="btn" onClick={salva}>Salva</button></div>
                 </div>
                     <InputText type={"text"} label={"Categoria"} id={"categoria"} onChangeHeadline={handleChangeInputText} />
-                <div className='selectors'>
+                <div className='selectors' style={{"display":"none"}}>
                     <div>       
                         <label>Coach</label>
                         <div className='chInput'>        

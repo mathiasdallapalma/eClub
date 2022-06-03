@@ -7,6 +7,7 @@ import 'typeface-roboto';
 
 import "./Sidebar.css"
 
+
 const Sidebar = ()=>{
     const profileLink="/anagrafica/"+sessionStorage.getItem('user_id');
     
@@ -18,9 +19,7 @@ const Sidebar = ()=>{
     const fetchData = async(handler) => {
         let response= await Axios.get('http://localhost:3001/api/v1/user/'+sessionStorage.getItem('user_id'),{
         headers:{
-            "auth-token":sessionStorage.getItem('token')},
-        params:{
-            _id:sessionStorage.getItem('user_id')}
+            "auth-token":sessionStorage.getItem('token')}
         })
         
         sessionStorage.setItem('user', JSON.stringify(response.data));
@@ -28,7 +27,7 @@ const Sidebar = ()=>{
     }
     
     useEffect( () => {
-        if(sessionStorage.getItem('auth-token')===undefined){
+        if(sessionStorage.length==0){
             window.location.href="/login";
         }else{
             if(!user){
@@ -63,13 +62,25 @@ const Sidebar = ()=>{
             <ul className="SidebarList" id="SidebarList"> 
                 {SidebarData.map((val, key) => {
                     return(
-                        <li key={key} className="row" 
-                            onClick={()=>{window.location.pathname=val.link
+                        <li key={key} className="row"
+                            id={val.id} 
+                            onClick={()=>{
                                 if(val.id=="logout"){
                                     sessionStorage.clear();
-                                    sessionStorage.setItem("loggedIn",false);
-                                }}}
-                            id={val.id}>
+                                    window.location.pathname="/login"
+                                }else if(val.id=="squadra"){
+                                    if(user.team_id!="000000000000000000000000"){
+                                        window.location.pathname="/squadra/"+user.team_id
+                                    }else{
+                                        window.alert("Non sei ancora stato inserito in una squadra")    
+                                    }
+                                }else{
+                                    window.location.pathname=val.link
+                                }
+                            
+                            
+                            }}
+                            >
                             {" "}
                             <div id="icon">
                                 {val.icon}

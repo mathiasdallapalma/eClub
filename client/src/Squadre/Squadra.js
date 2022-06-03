@@ -35,6 +35,8 @@ const Squadra = ()=>{
         let response= await Axios.get('http://localhost:3001/api/v1/team/'+params.id,{
             headers:{
                 "auth-token":sessionStorage.getItem('token')}
+            }).then((response)=>{
+                handler(response.data);
             })
             
         };
@@ -43,13 +45,12 @@ const Squadra = ()=>{
             if(squadra.length==0){
                 getSquadra(setSquadra);
             }
-        
-
         switch(sessionStorage.getItem('user_a_type')){
             case "0": //ga
                 document.getElementById("modificaBtn").style.display="none";
                 document.getElementById("eliminaBtn").style.display="none";
                 document.getElementById("AnagraficaList").style.display="none";
+                document.getElementById("tabellaTitle").style.display="none";
                 break;
             case "1": //dd
                
@@ -71,9 +72,11 @@ const Squadra = ()=>{
         let response= await Axios.get('http://localhost:3001/api/v1/user',{
             headers:{
                 "auth-token":sessionStorage.getItem('token')}
-            });
+            }).then((response)=>{
+                handler(response.data);
+            })
             //settesseratiList(response.data);
-            handler(response.data);    
+                
     }
 
     useEffect(()=>{
@@ -83,9 +86,7 @@ const Squadra = ()=>{
         }
         else{
             tesseratiList.forEach(element => {
-                console.log(element.name)
                 if(element.team_id==params.id){
-                    console.log("true")
                     switch(element.a_type.type){
                         case 0:
                             gas.push(element)
@@ -108,7 +109,7 @@ const Squadra = ()=>{
     };
 
     const elimina=()=>{
-        console.log(params.id);
+        //TODO eliminare team da users 
         Axios.delete('http://localhost:3001/api/v1/team/'+params.id,{
         headers:{
             "auth-token":sessionStorage.getItem('token')},
@@ -120,6 +121,43 @@ const Squadra = ()=>{
             console.log(error.response.data)
             window.alert(error.response.data);
         });
+
+        gas.forEach(element => {
+            Axios.patch('http://localhost:3001/api/v1/user/'+element._id,{
+                team_id:"000000000000000000000000"
+            },
+            {headers:{
+                "auth-token":sessionStorage.getItem('token')}
+            }).then((response)=>{
+                //window.alert("Profilo modificato correttamente");
+            }).catch((error)=>{
+                console.log(error.response.data)
+                window.alert(error.response.data);
+            })
+        })
+        Axios.patch('http://localhost:3001/api/v1/user/'+tm._id,{
+                team_id:"000000000000000000000000"
+            },
+            {headers:{
+                "auth-token":sessionStorage.getItem('token')}
+            }).then((response)=>{
+                //window.alert("Profilo modificato correttamente");
+            }).catch((error)=>{
+                console.log(error.response.data)
+                window.alert(error.response.data);
+            })
+        Axios.patch('http://localhost:3001/api/v1/user/'+ch._id,{
+            team_id:"000000000000000000000000"
+        },
+        {headers:{
+            "auth-token":sessionStorage.getItem('token')}
+        }).then((response)=>{
+            //window.alert("Profilo modificato correttamente");
+        }).catch((error)=>{
+            console.log(error.response.data)
+            window.alert(error.response.data);
+        })
+
         window.location.href = "/squadre";
     };
 
@@ -137,11 +175,11 @@ const Squadra = ()=>{
                     <img src="img.jpg" id="profileImg"></img>
                     <div className='datiSquadra'>
                         <h3>INFORMAZIONI GENERALI</h3>
-                        <h1> {squadra.category}</h1>
+                        <h1>{squadra.category}</h1>
                         <div><h2> TM: {tm.name} {tm.surname}  |</h2><h2>CH: {ch.name} {ch.surname}  </h2></div>
                     </div>
                 </div> 
-                <h1 className="tabellaTitle">Tesserati</h1>
+                <h1 className="tabellaTitle" id="tabellaTitle">Tesserati</h1>
                 <table cellspacing ="0" className='AnagraficaList' id="AnagraficaList">
                 <tr id="header"> <td><h1></h1></td> <td><h1>Nome</h1></td> <td><h1>Data nascita</h1></td><td><h1>Indirizzo</h1></td><td><h1>Telefono</h1></td></tr>
                     {gas.map((val,key) => {

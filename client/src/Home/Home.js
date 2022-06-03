@@ -9,21 +9,22 @@ import Topbar from '../components/Topbar';
 import "./Home.css"
 
 const Home = ()=>{
-    
-    
-    
+
+
+    const [user,setUser]=useState(0);
     useEffect( () => {
-        if(sessionStorage.getItem('loggedIn')==false){
-            window.location.href="/login";
-        }
-        console.log(sessionStorage.getItem('loggedIn')==false)
-        
-    });
+        setUser(JSON.parse(sessionStorage.getItem("user")));
+    },[]);
+
+
  
     return (
         <div className="home">
             <Sidebar />
-            <Topbar />
+            <div>
+                <Topbar />
+                <h1>Ciao {user.name}</h1>
+            </div>
         </div>
         
     );

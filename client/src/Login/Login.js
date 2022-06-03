@@ -10,7 +10,6 @@ import { Checkbox } from '@mui/material';
 /*Style*/
 import './Login.css';
 
-import session from '../index.js';
 
 const Login = ()=>{
     const[email,setEmail]=useState("");
