@@ -13,7 +13,7 @@ router.get('/', verify, authorization, async(req, res) => {
     
     try{
         //loading all users
-        const user = await User.find().populate("id_team", ["_id", "category"]).populate("a_type", ["_id", "name"]).populate("added_by", ["_id", "name", "surname"])
+        const user = await User.find().populate("a_type", ["_id", "name","type"]).populate("added_by", ["_id", "name", "surname"])
         res.json(user);
     }catch(err){
         res.status(500).json({ message: err });
@@ -107,7 +107,7 @@ router.patch('/:userId', verify, authorization, async(req,res)=>{
 async function getUser(req, res, next) {
     let user
     try {
-        user = await User.findById(req.params.userId).populate("id_team", ["_id", "category"]).populate("a_type", ["_id", "name"]).populate("added_by", ["_id", "name", "surname"])
+        user = await User.findById(req.params.userId).populate("a_type", ["_id", "name"]).populate("added_by", ["_id", "name", "surname"])
         if (user == null) {
             return res.status(404).json({ message: 'Cannot find user' })
         }

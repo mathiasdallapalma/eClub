@@ -4,9 +4,13 @@ const express = require('express');
 const app = express();
 const mongoose = require('mongoose');
 const bodyParser = require("body-parser");
+const cors=require("cors");
 
 /* --- Middlewares: Body Parser --- */
 app.use(bodyParser.json());
+
+/* --- Middlewares: Cors --- */
+app.use(cors());
 
 /* --- Routes --- */
 const authRoute = require('./routes/auth');
@@ -28,6 +32,6 @@ db.on('error', (error) => console.error(error))
 db.once('open', () => console.log('Connected to Database'))
 
 /* --- Server Starting --- */
-app.listen(3000, () => console.log("Server started"));
+app.listen(3001, () => console.log("Server started"));
 
 

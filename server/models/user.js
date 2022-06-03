@@ -24,13 +24,15 @@ const UserSchema = new mongoose.Schema({
     },
     birth:{
         type: Date,
+        required:true
     },
     a_type:{
         type: mongoose.Schema.Types.ObjectId, ref: 'UserType',
         required: true
     },
-    id_team:{
+    team_id:{
         type: mongoose.Schema.Types.ObjectId, ref: 'Team',
+        default:"000000000000000000000000"
     },
     zip:{
         type: String,

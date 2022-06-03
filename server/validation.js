@@ -35,6 +35,7 @@ const registerUserValidation = (data) => {
             .max(30),
         added_by: Joi.string()
             .required(),
+        team_id:Joi.string()
     });
     return schema.validate(data);
 }
