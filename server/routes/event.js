@@ -2,10 +2,19 @@ const express = require('express');
 const mongoose = require('mongoose');
 const req = require('express/lib/request');
 const router = express.Router();
-const Event = require('../models/Event')
+var ObjectId = require('mongoose').Types.ObjectId;
+
 const bcrypt = require('bcryptjs')
 const {eventValidation}= require('../validation')
 const verify = require('./verifyToken');
+
+/* --- Importing models--- */
+const Event = require('../models/Event');
+const EventType = require('../models/EventType');
+const User = require('../models/User');
+const Attendance = require('../models/Attendance');
+const Summoning = require('../models/Summoning');
+const Evaluation = require('../models/Evaluation');
 
 /* --- GET: all Events --- */
 router.get('/', verify, async(req, res) => {
@@ -35,14 +44,6 @@ router.post('/', verify, async (req, res) => {
     const eventExist = await Event.findOne({title: req.body.title, teams: req.body.teams, date:req.body.date});
     if(eventExist) return res.status(400).send('Event already exists')
 
-    //parsing team array
-    /*
-    var teams=[];
-    
-        req.body.teams.forEach(function(element) { 
-            teams.push(element)
-            });
-   */
     //create new event
     const event = new Event({
         title: req.body.title,
@@ -57,6 +58,64 @@ router.post('/', verify, async (req, res) => {
         res.status(201).json({ event: event._id })
     }catch(err){
         res.status(500).json({ message: err });
+    }
+
+    const event_type= await EventType.findById(req.body.e_type);
+
+    if(event_type.type!=0){
+        var players=[];
+        req.body.teams.forEach(async element =>  {
+            players= await User.find({team_id:new ObjectId(element)}).populate({path: 'a_type'});
+            players.forEach(ga => {
+                if(ga.a_type.type==0){
+                    createAttendence(ga.id);
+                    if(event_type.type==1){ //partita
+                        createSummoning(ga._id);
+                        createEvaluation(ga._id);
+                    } 
+                }  
+            });
+        });
+    }
+
+    async function createAttendence(ga_id){
+        const attendance = new Attendance({
+            event: event._id,
+            player: ga_id,
+            value: false,
+            added_by: req.body.added_by,
+        })
+        try{
+            const savedAttendance = await attendance.save();
+        }catch(err){
+            console.log(err)
+        }
+    }
+    async function createSummoning(ga_id){
+        const summoning = new Summoning({
+            event: event._id,
+            player: ga_id,
+            value: false,
+            added_by: req.body.added_by,
+        })
+        try{
+            const savedAttendance = await summoning.save();
+        }catch(err){
+            console.log(err)
+        }
+    }
+    async function createEvaluation(ga_id){
+        const evaluation = new Evaluation({
+            event: event._id,
+            player: ga_id,
+            value: 0,
+            added_by: req.body.added_by,
+        })
+        try{
+            const savedAttendance = await evaluation.save();
+        }catch(err){
+            console.log(err)
+        }
     }
 } )
 
