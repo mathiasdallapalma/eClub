@@ -89,10 +89,26 @@ const passwordResetValidation = (data) => {
     return schema.validate(data);
 }
 
+/* --- VALIDATION: med schema --- */
+const medValidation = (data) => {
+    const schema = Joi.object({
+        released_at: Joi.date()
+            .required(),
+        expiring_at: Joi.date()
+            .required,
+        player: Joi.string()
+            .required()
+            .min(3)
+            .max(255),
+        verified: Joi.bool(),
+    });
+    return schema.validate(data);
+}
+
 module.exports.registerUserValidation = registerUserValidation;
 module.exports.loginValidation = loginValidation;
 module.exports.teamValidation = teamValidation;
 module.exports.userTypeValidation = userTypeValidation;
 module.exports.passwordResetValidation = passwordResetValidation;
-
+module.exports.medValidation = medValidation;
     
