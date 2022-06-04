@@ -5,6 +5,8 @@ const payment = require('../models/Payment');
 const router = express.Router();
 const Payment = require('../models/Payment');
 const verify = require('./verifyToken');
+const authorization = require('./authToken');
+
 
 /* --- GET: all Payments --- */
 router.get('/', verify, async(req, res) => {
@@ -18,12 +20,28 @@ router.get('/', verify, async(req, res) => {
 })
 
 /* --- GET: specific Payment --- */
-router.get('/:paymentId', verify, getPayment, async (req, res) => {
-    res.json(res.payment)
+router.get('/payment/paymentId', verify, authorization, getPayment, async (req, res) => {
+    res.status(200).json(res.payment)
 })
 
+/* --- GET: Payment by player --- */
+router.get('/player/:playerId', verify, authorization, async (req, res) => {
+    
+    let payment
+    try {
+        payment = await Payment.find({player : req.params.playerId}).populate("player",["name","surname"]);
+        if (payment == null) {
+            return res.status(404).json({ message: 'Cannot find player' })
+        }
+    } catch (err) {
+        return res.status(500).json({ message: err.message })
+    }
+    res.status(200).json(payment)
+})
+
+
 /* --- POST: creating one Payment --- */
-router.post('/', verify, async (req, res) => {
+router.post('/', verify, authorization, async (req, res) => {
 
     //create new Payment
     const payment = new Payment({
@@ -40,7 +58,7 @@ router.post('/', verify, async (req, res) => {
 })
 
 /* --- DELETE: specific Payment --- */
-router.delete('/:paymentId', verify, getPayment, async (req, res) => {
+router.delete('/:paymentId', verify, authorization, getPayment, async (req, res) => {
     try {
         //removing payment
         const removedpayment = await res.payment.remove()
@@ -51,7 +69,7 @@ router.delete('/:paymentId', verify, getPayment, async (req, res) => {
 })
 
 /* --- PATCH: update Payment --- */
-router.patch('/:paymentId', verify, async(req,res)=>{
+router.patch('/:paymentId', verify, authorization, async(req,res)=>{
     Payment.findByIdAndUpdate({
         _id:req.params.paymentId
     },{
