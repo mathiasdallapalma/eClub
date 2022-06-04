@@ -1,0 +1,22 @@
+.eventi{
+    position: absolute;
+    top: 0;
+    display: flex;
+    flex-direction: row;
+}
+
+.EventList #header{
+    background-color: hsl(16, 78%, 52%);
+    color:white;
+    border-radius: 100%;
+}
+
+.eventi .title{
+    flex-direction: row;
+    display: flex;
+    
+}
+
+.title h1{
+    font-size:22px
+}

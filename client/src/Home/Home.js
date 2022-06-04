@@ -23,7 +23,6 @@ const Home = ()=>{
             <Sidebar />
             <div>
                 <Topbar />
-                <h1>Ciao {user.name}</h1>
             </div>
         </div>
         

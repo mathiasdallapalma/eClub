@@ -18,7 +18,7 @@ const Profilo = ()=>{
     /*getting user id*/
     const params=useParams();
 
-    const [user,setUser]=useState("");
+    const [user,setUser]=useState(0);
 
     const fetchData = async(handler) => {
         let response= await Axios.get('http://localhost:3001/api/v1/user/'+params.id,{
@@ -60,7 +60,7 @@ const Profilo = ()=>{
                 document.getElementById("modificaBtn").style.display="none";
                 break;
         }
-    },[user]); //TODO useffect keeps calling
+    },[]);
 
     const modifica=()=>{
         const path=params.id+"/modifica"

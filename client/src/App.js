@@ -15,6 +15,9 @@ import Squadra from './Squadre/Squadra';
 import ModificaProfilo from './Profilo/ModificaProfilo';
 import ModificaSquadra from './Squadre/ModificaSquadra';
 import NuovaPass from './Login/NuovaPass'
+import Eventi from "./Eventi/Eventi"
+import Evento from './Eventi/Evento';
+import NuovoEvento from './Eventi/NuovoEvento';
 
 
 function App() {
@@ -63,6 +66,15 @@ function App() {
           </Route>
           <Route exact path="/creaTesserato">
             <NuovoTesserato />
+          </Route>
+          <Route exact path="/eventi">
+            <Eventi />
+          </Route>
+          <Route exact path="/evento/:id">
+            <Evento />
+          </Route>
+          <Route exact path="/creaEvento">
+            <NuovoEvento />
           </Route>
         </Switch>
       </div>

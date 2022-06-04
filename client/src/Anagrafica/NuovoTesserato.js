@@ -50,7 +50,6 @@ const NuovoTesserato = ()=>{
             console.log(error.response.data)
             window.alert(error.response.data);
             document.getElementById("ruolo").value="";
-            
         })
     };
 
