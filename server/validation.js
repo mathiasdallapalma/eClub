@@ -89,10 +89,25 @@ const passwordResetValidation = (data) => {
     return schema.validate(data);
 }
 
+/* --- VALIDATION: material schema --- */
+const materialValidation = (data) => {
+    const schema = Joi.object({
+        description: Joi.string()
+            .required()
+            .min(3)
+            .max(255),
+        player: Joi.string()
+            .min(3)
+            .max(255),
+        given_at: Joi.date(),
+        returned_at: Joi.date(),
+    });
+    return schema.validate(data);
+}
+
 module.exports.registerUserValidation = registerUserValidation;
 module.exports.loginValidation = loginValidation;
 module.exports.teamValidation = teamValidation;
 module.exports.userTypeValidation = userTypeValidation;
 module.exports.passwordResetValidation = passwordResetValidation;
-
-    
+module.exports.materialValidation = materialValidation;
