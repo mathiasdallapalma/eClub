@@ -14,7 +14,7 @@ router.get('/', verify, authorization, async(req, res) => {
     try{
         //loading all users
         const user = await User.find().populate("a_type", ["_id", "name","type"]).populate("added_by", ["_id", "name", "surname"])
-        res.json(user);
+        res.status(200).json(user);
     }catch(err){
         res.status(500).json({ message: err });
     }

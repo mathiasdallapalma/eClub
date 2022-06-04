@@ -125,8 +125,11 @@ const eventValidation = (data) => {
         e_type: Joi.string()
             .required(),
         added_by: Joi.string()
-            .required()
-            
+            .required()       
+    });
+    return schema.validate(data);
+}
+
 /* --- VALIDATION: med schema --- */
 const medValidation = (data) => {
     const schema = Joi.object({
@@ -185,6 +188,20 @@ const evaluationValidation = (data) => {
     return schema.validate(data);
 }
 
+const communicationValidation = (data) => {
+    const schema = Joi.object({
+        teams: Joi.array(),
+        subject: Joi.string()
+            .max(200)
+            .required(),
+        text: Joi.string()
+            .max(2000)
+            .required(),
+        added_by: Joi.string()
+            .required()
+    });
+    return schema.validate(data);
+}
 
 
 
@@ -200,4 +217,5 @@ module.exports.eventTypeValidation = eventTypeValidation;
 module.exports.attendanceValidation = attendanceValidation;
 module.exports.evaluationValidation = evaluationValidation;
 module.exports.medValidation = medValidation;
+module.exports.communicationValidation = communicationValidation;
     
