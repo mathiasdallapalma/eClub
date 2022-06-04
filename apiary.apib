@@ -1549,7 +1549,7 @@ You may delete an existing event type using this action. It takes a JSON object 
             {
                 "error": "Database error message"
             }
-
+        
 ### Add a new attendance [POST]
 You may add a new user using this action. It takes a JSON object containing the necessary information.
 
@@ -1625,7 +1625,7 @@ You may add a new user using this action. It takes a JSON object containing the 
                 "error": "Database error message"
             }
 
-## Attendances By Player [/api/v1/user/player/{idPlayer}]
+## Attendances By Player [/api/v1/attendance/player/{idPlayer}]
 ### List all attendances of scpecific player [GET]
 + Request (application/json)
 
@@ -1676,7 +1676,7 @@ You may add a new user using this action. It takes a JSON object containing the 
                 "error": "Database error message"
             }
 
-## Attendances By Event [/api/v1/user/event/{idEvent}]
+## Attendances By Event [/api/v1/attendance/event/{idEvent}]
 ### List all attendances of scpecific event [GET]
 + Request (application/json)
 
@@ -1765,7 +1765,7 @@ You may update an existing attendance using this action. It takes a JSON object 
     + Body
 
             {
-                "error":"Object sent is not a user."
+                "error":"Object sent is not a attendance."
             }
 
 + Response 401 (application/json)
@@ -1791,9 +1791,10 @@ You may update an existing attendance using this action. It takes a JSON object 
             {
                 "error": "Database error message"
             }
+
 ### Delete a specific attendance [DELETE]
 
-You may delete an existing user using this action. It takes a JSON object containing the id of the user to delete.
+You may delete an existing attendance using this action. It takes a JSON object containing the id of the user to delete.
 
 + Request (application/json)
 
@@ -1807,12 +1808,12 @@ You may delete an existing user using this action. It takes a JSON object contai
                 "_id": "62894da00842bba6fcfbc9a3",
             }
 
-+ Response 200 (application/json)
 
++ Response 200 (application/json)
     + Headers
 
             Location: /api/v2/attendance/
-
+            
     + Body
 
             {
@@ -1825,7 +1826,715 @@ You may delete an existing user using this action. It takes a JSON object contai
     + Body
 
             {
-                "error":"Object sent is not a attendance."
+                "error":"Object passed has incorrect values."
+            }
+
++ Response 401 (application/json)
+
+
+    + Body
+
+            {
+                "error":"No token provided."
+            }
+            
++ Response 403 (application/json)
+
+
+    + Body
+
+            {
+                "error":"Invalid token. / User is not admin."
+            }
+
++ Response 500 (application/json)
+
+            {
+                "error": "Database error message"
+            }
+
+## Summonings [/api/v2/summoning]
+
+### List all Summonings [GET]
+
++ Response 201 (application/json)
+
+           [
+                {
+                    "_id": "629b19c417d2c125ef102c71",
+                    "event": {
+                        "_id": "629b19c317d2c125ef102c69",
+                        "title": "Evento1",
+                        "date": "2022-06-02T21:30:00.000Z"
+                    },
+                    "player": {
+                        "_id": "629908391b943ad700b52c63",
+                        "name": "Gianfranco",
+                        "surname": "Ariosto"
+                    },
+                    "value": false,
+                    "status": 0,
+                    "hidden": 0,
+                    "added_by": "628905acfc8a650ccd42368e",
+                    "created_at": "2022-06-04T08:37:24.931Z",
+                    "__v": 0
+                }
+            ]
+
++ Response 401 (application/json)
+
+    + Body
+
+            {
+                "error":"Invalid Token"
+            }
+            
++ Response 403 (application/json)
+
+
+    + Body
+
+            {
+                "error":"Invalid token. / User is not admin."
+            }
+
++ Response 500 (application/json)
+
+            {
+                "error": "Database error message"
+            }
+        
+### Add a new summoning [POST]
+You may add a new summoning using this action. It takes a JSON object containing the necessary information.
+
++ Parameters
+
+    - player: 629272f3c8a1c137d5e6ca6c (ObjectId) - ###### required
+    - event: 62986cb047de012aab2dac4c (String) - ###### required
+    - value: true (Boolean) - ###### required
+    - status: 0 (Number) - ###### not required
+    - hidden: 0 (Boolean) - ###### not required
+    - added_by: sd3fe2w23 (ObjectId) - ###### required
+    - created_at: 2020/12/13 (Date) - ###### required
+    - updated_at: 2020/12/13 (Date) - ###### required
+    - deleted_at: 2020/12/13 (Date) - ###### required
+
++ Request (application/json)
+
+    + Headers
+    
+            auth-token: token
+    
+    + Body
+
+            {
+                "player":"629272f3c8a1c137d5e6ca6c",
+                "event": "62986cb047de012aab2dac4c",
+                "value":true,
+                "added_by": "62927232c8a1c137d5e6ca4f"
+            }
+            
++ Response 201 (application/json)
+
+    + Headers
+
+            Location: /api/v2/summoning/
+
+    + Body
+
+            {
+                "summoning": "628bca9fd92d31c040d82474"
+            }
+
++ Response 400 (application/json)
+
+
+    + Body
+
+            {
+                "error":"Validation error"
+            }
+
++ Response 401 (application/json)
+
+
+    + Body
+
+            {
+                "error":"Invalid Token"
+            }
+            
++ Response 403 (application/json)
+
+
+    + Body
+
+            {
+                "error":"Invalid token. / User is not admin."
+            }
+
++ Response 500 (application/json)
+
+            {
+                "error": "Database error message"
+            }
+
+## Summonings By Player [/api/v1/summoning/player/{idPlayer}]
+### List all summonings of scpecific player [GET]
++ Request (application/json)
+
+    + Headers
+    
+            auth-token: token
+
++ Response 201 (application/json)
+
+            [
+                {
+                    "_id": "629b19c417d2c125ef102c71",
+                    "event": {
+                        "_id": "629b19c317d2c125ef102c69",
+                        "title": "Evento1",
+                        "date": "2022-06-02T21:30:00.000Z"
+                    },
+                    "player": "629908391b943ad700b52c63",
+                    "value": false,
+                    "status": 0,
+                    "hidden": 0,
+                    "added_by": "628905acfc8a650ccd42368e",
+                    "created_at": "2022-06-04T08:37:24.931Z",
+                    "__v": 0
+                },
+            ]
+
++ Response 401 (application/json)
+
+    + Body
+
+            {
+                "error":"Invalid Token"
+            }
+            
++ Response 403 (application/json)
+
+
+    + Body
+
+            {
+                "error":"Invalid token. / User is not admin."
+            }
+
++ Response 500 (application/json)
+
+            {
+                "error": "Database error message"
+            }
+
+## Summoning By Event [/api/v1/summoning/event/{idEvent}]
+### List all summoning of scpecific event [GET]
++ Request (application/json)
+
+    + Headers
+    
+            auth-token: token
+
++ Response 201 (application/json)
+
+            [
+                {
+                    "_id": "629b19c417d2c125ef102c71",
+                    "event": "629b19c317d2c125ef102c69",
+                    "player": {
+                        "_id": "629908391b943ad700b52c63",
+                        "name": "Gianfranco",
+                        "surname": "Ariosto"
+                    },
+                    "value": false,
+                    "status": 0,
+                    "hidden": 0,
+                    "added_by": "628905acfc8a650ccd42368e",
+                    "created_at": "2022-06-04T08:37:24.931Z",
+                    "__v": 0
+                },
+            ]
+
++ Response 401 (application/json)
+
+    + Body
+
+            {
+                "error":"Invalid Token"
+            }
+            
++ Response 403 (application/json)
+
+
+    + Body
+
+            {
+                "error":"Invalid token. / User is not admin."
+            }
+
++ Response 500 (application/json)
+
+            {
+                "error": "Database error message"
+            }
+
+## Specific Summoning [/api/v2/summoning/{idSummoning}]
+### Update a specific summoning [PATCH]
+
+You may update an existing summoning using this action. It takes a JSON object containing the new complete information.
+
++ Request (application/json)
+
+    + Headers
+    
+            auth-token: token
+    
+    + Body
+
+            {
+                "player":"629272f3c8a1c137d5e6ca6c",
+                "event": "62986cb047de012aab2dac4c",
+                "value":true,
+                "added_by": "62927232c8a1c137d5e6ca4f"
+            }
+
++ Response 200 (application/json)
+
+    + Headers
+
+            Location: /api/v2/summoning/
+
+    + Body
+
+            {
+                "message": "Success updating"
+            }
+
++ Response 400 (application/json)
+
+
+    + Body
+
+            {
+                "error":"Object sent is not a summoning."
+            }
+
++ Response 401 (application/json)
+
+
+    + Body
+
+            {
+                "error":"No token provided."
+            }
+            
++ Response 403 (application/json)
+
+
+    + Body
+
+            {
+                "error":"Invalid token. / User is not admin."
+            }
+
++ Response 500 (application/json)
+
+            {
+                "error": "Database error message"
+            }
+
+### Delete a specific summoning [DELETE]
+
+You may delete an existing summoning using this action. It takes a JSON object containing the id of the user to delete.
+
++ Request (application/json)
+
+    + Headers
+    
+            auth-token: token
+    
+    + Body
+
+            {
+                "_id": "62894da00842bba6fcfbc9a3",
+            }
+
+
++ Response 200 (application/json)
+    + Headers
+
+            Location: /api/v2/summoning/
+            
+    + Body
+
+            {
+                "result":"Succesfully removed `req.body.id`"
+            }
+
++ Response 400 (application/json)
+
+
+    + Body
+
+            {
+                "error":"Object passed has incorrect values."
+            }
+
++ Response 401 (application/json)
+
+
+    + Body
+
+            {
+                "error":"No token provided."
+            }
+            
++ Response 403 (application/json)
+
+
+    + Body
+
+            {
+                "error":"Invalid token. / User is not admin."
+            }
+
++ Response 500 (application/json)
+
+            {
+                "error": "Database error message"
+            }
+
+## Evaluation [/api/v2/evaluation]
+
+### List all Evaluation [GET]
+
++ Response 201 (application/json)
+
+           [
+                {
+                    "_id": "629b19c417d2c125ef102c71",
+                    "event": {
+                        "_id": "629b19c317d2c125ef102c69",
+                        "title": "Evento1",
+                        "date": "2022-06-02T21:30:00.000Z"
+                    },
+                    "player": {
+                        "_id": "629908391b943ad700b52c63",
+                        "name": "Gianfranco",
+                        "surname": "Ariosto"
+                    },
+                    "value": false,
+                    "status": 0,
+                    "hidden": 0,
+                    "added_by": "628905acfc8a650ccd42368e",
+                    "created_at": "2022-06-04T08:37:24.931Z",
+                    "__v": 0
+                }
+            ]
+
++ Response 401 (application/json)
+
+    + Body
+
+            {
+                "error":"Invalid Token"
+            }
+            
++ Response 403 (application/json)
+
+
+    + Body
+
+            {
+                "error":"Invalid token. / User is not admin."
+            }
+
++ Response 500 (application/json)
+
+            {
+                "error": "Database error message"
+            }
+        
+### Add a new evaluation [POST]
+You may add a new evaluation using this action. It takes a JSON object containing the necessary information.
+
++ Parameters
+
+    - player: 629272f3c8a1c137d5e6ca6c (ObjectId) - ###### required
+    - event: 62986cb047de012aab2dac4c (String) - ###### required
+    - value: 8 (Number) - ###### required
+    - status: 0 (Number) - ###### not required
+    - hidden: 0 (Boolean) - ###### not required
+    - added_by: sd3fe2w23 (ObjectId) - ###### required
+    - created_at: 2020/12/13 (Date) - ###### required
+    - updated_at: 2020/12/13 (Date) - ###### required
+    - deleted_at: 2020/12/13 (Date) - ###### required
+
++ Request (application/json)
+
+    + Headers
+    
+            auth-token: token
+    
+    + Body
+
+            {
+                "player":"629272f3c8a1c137d5e6ca6c",
+                "event": "62986cb047de012aab2dac4c",
+                "value":8,
+                "added_by": "62927232c8a1c137d5e6ca4f"
+            }
+            
++ Response 201 (application/json)
+
+    + Headers
+
+            Location: /api/v2/evaluation/
+
+    + Body
+
+            {
+                "evaluation": "628bca9fd92d31c040d82474"
+            }
+
++ Response 400 (application/json)
+
+
+    + Body
+
+            {
+                "error":"Validation error"
+            }
+
++ Response 401 (application/json)
+
+
+    + Body
+
+            {
+                "error":"Invalid Token"
+            }
+            
++ Response 403 (application/json)
+
+
+    + Body
+
+            {
+                "error":"Invalid token. / User is not admin."
+            }
+
++ Response 500 (application/json)
+
+            {
+                "error": "Database error message"
+            }
+
+## Evaluation By Player [/api/v1/evaluation/player/{idPlayer}]
+### List all evaluation of scpecific player [GET]
++ Request (application/json)
+
+    + Headers
+    
+            auth-token: token
+
++ Response 201 (application/json)
+
+            [
+                {
+                    "_id": "629b19c417d2c125ef102c71",
+                    "event": {
+                        "_id": "629b19c317d2c125ef102c69",
+                        "title": "Evento1",
+                        "date": "2022-06-02T21:30:00.000Z"
+                    },
+                    "player": "629908391b943ad700b52c63",
+                    "value": 7,
+                    "status": 0,
+                    "hidden": 0,
+                    "added_by": "628905acfc8a650ccd42368e",
+                    "created_at": "2022-06-04T08:37:24.931Z",
+                    "__v": 0
+                },
+            ]
+
++ Response 401 (application/json)
+
+    + Body
+
+            {
+                "error":"Invalid Token"
+            }
+            
++ Response 403 (application/json)
+
+
+    + Body
+
+            {
+                "error":"Invalid token. / User is not admin."
+            }
+
++ Response 500 (application/json)
+
+            {
+                "error": "Database error message"
+            }
+
+## Evaluation By Event [/api/v1/evaluation/event/{idEvent}]
+### List all evaluation of scpecific event [GET]
++ Request (application/json)
+
+    + Headers
+    
+            auth-token: token
+
++ Response 201 (application/json)
+
+            [
+                {
+                    "_id": "629b19c417d2c125ef102c71",
+                    "event": "629b19c317d2c125ef102c69",
+                    "player": {
+                        "_id": "629908391b943ad700b52c63",
+                        "name": "Gianfranco",
+                        "surname": "Ariosto"
+                    },
+                    "value": 5,
+                    "status": 0,
+                    "hidden": 0,
+                    "added_by": "628905acfc8a650ccd42368e",
+                    "created_at": "2022-06-04T08:37:24.931Z",
+                    "__v": 0
+                },
+            ]
+
++ Response 401 (application/json)
+
+    + Body
+
+            {
+                "error":"Invalid Token"
+            }
+            
++ Response 403 (application/json)
+
+
+    + Body
+
+            {
+                "error":"Invalid token. / User is not admin."
+            }
+
++ Response 500 (application/json)
+
+            {
+                "error": "Database error message"
+            }
+
+## Specific Evaluation [/api/v2/evaluation/{idEvaluation}]
+### Update a specific evaluation [PATCH]
+
+You may update an existing evaluation using this action. It takes a JSON object containing the new complete information.
+
++ Request (application/json)
+
+    + Headers
+    
+            auth-token: token
+    
+    + Body
+
+            {
+                "player":"629272f3c8a1c137d5e6ca6c",
+                "event": "62986cb047de012aab2dac4c",
+                "value":10,
+                "added_by": "62927232c8a1c137d5e6ca4f"
+            }
+
++ Response 200 (application/json)
+
+    + Headers
+
+            Location: /api/v2/evaluation/
+
+    + Body
+
+            {
+                "message": "Success updating"
+            }
+
++ Response 400 (application/json)
+
+
+    + Body
+
+            {
+                "error":"Object sent is not a summoning."
+            }
+
++ Response 401 (application/json)
+
+
+    + Body
+
+            {
+                "error":"No token provided."
+            }
+            
++ Response 403 (application/json)
+
+
+    + Body
+
+            {
+                "error":"Invalid token. / User is not admin."
+            }
+
++ Response 500 (application/json)
+
+            {
+                "error": "Database error message"
+            }
+
+### Delete a specific evaluation [DELETE]
+
+You may delete an existing evaluation using this action. It takes a JSON object containing the id of the user to delete.
+
++ Request (application/json)
+
+    + Headers
+    
+            auth-token: token
+    
+    + Body
+
+            {
+                "_id": "62894da00842bba6fcfbc9a3",
+            }
+
+
++ Response 200 (application/json)
+    + Headers
+
+            Location: /api/v2/evaluation/
+            
+    + Body
+
+            {
+                "result":"Succesfully removed `req.body.id`"
+            }
+
++ Response 400 (application/json)
+
+
+    + Body
+
+            {
+                "error":"Object passed has incorrect values."
             }
 
 + Response 401 (application/json)
