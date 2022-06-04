@@ -89,10 +89,25 @@ const passwordResetValidation = (data) => {
     return schema.validate(data);
 }
 
+/* --- VALIDATION: payment schema ---*/
+const paymentValidation = (data) => {
+    const schema = Joi.object({
+        amount: Joi.number()
+            .required(),
+        description: Joi.string(),
+        paid_at: Joi.date()
+            .required(),
+        player: Joi.string()
+            .required(),
+    })
+    return schema.validate(data);
+}
+
 module.exports.registerUserValidation = registerUserValidation;
 module.exports.loginValidation = loginValidation;
 module.exports.teamValidation = teamValidation;
 module.exports.userTypeValidation = userTypeValidation;
 module.exports.passwordResetValidation = passwordResetValidation;
+module.exports.paymentValidation = paymentValidation;
 
     

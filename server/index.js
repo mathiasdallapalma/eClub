@@ -18,12 +18,13 @@ const userRoute = require('./routes/User');
 const userTypeRoute = require('./routes/UserType');
 const teamRoute = require('./routes/Team');
 const passwordResetRoute = require('./routes/password_reset');
+const paymentRoute = require ('./routes/Payment');
 app.use("/api/v1/user", userRoute)
 app.use("/api/v1/usertype", userTypeRoute)
 app.use("/api/v1/team", teamRoute)
 app.use("/api/v1/auth", authRoute)
 app.use("/api/v1/password_reset", passwordResetRoute)
-
+app.use("/api/v2/payment", paymentRoute)
 
 /* --- DB Connection --- */
 mongoose.connect(process.env.DATABASE_URL, { useNewUrlParser: true })
