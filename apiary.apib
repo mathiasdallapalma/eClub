@@ -22,12 +22,16 @@ relative alle proprie squadre composte ciascuna da Team Manager, Coach e Atleti.
 
             [
                 {
-                    "_id": "628905acfc8a650ccd42368e",
+                    "_id": "62987f9e04224e2d33075e28",
                     "email": "giovanni@storti.it",
-                    "password": "$2a$10$psih7lvs4/u9DXEtqNAZKuFzPXk90sU/36zguFEtvJNhpsb2jzhEe",
+                    "password": "$2a$10$HpjRQaVGbdkRBtnBzolrH.XGMzkK9wOmWCcKax4GRPlfNk0yHOvIu",
                     "name": "Giovanni",
                     "surname": "Storti",
-                    "a_type": 1,
+                    "a_type": {
+                        "_id": "62987f2b04224e2d33075e22",
+                        "name": "Dirigente del Direttivo",
+                        "type": 1
+                    },
                     "zip": "38016",
                     "city": "Mezzocorona",
                     "province": "TN",
@@ -36,9 +40,14 @@ relative alle proprie squadre composte ciascuna da Team Manager, Coach e Atleti.
                     "phone": "340432543",
                     "status": 0,
                     "hidden": false,
-                    "added_by": "628905acfc8a650ccd4223234233ee",
-                    "created_at": "2022-05-21T15:30:52.343Z",
-                    "__v": 0
+                    "added_by": {
+                        "_id": "62987f9e04224e2d33075e28",
+                        "name": "Mario",
+                        "surname": "Rossi"
+                    },
+                    "created_at": "2022-06-02T09:15:10.502Z",
+                    "__v": 0,
+                    "birth": "1966-03-12T00:00:00.000Z"
                 }
             ]
 
@@ -74,17 +83,18 @@ You may add a new user using this action. It takes a JSON object containing the 
     - password: sdfe2w23! (String) - ###### required
     - name: Samuel (String) - ###### not required
     - surname: Rossi (String) - ###### not required
-    - a_type: 1 (Number) - ###### not required
+    - birth: 10/10/1999 (Date) - ###### required
+    - a_type: 1 (ObjectId) - ###### not required
     - zip: 38016 (String) - ###### not required
     - city: Trento (String) - ###### not required
     - province: TN (String) - ###### not required
     - nation: IT (String) - ###### not required
     - street: Via Verdi 5 (String) - ###### not required
     - phone: 3482747820 (String) - ###### not required
-    - assign_squad: ["ewr222]", "wefwieb2"] (Buffer) - ###### not required
     - status: 0 (Number) - ###### not required
     - hidden: 0 (Boolean) - ###### not required
-    - added_by: sd3fe2w23 (String) - ###### not required
+    - team_id: wefwweewf (ObjectId) - ###### not required
+    - added_by: sd3fe2w23 (ObjectId) - ###### required
     - created_at: 2020/12/13 (Date) - ###### required
     - updated_at: 2020/12/13 (Date) - ###### required
     - deleted_at: 2020/12/13 (Date) - ###### required
@@ -103,6 +113,7 @@ You may add a new user using this action. It takes a JSON object containing the 
                 "surname": "Storti",
                 "password": "trecaratterieunpunto",
                 "a_type":"1",
+                "birth": "10/10/1999",
                 "zip":"38016",
                 "city":"Mezzocorona",
                 "province":"TN",
@@ -171,12 +182,15 @@ You may add a new user using this action. It takes a JSON object containing the 
 
             [
                 {
-                    "_id": "628905acfc8a650ccd42368e",
+                    "_id": "62987f9e04224e2d33075e28",
                     "email": "giovanni@storti.it",
-                    "password": "$2a$10$psih7lvs4/u9DXEtqNAZKuFzPXk90sU/36zguFEtvJNhpsb2jzhEe",
+                    "password": "$2a$10$HpjRQaVGbdkRBtnBzolrH.XGMzkK9wOmWCcKax4GRPlfNk0yHOvIu",
                     "name": "Giovanni",
                     "surname": "Storti",
-                    "a_type": 1,
+                    "a_type": {
+                        "_id": "62987f2b04224e2d33075e22",
+                        "name": "Dirigente del Direttivo"
+                    },
                     "zip": "38016",
                     "city": "Mezzocorona",
                     "province": "TN",
@@ -185,9 +199,14 @@ You may add a new user using this action. It takes a JSON object containing the 
                     "phone": "340432543",
                     "status": 0,
                     "hidden": false,
-                    "added_by": "628905acfc8a650ccd4223234233ee",
-                    "created_at": "2022-05-21T15:30:52.343Z",
-                    "__v": 0
+                    "added_by": {
+                        "_id": "62987f9e04224e2d33075e28",
+                        "name": "Mario",
+                        "surname": "Rossi"
+                    },
+                    "created_at": "2022-06-02T09:15:10.502Z",
+                    "__v": 0,
+                    "birth": "1966-03-12T00:00:00.000Z"
                 }
             ]
 
@@ -231,14 +250,14 @@ You may update an existing user using this action. It takes a JSON object contai
                 "name":"Giovanni",
                 "surname": "Storti",
                 "password": "trecaratterieunpunto",
-                "a_type":"1",
+                "a_type":"62987f9e04224e2d33075e28",
                 "zip":"38016",
                 "city":"Mezzocorona",
                 "province":"TN",
                 "nation":"IT",
                 "street":"Via Arrotati 10",
                 "phone":"340432543",
-                "added_by":"1"
+                "added_by":"62987f9e04224e2d33075e28"
             }
 
 + Response 200 (application/json)
@@ -356,9 +375,6 @@ You may delete an existing user using this action. It takes a JSON object contai
     {
         "_id": "628a8b0dd4e5704c4c5098e7",
         "category": "Esordienti",
-        "players": "[230,34]",
-        "coach": "3423",
-        "tm": "3423",
         "status": 0,
         "hidden": 0,
         "added_by": "23",
@@ -395,10 +411,7 @@ You may add a new team using this action. It takes a JSON object containing the 
 
 + Parameters
 
-    - category: Esordienti (String) - ###### required
-    - players: ["12e34", "12e34"] (Buffer) - ###### required
-    - coach: 12e34 (String) - ###### required
-    - tm: 12e34 (String) - ###### required
+    - category: Esordienti (String) - ###### requiredx
     - status: 0 (Number) - ###### not required
     - hidden: 0 (Boolean) - ###### not required
     - added_by: sd3fe2w23 (String) - ###### required
@@ -416,10 +429,7 @@ You may add a new team using this action. It takes a JSON object containing the 
     + Body
 
             {
-                "category":"Esordienti",
-                "players": "['23der', '13dtr']",
-                "coach": "wer34r3",
-                "tm":"2er34r3",
+                "category":"Esordienti",x
                 "status":"0",
                 "hidden":"0",
                 "added_by":"1"
@@ -484,10 +494,7 @@ You may update an existing user using this action. It takes a JSON object contai
     + Body
 
              {
-                "category":"Esordienti",
-                "players": "['23der', '13dtr']",
-                "coach": "wer34r3",
-                "tm":"2er34r3",
+                "category":"Esordienti",a
                 "status":"0",
                 "hidden":"0",
             }
