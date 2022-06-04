@@ -84,7 +84,7 @@ You may add a new user using this action. It takes a JSON object containing the 
     - name: Samuel (String) - ###### not required
     - surname: Rossi (String) - ###### not required
     - birth: 10/10/1999 (Date) - ###### required
-    - a_type: 1 (ObjectId) - ###### not required
+    - a_type: 62987f2b04224e2d33075e22 (ObjectId) - ###### not required
     - zip: 38016 (String) - ###### not required
     - city: Trento (String) - ###### not required
     - province: TN (String) - ###### not required
@@ -112,7 +112,7 @@ You may add a new user using this action. It takes a JSON object containing the 
                 "name":"Giovanni",
                 "surname": "Storti",
                 "password": "trecaratterieunpunto",
-                "a_type":"1",
+                "a_type":"62987f2b04224e2d33075e22",
                 "birth": "10/10/1999",
                 "zip":"38016",
                 "city":"Mezzocorona",
@@ -943,4 +943,270 @@ You may delete an existing user type using this action. It takes a JSON object c
 
             {
                 "error": "Error updating user password"
+            }
+
+## Event [/api/v2/event]
+
+### List all events [GET]
+
++ Request (application/json)
+
+    + Headers
+    
+            auth-token: token
+
++ Response 201 (application/json)
+
+            [
+                {
+                    "_id": "629b19c317d2c125ef102c69",
+                    "title": "Evento 1",
+                    "date": "2022-06-02T21:30:00.000Z",
+                    "description": "descrizione dell'evento",
+                    "teams": [
+                        {
+                            "_id": "6298c3103818deda59b34104",
+                            "category": "Esordienti"
+                        }
+                    ],
+                    "e_type": {
+                        "_id": "629643542cfad8fa95f70c1e",
+                        "name": "Partita"
+                    },
+                    "status": 0,
+                    "hidden": 0,
+                    "added_by": "628905acfc8a650ccd42368e",
+                    "created_at": "2022-06-04T08:37:23.993Z",
+                    "__v": 0,
+                    
+                }
+            ]
+
++ Response 401 (application/json)
+
+    + Body
+
+            {
+                "error":"Invalid Token"
+            }
+            
++ Response 403 (application/json)
+
+
+    + Body
+
+            {
+                "error":"Invalid token. / User is not admin."
+            }
+
++ Response 500 (application/json)
+
+            {
+                "error": "Database error message"
+            }
+
+### Add a new Event [POST]
+You may add a new event using this action. It takes a JSON object containing the necessary information.
+
++ Parameters
+
+    - tittle: Partita Finale (String) - ###### required
+    - date: 2020-03-29T15:30:00.000 (String) - ###### required
+    - description: Finale di campionato contro Mezzoorona AC (String) - ###### not required
+    - e_type: 6296433c2cfad8fa95f70c1b (ObjectId) - ###### required
+    - teams: [6297c78a46b44412fbc25485] (Array) - ###### required
+    - status: 0 (Number) - ###### not required
+    - hidden: 0 (Boolean) - ###### not required
+    - added_by: sd3fe2w23 (ObjectId) - ###### required
+    - created_at: 2020/12/13 (Date) - ###### required
+    - updated_at: 2020/12/13 (Date) - ###### required
+    - deleted_at: 2020/12/13 (Date) - ###### required
+
++ Request (application/json)
+
+    + Headers
+    
+            auth-token: token
+    
+    + Body
+
+            {
+                "title":"Quarto di andata",
+                "date":"2020-03-29T15:30:00.000",
+                "description":"desc",
+                "added_by":"deade23131d123d1e1",
+                "e_type":"6296433c2cfad8fa95f70c1b",
+                "teams":["6297c78a46b44412fbc25485"],
+                "added_by":"628905acfc8a650ccd42368e"
+            }
+            
++ Response 201 (application/json)
+
+    + Headers
+
+            Location: /api/v2/event/
+
+    + Body
+
+            {
+                "user": "628bca9fd92d34c040d82474"
+            }
+
++ Response 400 (application/json)
+
+
+    + Body
+
+            {
+                "error":"Validation error"
+            }
+
++ Response 401 (application/json)
+
+
+    + Body
+
+            {
+                "error":"Invalid Token"
+            }
+            
++ Response 403 (application/json)
+
+
+    + Body
+
+            {
+                "error":"Invalid token. / User is not admin."
+            }
+
++ Response 500 (application/json)
+
+            {
+                "error": "Database error message"
+            }
+
+## Specific Event [/api/v2/event/{idEvent}]
+
+### Getting specific event[GET]
+
++ Request (application/json)
+
+    + Headers
+    
+            auth-token: token
+
++ Response 201 (application/json)
+
+            
+            {
+                "_id": "629b19c317d2c125ef102c69",
+                "title": "Evento1",
+                "date": "2022-06-02T21:30:00.000Z",
+                "description": "descrizione dell'evento",
+                "teams": [
+                    {
+                        "_id": "6298c3103818deda59b34104",
+                        "category": "Esordienti"
+                    }
+                ],
+                "e_type": {
+                    "_id": "629643542cfad8fa95f70c1e",
+                    "name": "Partita"
+                },
+                "status": 0,
+                "hidden": 0,
+                "added_by": "628905acfc8a650ccd42368e",
+                "created_at": "2022-06-04T08:37:23.993Z",
+                "__v": 0,
+            }
+            
+
++ Response 401 (application/json)
+
+    + Body
+
+            {
+                "error":"Invalid Token"
+            }
+            
++ Response 403 (application/json)
+
+
+    + Body
+
+            {
+                "error":"Invalid token. / User is not admin."
+            }
+
++ Response 500 (application/json)
+
+            {
+                "error": "Database error message"
+            }
+
+### Update a specific event [PATCH]
+
+You may update an existing event using this action. It takes a JSON object containing the new complete information.
+
++ Request (application/json)
+
+    + Headers
+    
+            auth-token: token
+    
+    + Body
+
+            {
+                "title":"Quarto di andata",
+                "date":"2020-03-29T15:30:00.000",
+                "description":"desc",
+                "added_by":"deade23131d123d1e1",
+                "e_type":"6296433c2cfad8fa95f70c1b",
+                "teams":["6297c78a46b44412fbc25485"],
+                "added_by":"62987f9e04224e2d33075e28"
+            }
+
++ Response 200 (application/json)
+
+    + Headers
+
+            Location: /api/v2/event/
+
+    + Body
+
+            {
+                "message": "Success updating"
+            }
+
++ Response 400 (application/json)
+
+
+    + Body
+
+            {
+                "error":"Object sent is not a event."
+            }
+
++ Response 401 (application/json)
+
+
+    + Body
+
+            {
+                "error":"No token provided."
+            }
+            
++ Response 403 (application/json)
+
+
+    + Body
+
+            {
+                "error":"Invalid token. / User is not admin."
+            }
+
++ Response 500 (application/json)
+
+            {
+                "error": "Database error message"
             }
