@@ -62,6 +62,12 @@ const teamValidation = (data) => {
             .min(3)
             .max(255)
             .required(),
+        players: Joi.string()
+            .required(),
+        coach: Joi.string()
+            .required(),
+        tm: Joi.string()
+            .required(),
         added_by: Joi.string()
             .required()
     });
@@ -103,6 +109,74 @@ const paymentValidation = (data) => {
     return schema.validate(data);
 }
 
+/* --- VALIDATION: event schema --- */
+const eventValidation = (data) => {
+    const schema = Joi.object({
+        title: Joi.string()
+            .min(3)
+            .max(255)
+            .required(),
+        date: Joi.date()
+            .required(),
+        description: Joi.string()
+            .max(255),
+        teams: Joi.array()
+            .required(),
+        e_type: Joi.string()
+            .required(),
+        added_by: Joi.string()
+            .required()
+    });
+    return schema.validate(data);
+}
+
+/* --- VALIDATION: event type schema --- */
+const eventTypeValidation = (data) => {
+    const schema = Joi.object({
+        name: Joi.string()
+            .required(), 
+        type: Joi.number()
+            .required(),
+    });
+    return schema.validate(data);
+}
+
+/* --- ATTENDANCE: event type schema --- */
+const attendanceValidation = (data) => {
+    const schema = Joi.object({
+        player: Joi.string()
+            .required(), 
+        event: Joi.string()
+            .required(),
+        value: Joi.bool()
+            .required(),
+        added_by: Joi.string()
+            .required()
+    });
+    return schema.validate(data);
+}
+
+/* --- EVALUATION: event type schema --- */
+const evaluationValidation = (data) => {
+    const schema = Joi.object({
+        player: Joi.string()
+            .required(), 
+        event: Joi.string()
+            .required(),
+        value: Joi.number()
+            .max(10)
+            .min(0)
+            .required(),
+        added_by: Joi.string()
+            .required()
+    });
+    return schema.validate(data);
+}
+
+
+
+
+
 module.exports.registerUserValidation = registerUserValidation;
 module.exports.loginValidation = loginValidation;
 module.exports.teamValidation = teamValidation;
@@ -110,4 +184,8 @@ module.exports.userTypeValidation = userTypeValidation;
 module.exports.passwordResetValidation = passwordResetValidation;
 module.exports.paymentValidation = paymentValidation;
 
+module.exports.eventValidation = eventValidation;
+module.exports.eventTypeValidation = eventTypeValidation;
+module.exports.attendanceValidation = attendanceValidation;
+module.exports.evaluationValidation = evaluationValidation;
     
