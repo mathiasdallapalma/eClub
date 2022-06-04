@@ -9,12 +9,17 @@ const MedSchema = new mongoose.Schema({
         required: true,
     },
     player:{
-        type: String, //TODO: da modificare
+        type: mongoose.Schema.Types.ObjectId, ref: 'User',
         required: true,
+    },
+    doctor:{
+        type: String, 
+    },
+    med_type:{
+        type: String,
     },
     verified:{
         type: Boolean,
-        default: false,
     },
     //TODO PDF
 })

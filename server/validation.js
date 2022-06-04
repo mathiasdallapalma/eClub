@@ -96,10 +96,9 @@ const medValidation = (data) => {
             .required(),
         expiring_at: Joi.date()
             .required,
-        player: Joi.string()
-            .required()
-            .min(3)
-            .max(255),
+        player: Joi.string(),
+        doctor: Joi.string(),
+        med_type: Joi.string(),
         verified: Joi.bool(),
     });
     return schema.validate(data);

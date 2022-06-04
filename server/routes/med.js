@@ -3,25 +3,43 @@ const req = require('express/lib/request');
 const router = express.Router();
 const Med = require('../models/med');
 const verify = require('./verifyToken');
+const authorization = require('./authToken');
+
 
 /* --- GET: all Meds --- */
-router.get('/', verify, async(req, res) => {
+router.get('/', verify, authorization, async(req, res) => {
     try{
         //loading all meds
-        const med = await Med.find();
-        res.json(med);
+        const med = await Med.find().populate("player",["name","surname"]);
+        res.status(200).json(med);
     }catch(err){
         res.status(500).json({ message: err });
     }
 })
 
 /* --- GET: specific Med --- */
-router.get('/:medId', verify, getMed, async (req, res) => {
-    res.json(res.med)
+router.get('/:medId', verify, authorization, getMed, async (req, res) => {
+    res.status(200).json(res.med)
+})
+
+
+/* --- GET: Med by player --- */
+router.get('/player/:playerId', verify, authorization, async (req, res) => {
+    
+    let med
+    try {
+        med = await Med.find({player : req.params.playerId}).populate("player",["name","surname"]);
+        if (med == null) {
+            return res.status(404).json({ message: 'Cannot find player' })
+        }
+    } catch (err) {
+        return res.status(500).json({ message: err.message })
+    }
+    res.status(200).json(med)
 })
 
 /* --- POST: creating one Med Certifcate --- */
-router.post('/', verify, async (req, res) => {
+router.post('/', verify, authorization, async (req, res) => {
 
     //create new Med
     const med = new Med({
@@ -39,7 +57,7 @@ router.post('/', verify, async (req, res) => {
 } )
 
 /* --- DELETE: specific Med --- */
-router.delete('/:medId', verify, getMed, async (req, res) => {
+router.delete('/:medId', verify, authorization, getMed, async (req, res) => {
     try {
         //removing med
         const removedMed = await res.med.remove()
@@ -50,7 +68,7 @@ router.delete('/:medId', verify, getMed, async (req, res) => {
 })
 
 /* --- PATCH: update Med --- */
-router.patch('/:medId', async(req,res)=>{
+router.patch('/:medId', verify, authorization, async(req,res)=>{
     console.log(req.body);
 
     Med.findByIdAndUpdate({
@@ -58,7 +76,7 @@ router.patch('/:medId', async(req,res)=>{
     },{
         $set:req.body
     }).then(()=>{
-        res.sendStatus({message:"Success"});
+        res.status(200).send({message:"Success"});
     }).catch(err => {
        res.status(500).send(err.message);
     })
@@ -68,7 +86,7 @@ router.patch('/:medId', async(req,res)=>{
 async function getMed(req, res, next) {
     let med
     try {
-        med = await Med.findById(req.params.medId)
+        med = await Med.findById(req.params.medId).populate("player",["name","surname"]);
         if (med == null) {
             return res.status(404).json({ message: 'Cannot find med certificate' })
         }
