@@ -126,6 +126,18 @@ const eventValidation = (data) => {
             .required(),
         added_by: Joi.string()
             .required()
+            
+/* --- VALIDATION: med schema --- */
+const medValidation = (data) => {
+    const schema = Joi.object({
+        released_at: Joi.date()
+            .required(),
+        expiring_at: Joi.date()
+            .required,
+        player: Joi.string(),
+        doctor: Joi.string(),
+        med_type: Joi.string(),
+        verified: Joi.bool(),
     });
     return schema.validate(data);
 }
@@ -176,7 +188,6 @@ const evaluationValidation = (data) => {
 
 
 
-
 module.exports.registerUserValidation = registerUserValidation;
 module.exports.loginValidation = loginValidation;
 module.exports.teamValidation = teamValidation;
@@ -188,4 +199,5 @@ module.exports.eventValidation = eventValidation;
 module.exports.eventTypeValidation = eventTypeValidation;
 module.exports.attendanceValidation = attendanceValidation;
 module.exports.evaluationValidation = evaluationValidation;
+module.exports.medValidation = medValidation;
     
