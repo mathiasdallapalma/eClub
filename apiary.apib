@@ -371,17 +371,17 @@ You may delete an existing user using this action. It takes a JSON object contai
 
 + Response 201 (application/json)
 
-[
-    {
-        "_id": "628a8b0dd4e5704c4c5098e7",
-        "category": "Esordienti",
-        "status": 0,
-        "hidden": 0,
-        "added_by": "23",
-        "created_at": "2022-05-22T19:12:13.819Z",
-        "__v": 0
-    }
-]
+    [
+        {
+            "_id": "628a8b0dd4e5704c4c5098e7",
+            "category": "Esordienti",
+            "status": 0,
+            "hidden": 0,
+            "added_by": "23",
+            "created_at": "2022-05-22T19:12:13.819Z",
+            "__v": 0
+        },
+    ]
 
 + Response 401 (application/json)
 
@@ -607,14 +607,14 @@ You may delete an existing team using this action. It takes a JSON object contai
 
 + Response 201 (application/json)
 
-[
-    {
-        "_id": "628aa05b963e0dc94bae524d",
-        "name": "Team Manager",
-        "type": 1,
-        "__v": 0
-    }
-]
+    [
+        {
+            "_id": "628aa05b963e0dc94bae524d",
+            "name": "Team Manager",
+            "type": 1,
+            "__v": 0
+        },
+    ]
 
 + Response 401 (application/json)
 
@@ -1085,7 +1085,7 @@ You may add a new event using this action. It takes a JSON object containing the
                 "error": "Database error message"
             }
 
-## Specific Event [/api/v2/event/{idEvent}]
+## Specific Event [/api/v2/event/{idEvent]
 
 ### Getting specific event[GET]
 
@@ -1157,13 +1157,13 @@ You may update an existing event using this action. It takes a JSON object conta
     + Body
 
             {
-                "title":"Quarto di andata",
-                "date":"2020-03-29T15:30:00.000",
-                "description":"desc",
-                "added_by":"deade23131d123d1e1",
-                "e_type":"6296433c2cfad8fa95f70c1b",
+                "title": "Quarto di andata",
+                "date": "2020-03-29T15:30:00.000",
+                "description": "desc",
+                "added_by": "deade23131d123d1e1",
+                "e_type": "6296433c2cfad8fa95f70c1b",
                 "teams":["6297c78a46b44412fbc25485"],
-                "added_by":"62987f9e04224e2d33075e28"
+                "added_by": "62987f9e04224e2d33075e28"
             }
 
 + Response 200 (application/json)
@@ -1185,6 +1185,647 @@ You may update an existing event using this action. It takes a JSON object conta
 
             {
                 "error":"Object sent is not a event."
+            }
+
++ Response 401 (application/json)
+
+
+    + Body
+
+            {
+                "error":"No token provided."
+            }
+            
++ Response 403 (application/json)
+
+
+    + Body
+
+            {
+                "error":"Invalid token. / User is not admin."
+            }
+
++ Response 500 (application/json)
+
+            {
+                "error": "Database error message"
+            }
+
+### Delete a specific event [DELETE]
+
+You may delete an existing user using this action. It takes a JSON object containing the id of the user to delete.
+
++ Request (application/json)
+
+    + Headers
+    
+            auth-token: token
+    
+    + Body
+
+            {
+                "_id": "62894da00842bba6fcfbc9a3",
+            }
+
+
++ Response 200 (application/json)
+    + Headers
+
+            Location: /api/v2/event/
+            
+    + Body
+
+            {
+                "result":"Succesfully removed `req.body.id`"
+            }
+
++ Response 400 (application/json)
+
+
+    + Body
+
+            {
+                "error":"Object passed has incorrect values."
+            }
+
++ Response 401 (application/json)
+
+
+    + Body
+
+            {
+                "error":"No token provided."
+            }
+            
++ Response 403 (application/json)
+
+
+    + Body
+
+            {
+                "error":"Invalid token. / User is not admin."
+            }
+
++ Response 500 (application/json)
+
+            {
+                "error": "Database error message"
+            }
+
+
+## Event Type [/api/v2/eventtype]
+### List all Event Type [GET]
+
++ Response 201 (application/json)
+
+[
+    {
+        "_id": "628aa05b963e0dc94bae524d",
+        "name": "Partita",
+        "type": 1,
+        "__v": 0
+    }
+]
+
++ Response 401 (application/json)
+
+    + Body
+
+            {
+                "error":"Invalid Token"
+            }
+            
++ Response 403 (application/json)
+
+
+    + Body
+
+            {
+                "error":"Invalid token. / User is not admin."
+            }
+
++ Response 500 (application/json)
+
+            {
+                "error": "Database error message"
+            }
+
+### Add a new event type [POST]
+You may add a new event type using this action. It takes a JSON object containing the necessary information.
+
++ Parameters
+
+    - name: Partita (String) - ###### required
+    - type: 1 (Number) - ###### required
+    
+    
++ Request (application/json)
+
+    + Headers
+    
+            auth-token: token
+    
+    + Body
+
+            {
+                "name":"Partita",
+                "type": "1",
+            }
+
++ Response 201 (application/json)
+
+    + Headers
+
+            Location: /api/v2/eventtype/
+
+    + Body
+
+            {
+                "event-type": "628bca9fd92d31c040d82474"
+            }
+
++ Response 400 (application/json)
+
+
+    + Body
+
+            {
+                "error":"Validation error"
+            }
+
++ Response 401 (application/json)
+
+
+    + Body
+
+            {
+                "error":"Invalid Token"
+            }
+            
++ Response 403 (application/json)
+
+
+    + Body
+
+            {
+                "error":"Invalid token. / User is not admin."
+            }
+
++ Response 500 (application/json)
+
+            {
+                "error": "Database error message"
+            }
+
+## Specific Event Type [/api/v1/eventtype/{idEventType}]
+### Update a specific event type [PATCH]
+
+You may update an existing event using this action. It takes a JSON object containing the new complete information.
+
++ Request (application/json)
+
+    + Headers
+    
+            auth-token: token
+    
+    + Body
+
+             {
+                "name":"Allenamento",
+                "type": "0",
+            }
+
++ Response 200 (application/json)
+
+    + Headers
+
+            Location: /api/v2/eventtype/
+
+    + Body
+
+            {
+                "message": "Success updating"
+            }
+
++ Response 400 (application/json)
+
+
+    + Body
+
+            {
+                "error":"Object sent is not a eventType."
+            }
+
++ Response 401 (application/json)
+
+
+    + Body
+
+            {
+                "error":"No token provided."
+            }
+            
++ Response 403 (application/json)
+
+
+    + Body
+
+            {
+                "error":"Invalid token. / User is not admin."
+            }
+
++ Response 500 (application/json)
+
+            {
+                "error": "Database error message"
+            }
+
+### Delete a specific event type [DELETE]
+
+You may delete an existing event type using this action. It takes a JSON object containing the id of the user type to delete.
+
++ Request (application/json)
+
+    + Headers
+    
+            auth-token: token
+    
+    + Body
+            {
+                "_id": "62894da00842bba6fcfbc9a3",
+            }
+
++ Response 200 (application/json)
+    + Headers
+
+            Location: /api/v2/eventtype/
+            
+    + Body
+
+            {
+                "result":"Succesfully removed `req.body.id`"
+            }
+
++ Response 400 (application/json)
+
+
+    + Body
+
+            {
+                "error":"Object passed has incorrect values."
+            }
+
++ Response 401 (application/json)
+
+
+    + Body
+
+            {
+                "error":"No token provided."
+            }
+            
++ Response 403 (application/json)
+
+
+    + Body
+
+            {
+                "error":"Invalid token. / User is not admin."
+            }
+
++ Response 500 (application/json)
+
+            {
+                "error": "Database error message"
+            }
+
+## Attendance [/api/v2/attendance]
+
+### List all Attendance [GET]
+
++ Response 201 (application/json)
+
+           [
+                {
+                    "_id": "629b19c417d2c125ef102c71",
+                    "event": {
+                        "_id": "629b19c317d2c125ef102c69",
+                        "title": "Evento1",
+                        "date": "2022-06-02T21:30:00.000Z"
+                    },
+                    "player": {
+                        "_id": "629908391b943ad700b52c63",
+                        "name": "Gianfranco",
+                        "surname": "Ariosto"
+                    },
+                    "value": false,
+                    "status": 0,
+                    "hidden": 0,
+                    "added_by": "628905acfc8a650ccd42368e",
+                    "created_at": "2022-06-04T08:37:24.931Z",
+                    "__v": 0
+                }
+            ]
+
++ Response 401 (application/json)
+
+    + Body
+
+            {
+                "error":"Invalid Token"
+            }
+            
++ Response 403 (application/json)
+
+
+    + Body
+
+            {
+                "error":"Invalid token. / User is not admin."
+            }
+
++ Response 500 (application/json)
+
+            {
+                "error": "Database error message"
+            }
+
+### Add a new attendance [POST]
+You may add a new user using this action. It takes a JSON object containing the necessary information.
+
++ Parameters
+
+    - player: user@629272f3c8a1c137d5e6ca6c.it (ObjectId) - ###### required
+    - event: 62986cb047de012aab2dac4c (String) - ###### required
+    - value: true (Boolean) - ###### required
+    - status: 0 (Number) - ###### not required
+    - hidden: 0 (Boolean) - ###### not required
+    - added_by: sd3fe2w23 (ObjectId) - ###### required
+    - created_at: 2020/12/13 (Date) - ###### required
+    - updated_at: 2020/12/13 (Date) - ###### required
+    - deleted_at: 2020/12/13 (Date) - ###### required
+
++ Request (application/json)
+
+    + Headers
+    
+            auth-token: token
+    
+    + Body
+
+            {
+                "player":"629272f3c8a1c137d5e6ca6c",
+                "event": "62986cb047de012aab2dac4c",
+                "value":true,
+                "added_by": "62927232c8a1c137d5e6ca4f"
+            }
+            
++ Response 201 (application/json)
+
+    + Headers
+
+            Location: /api/v2/attendance/
+
+    + Body
+
+            {
+                "attendance": "628bca9fd92d31c040d82474"
+            }
+
++ Response 400 (application/json)
+
+
+    + Body
+
+            {
+                "error":"Validation error"
+            }
+
++ Response 401 (application/json)
+
+
+    + Body
+
+            {
+                "error":"Invalid Token"
+            }
+            
++ Response 403 (application/json)
+
+
+    + Body
+
+            {
+                "error":"Invalid token. / User is not admin."
+            }
+
++ Response 500 (application/json)
+
+            {
+                "error": "Database error message"
+            }
+
+## Attendances By Player [/api/v1/user/player/{idPlayer}]
+### List all attendances of scpecific player [GET]
++ Request (application/json)
+
+    + Headers
+    
+            auth-token: token
+
++ Response 201 (application/json)
+
+            [
+                {
+                    "_id": "629b19c417d2c125ef102c71",
+                    "event": {
+                        "_id": "629b19c317d2c125ef102c69",
+                        "title": "Evento1",
+                        "date": "2022-06-02T21:30:00.000Z"
+                    },
+                    "player": "629908391b943ad700b52c63",
+                    "value": false,
+                    "status": 0,
+                    "hidden": 0,
+                    "added_by": "628905acfc8a650ccd42368e",
+                    "created_at": "2022-06-04T08:37:24.931Z",
+                    "__v": 0
+                },
+            ]
+
++ Response 401 (application/json)
+
+    + Body
+
+            {
+                "error":"Invalid Token"
+            }
+            
++ Response 403 (application/json)
+
+
+    + Body
+
+            {
+                "error":"Invalid token. / User is not admin."
+            }
+
++ Response 500 (application/json)
+
+            {
+                "error": "Database error message"
+            }
+
+## Attendances By Event [/api/v1/user/event/{idEvent}]
+### List all attendances of scpecific event [GET]
++ Request (application/json)
+
+    + Headers
+    
+            auth-token: token
+
++ Response 201 (application/json)
+
+            [
+                {
+                    "_id": "629b19c417d2c125ef102c71",
+                    "event": "629b19c317d2c125ef102c69",
+                    "player": {
+                        "_id": "629908391b943ad700b52c63",
+                        "name": "Gianfranco",
+                        "surname": "Ariosto"
+                    },
+                    "value": false,
+                    "status": 0,
+                    "hidden": 0,
+                    "added_by": "628905acfc8a650ccd42368e",
+                    "created_at": "2022-06-04T08:37:24.931Z",
+                    "__v": 0
+                },
+            ]
+
++ Response 401 (application/json)
+
+    + Body
+
+            {
+                "error":"Invalid Token"
+            }
+            
++ Response 403 (application/json)
+
+
+    + Body
+
+            {
+                "error":"Invalid token. / User is not admin."
+            }
+
++ Response 500 (application/json)
+
+            {
+                "error": "Database error message"
+            }
+
+## Specific Attendance [/api/v2/attendance/{idAttendance}]
+### Update a specific attendance [PATCH]
+
+You may update an existing attendance using this action. It takes a JSON object containing the new complete information.
+
++ Request (application/json)
+
+    + Headers
+    
+            auth-token: token
+    
+    + Body
+
+            {
+                "player":"629272f3c8a1c137d5e6ca6c",
+                "event": "62986cb047de012aab2dac4c",
+                "value":true,
+                "added_by": "62927232c8a1c137d5e6ca4f"
+            }
+
++ Response 200 (application/json)
+
+    + Headers
+
+            Location: /api/v2/attendance/
+
+    + Body
+
+            {
+                "message": "Success updating"
+            }
+
++ Response 400 (application/json)
+
+
+    + Body
+
+            {
+                "error":"Object sent is not a user."
+            }
+
++ Response 401 (application/json)
+
+
+    + Body
+
+            {
+                "error":"No token provided."
+            }
+            
++ Response 403 (application/json)
+
+
+    + Body
+
+            {
+                "error":"Invalid token. / User is not admin."
+            }
+
++ Response 500 (application/json)
+
+            {
+                "error": "Database error message"
+            }
+### Delete a specific attendance [DELETE]
+
+You may delete an existing user using this action. It takes a JSON object containing the id of the user to delete.
+
++ Request (application/json)
+
+    + Headers
+    
+            auth-token: token
+    
+    + Body
+
+            {
+                "_id": "62894da00842bba6fcfbc9a3",
+            }
+
++ Response 200 (application/json)
+
+    + Headers
+
+            Location: /api/v2/attendance/
+
+    + Body
+
+            {
+                "result":"Succesfully removed `req.body.id`"
+            }
+
++ Response 400 (application/json)
+
+
+    + Body
+
+            {
+                "error":"Object sent is not a attendance."
             }
 
 + Response 401 (application/json)
