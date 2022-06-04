@@ -9,7 +9,7 @@ const authorization = require('./authToken');
 
 
 /* --- GET: all Payments --- */
-router.get('/', verify, async(req, res) => {
+router.get('/', verify, authorization, async(req, res) => {
     try{
         //loading all payments
         const payment = await Payment.find().populate("player", ["_id", "name", "surname"])
