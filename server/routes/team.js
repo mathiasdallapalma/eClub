@@ -11,7 +11,7 @@ const authorization = require('./authToken');
 router.get('/', verify, authorization, async(req, res) => {
     try{
         //loading all teams
-        const team = await Team.find();
+        const team = await Team.find({hidden: {$ne:1}});
         res.json(team);
     }catch(err){
         res.status(500).json({ message: err });

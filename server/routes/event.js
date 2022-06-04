@@ -32,6 +32,11 @@ router.get('/:eventId', verify, getEvent, async (req, res) => {
     res.json(res.event)
 })
 
+/* --- GET: Events by Team --- */
+router.get('/team/:teamId', verify, getEventByTeam, async (req, res) => {
+    res.json(res.evaluation)
+})
+
 
 /* --- POST: creating one Event --- */
 router.post('/', verify, async (req, res) => {
@@ -150,6 +155,21 @@ async function getEvent(req, res, next) {
     let event
     try {
         event = await Event.findById(req.params.eventId).populate("teams",["category"]).populate("e_type",["name"]);
+        if (event == null) {
+            return res.status(404).json({ message: 'Cannot find event' })
+        }
+    } catch (err) {
+        return res.status(500).json({ message: err.message })
+    }
+    res.event = event
+    next()
+  }
+
+/* --- FUNCTION: get Event by Team --- */
+async function getEventByTeam(req, res, next) {
+    let event
+    try {
+        event = await Attendance.find({player : req.params.teamId}).populate("team",["category"]);
         if (event == null) {
             return res.status(404).json({ message: 'Cannot find event' })
         }
