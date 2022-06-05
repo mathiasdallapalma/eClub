@@ -126,10 +126,20 @@ describe('[SUPERTEST] [SUMMONING]  /api/v2/summoning', () => {
     test('<200> PATCH specific summoning', () => {
         return request(app).patch('/api/v2/summoning/'+id+'/')
         .send({ 
-            value:"0"
+            value:"true"
         })  
         .set('auth-token', token).set('Accept', 'application/json')
         .expect(200)
+    });
+    let id10="629b19c417d2c125ef102234";
+
+    test('<404> PATCH specific summoning with wrong id', () => {
+        return request(app).patch('/api/v2/summoning/'+id10+'/')
+        .send({ 
+            value:"true"
+        })  
+        .set('auth-token', token).set('Accept', 'application/json')
+        .expect(404)
     });
 
     /* --- DELETE PAYMENT--- */

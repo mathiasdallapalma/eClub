@@ -12,7 +12,7 @@ router.get('/', verify, authorization, async(req, res) => {
     try{
         //loading all teams
         const team = await Team.find({hidden: {$ne:1}});
-        res.json(team);
+        res.status(200).json(team);
     }catch(err){
         res.status(500).json({ message: err });
     }
@@ -20,7 +20,7 @@ router.get('/', verify, authorization, async(req, res) => {
 
 /* --- GET: specific Team --- */
 router.get('/:teamId', verify, authorization, getTeam, async (req, res) => {
-    res.json(res.team)
+    res.status(200).json(res.team)
 })
 
 /* --- POST: creating one Team --- */
@@ -36,13 +36,12 @@ router.post('/', verify, authorization, async (req, res) => {
 
     //create new team
     const team = new Team({
-        name: req.body.name,
         category: req.body.category,
         added_by: req.body.added_by,
     })
     try{
         const savedTeam = await team.save();
-        res.status(201).json({ team: team._id })
+        res.status(200).json({ team: team._id })
     }catch(err){
         res.status(500).json({ message: err });
     }
@@ -61,21 +60,22 @@ router.delete('/:teamId', verify, authorization, getTeam, async (req, res) => {
 
 /* --- PATCH: update Team --- */
 router.patch('/:teamId', verify, authorization, async(req,res)=>{
-    console.log(req.body);
-
+    
     //checking if the team is already in the database
     const categoryExist = await Team.findOne({category: req.body.category});
     if(categoryExist) return res.status(400).send('Category already exists')
 
-    Team.findByIdAndUpdate({
-        _id:req.params.teamId
-    },{
-        $set:req.body
-    }).then(()=>{
-        res.status(201).json({message:"Success"});
-    }).catch(err => {
-       res.status(500).send(err.message);
-    })
+    try {
+        const team = await Team.findById({_id: req.params.teamId})
+        if(!team){
+            return res.status(404).json("team not found")
+        }else{
+            Team.updateOne({_id: req.params.teamId}, {$set:req.body}).exec()
+            res.status(200).json({ message: 'success' })
+        }
+    }catch(err){
+        res.status(500).json({ message: err.message })
+    }
 });
 
 /* --- FUNCTION: get Team --- */

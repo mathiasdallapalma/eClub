@@ -13,11 +13,12 @@ router.get('/', verify, authorization, async(req, res) => {
     try{
         //loading all userType
         const userType = await UserType.find();
-        res.json(userType);
+        res.status(200).json(userType);
     }catch(err){
         res.status(500).json({ message: err });
     }
 })
+
 /* --- POST: creating one UserType --- */
 router.post('/', verify, authorization, async (req, res) => {
 
@@ -36,7 +37,7 @@ router.post('/', verify, authorization, async (req, res) => {
     })
     try{
         const savedUserType = await userType.save();
-        res.status(201).json({ userType: userType._id })
+        res.status(200).json({ userType: userType._id })
     }catch(err){
         res.status(400).json({ message: err });
     }
@@ -54,21 +55,23 @@ router.delete('/:userTypeId', verify, authorization, getUserType, async (req, re
 
 /* --- PATCH: update User --- */
 router.patch('/:userTypeId', verify, authorization, async(req,res)=>{
-    console.log(req.body);
 
     //checking if the userType is already in the database
     const typeExist = await UserType.findOne({type: req.body.type});
     if(typeExist) return res.status(400).send('Type already exists')
 
-    UserType.findByIdAndUpdate({
-        _id:req.params.userTypeId
-    },{
-        $set:req.body
-    }).then(()=>{
-        res.status(201).json({message:"Success"});
-    }).catch(err => {
-       res.status(500).send(err.message);
-    })
+    try {
+        const usertype = await UserType.findById({_id: req.params.userTypeId})
+        if(!usertype){
+            return res.status(404).json("usertype not found")
+        }else{
+            UserType.updateOne({_id: req.params.userTypeId}, {$set:req.body}).exec()
+            res.status(200).json({ message: 'success' })
+        }
+    }catch(err){
+        res.status(500).json({ message: err.message })
+    }
+
 });
 
 /* --- FUNCTION: get Team --- */

@@ -74,6 +74,7 @@ router.delete('/:summoningId', verify, authorization, getSummoning, async (req, 
 router.patch('/:summoningId', verify, authorization, async(req,res)=>{
     try {
         const summoning = await Summoning.findById({_id: req.params.summoningId})
+        console.log(summoning)
         if(!summoning){
             return res.status(404).json("summoning not found")
         }else{
