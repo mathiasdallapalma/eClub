@@ -13,27 +13,20 @@ router.get('/', verify, authorization, async(req, res) => {
     try{
         //loading all summonings
         const summoning = await Summoning.find().populate("player",["name","surname"]).populate("event",["title","date"]);
-        res.json(summoning);
+        res.status(200).json(summoning);
     }catch(err){
         res.status(500).json({ message: err });
     }
 })
 
-/* --- GET: specific Summoning --- */
-/* IO la toglierei
-router.get('/:summoningId', verify, authorization, getSummoning, async (req, res) => {
-    res.json(res.summoning)
-})
-*/
-
 /* --- GET: Summoning by event --- */
 router.get('/event/:eventId', verify, authorization, getSummoningByEvent, async (req, res) => {
-    res.json(res.summoning)
+    res.status(200).json(res.summoning)
 })
 
 /* --- GET: Summoning by player --- */
 router.get('/player/:playerId', verify, authorization, getSummoningByPlayer, async (req, res) => {
-    res.json(res.summoning)
+    res.status(200).json(res.summoning)
 })
 
 /* --- POST: creating one Summoning --- */
@@ -59,7 +52,7 @@ router.post('/', verify, authorization, async (req, res) => {
     })
     try{
         const savedSummoning = await summoning.save();
-        res.status(201).json({ summoning: summoning._id })
+        res.status(200).json({ summoning: summoning._id })
     }catch(err){
         res.status(500).json({ message: err });
         console.log("asd");
@@ -78,18 +71,18 @@ router.delete('/:summoningId', verify, authorization, getSummoning, async (req, 
 })
 
 /* --- PATCH: update Summoning --- */
-router.patch('/:summoningId', async(req,res)=>{
-    console.log(req.body);
-
-    Summoning.findByIdAndUpdate({
-        _id:req.params.summoningId
-    },{
-        $set:req.body
-    }).then(()=>{
-        res.sendStatus({message:"Success"});
-    }).catch(err => {
-       res.status(500).send(err.message);
-    })
+router.patch('/:summoningId', verify, authorization, async(req,res)=>{
+    try {
+        const summoning = await Summoning.findById({_id: req.params.summoningId})
+        if(!summoning){
+            return res.status(404).json("summoning not found")
+        }else{
+            Summoning.updateOne({_id: req.params.summoningId}, {$set:req.body}).exec()
+            res.status(200).json({ message: 'success' })
+        }
+    }catch(err){
+        res.status(500).json({ message: err.message })
+    }
 });
 
 /* --- FUNCTION: get Summoning --- */
@@ -111,8 +104,8 @@ async function getSummoning(req, res, next) {
 async function getSummoningByEvent(req, res, next) {
     let summoning
     try {
-        summoning = await Summoning.find({player : req.params.eventId}).populate("player",["name","surname"]);
-        if (summoning == null) {
+        summoning = await Summoning.find({event : req.params.eventId}).populate("player",["name","surname"]);
+        if (summoning.length == "0") {
             return res.status(404).json({ message: 'Cannot find summoning' })
         }
     } catch (err) {
@@ -126,7 +119,7 @@ async function getSummoningByPlayer(req, res, next) {
     let summoning
     try {
         summoning = await Summoning.find({player : req.params.playerId}).populate("event",["title","date"]);
-        if (summoning == null) {
+        if (summoning.length == "0") {
             return res.status(404).json({ message: 'Cannot find summoning' })
         }
     } catch (err) {

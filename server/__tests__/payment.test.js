@@ -33,14 +33,13 @@ afterAll( async () =>{
     await Team.insertMany(BACKUP_TEAM)
     await Payment.insertMany(BACKUP_PAYMENT)
 
-
     mongoose.connection.close(true);
 })
 
 
 describe('[SUPERTEST] [PAYMENT]  /api/v2/payment', () => {
 
-    var token = jwt.sign({email:"giovanni@storti.it"}, process.env.TOKEN_SECRET, {expiresIn: 86400});
+    var token = jwt.sign({email:"dd@eclub.com"}, process.env.TOKEN_SECRET, {expiresIn: 86400});
     header={'Content-Type':'application/json', token:token};
     console.log(header)
 
@@ -59,7 +58,7 @@ describe('[SUPERTEST] [PAYMENT]  /api/v2/payment', () => {
 
 
     /* ---  GET SPECIFIC PAYMENT --- */
-    let id = "629cd177342fe15924cf7771";
+    let id = "629cd1d7c852509889761089";
 
     test('<200> GET specific payment', () => {
         return request(app).get('/api/v2/payment/'+id+'/')

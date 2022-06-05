@@ -215,6 +215,17 @@ const communicationValidation = (data) => {
     return schema.validate(data);
 }
 
+const summoningValidation = (data) => {
+    const schema = Joi.object({
+       value: Joi.bool(),
+       event: Joi.string(),
+       player: Joi.string(),
+       added_by: Joi.string()
+    });
+    return schema.validate(data);
+}
+
+
 
 
 module.exports.registerUserValidation = registerUserValidation;
@@ -230,3 +241,4 @@ module.exports.evaluationValidation = evaluationValidation;
 module.exports.medValidation = medValidation;
 module.exports.communicationValidation = communicationValidation;
 module.exports.materialValidation = materialValidation;
+module.exports.summoningValidation=summoningValidation;
