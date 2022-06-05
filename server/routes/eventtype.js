@@ -5,9 +5,10 @@ const EventType = require('../models/EventType')
 const bcrypt = require('bcryptjs')
 const {eventTypeValidation}= require('../validation')
 const verify = require('./verifyToken');
+const authorization = require('./authToken');
 
 /* --- GET: all eventType --- */
-router.get('/', verify, async(req, res) => {
+router.get('/', verify, authorization, async(req, res) => {
     try{
         //loading all eventType
         const eventType = await EventType.find();
@@ -17,7 +18,7 @@ router.get('/', verify, async(req, res) => {
     }
 })
 /* --- POST: creating one EventType --- */
-router.post('/', verify, async (req, res) => {
+router.post('/', verify, authorization, async (req, res) => {
 
     //validation data before creating EventType 
     const {error} = eventTypeValidation(req.body)
@@ -41,7 +42,7 @@ router.post('/', verify, async (req, res) => {
 } )
 
 /* --- DELETE: specific EventType --- */
-router.delete('/:eventTypeId', verify, getEventType, async (req, res) => {
+router.delete('/:eventTypeId', verify, authorization, getEventType, async (req, res) => {
     try {
         const removedEventType = await res.eventType.remove()
         res.status(200).json({ message: 'Deleted event type' })
@@ -51,7 +52,7 @@ router.delete('/:eventTypeId', verify, getEventType, async (req, res) => {
 })
 
 /* --- PATCH: update Event --- */
-router.patch('/:eventTypeId', verify, async(req,res)=>{
+router.patch('/:eventTypeId', verify, authorization, async(req,res)=>{
     console.log(req.body);
 
     //checking if the eventType is already in the database
