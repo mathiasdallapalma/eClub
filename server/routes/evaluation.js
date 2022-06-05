@@ -66,7 +66,7 @@ router.post('/', verify, authorization, async (req, res) => {
 } )
 
 /* --- DELETE: specific Evaluation --- */
-router.delete('/:evaluationId', verify, getEvaluation, async (req, res) => {
+router.delete('/:evaluationId', verify, authorization, getEvaluation, async (req, res) => {
     try {
         //removing evaluation
         const removedEvaluation = await res.evaluation.remove()
