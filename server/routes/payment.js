@@ -6,6 +6,8 @@ const router = express.Router();
 const Payment = require('../models/Payment');
 const verify = require('./verifyToken');
 const authorization = require('./authToken');
+const {paymentValidation}= require('../validation')
+
 
 
 /* --- GET: all Payments --- */
@@ -13,15 +15,15 @@ router.get('/', verify, authorization, async(req, res) => {
     try{
         //loading all payments
         const payment = await Payment.find().populate("player", ["_id", "name", "surname"])
-        res.json(payment);
+        res.status(200).json(payment);
     }catch(err){
         res.status(500).json({ message: err });
     }
 })
 
 /* --- GET: specific Payment --- */
-router.get('/payment/paymentId', verify, authorization, getPayment, async (req, res) => {
-    res.status(200).json(res.payment)
+router.get('/:paymentId', verify, authorization, getPayment, async (req, res) => {
+    res.status(200).json(res.payment);
 })
 
 /* --- GET: Payment by player --- */
@@ -30,7 +32,7 @@ router.get('/player/:playerId', verify, authorization, async (req, res) => {
     let payment
     try {
         payment = await Payment.find({player : req.params.playerId}).populate("player",["name","surname"]);
-        if (payment == null) {
+        if (payment.length == "0") {
             return res.status(404).json({ message: 'Cannot find player' })
         }
     } catch (err) {
@@ -43,15 +45,20 @@ router.get('/player/:playerId', verify, authorization, async (req, res) => {
 /* --- POST: creating one Payment --- */
 router.post('/', verify, authorization, async (req, res) => {
 
+    //validation data before creating user 
+    const {error} = paymentValidation(req.body)
+    if(error) return res.status(400).send(error.details[0].message)
+
     //create new Payment
     const payment = new Payment({
         amount: req.body.amount,
         paid_at: req.body.paid_at,
         player: req.body.player,
+        description: req.body.description,
     })
     try{
         const savedMed = await payment.save();
-        res.status(201).json({ payment: payment._id })
+        res.status(200).json({ payment: payment._id })
     }catch(err){
         res.status(500).json({ message: err });
     }
@@ -70,15 +77,18 @@ router.delete('/:paymentId', verify, authorization, getPayment, async (req, res)
 
 /* --- PATCH: update Payment --- */
 router.patch('/:paymentId', verify, authorization, async(req,res)=>{
-    Payment.findByIdAndUpdate({
-        _id:req.params.paymentId
-    },{
-        $set:req.body
-    }).then(()=>{
-        res.status(201).json({message:"Success"});
-    }).catch(err => {
-        res.status(500).send(err.message);
-    })
+    
+    try {
+        const payment = await Payment.findById({_id: req.params.paymentId})
+        if(!payment){
+            return res.status(404).json("payment not found")
+        }else{
+            Payment.updateOne({_id: req.params.paymentId}, {$set:req.body}).exec()
+            res.status(200).json({ message: 'success' })
+        }
+    }catch(err){
+        res.status(500).json({ message: err.message })
+    }
 });
 
 /* --- FUNCTION: get Payment --- */

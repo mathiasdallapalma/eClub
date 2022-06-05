@@ -18,6 +18,7 @@ const userRoute = require('./routes/User');
 const userTypeRoute = require('./routes/UserType');
 const teamRoute = require('./routes/Team');
 const passwordResetRoute = require('./routes/password_reset');
+
 app.use("/api/v1/user", userRoute)
 app.use("/api/v1/usertype", userTypeRoute)
 app.use("/api/v1/team", teamRoute)
@@ -55,5 +56,7 @@ db.once('open', () => console.log('Connected to Database'))
 
 /* --- Server Starting --- */
 app.listen(3001, () => console.log("Server started"));
+
+module.exports = app;
 
 

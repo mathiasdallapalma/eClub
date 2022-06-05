@@ -4,7 +4,7 @@ const router = express.Router();
 const mongoose = require('mongoose');
 const Evaluation = require('../models/Evaluation')
 const {evaluationValidation}= require('../validation')
-const \ = require('./verifyToken');
+const verify = require('./verifyToken');
 const authorization = require('./authToken');
 
 /* --- GET: all Attends --- */

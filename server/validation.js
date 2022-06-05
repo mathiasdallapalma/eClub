@@ -101,8 +101,7 @@ const paymentValidation = (data) => {
         amount: Joi.number()
             .required(),
         description: Joi.string(),
-        paid_at: Joi.date()
-            .required(),
+        paid_at: Joi.date(),
         player: Joi.string()
             .required(),
     })
