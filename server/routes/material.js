@@ -3,9 +3,10 @@ const req = require('express/lib/request');
 const router = express.Router();
 const Material = require('../models/material');
 const verify = require('./verifyToken');
+const authorization = require('./authToken');
 
 /* --- GET: all materials --- */
-router.get('/', verify, async(req, res) => {
+router.get('/', verify, authorization, async(req, res) => {
     try{
         //loading all materials
         const material = await Material.find();
@@ -16,13 +17,13 @@ router.get('/', verify, async(req, res) => {
 })
 
 /* --- GET: specific Material --- */
-router.get('/:materialId', verify, getMaterial, async (req, res) => {
+router.get('/:materialId', verify, authorization, getMaterial, async (req, res) => {
     res.json(res.material)
 })
 
 
 /* --- POST: creating one material --- */
-router.post('/', verify, async (req, res) => {
+router.post('/', verify, authorization, async (req, res) => {
 
     //create new material
     const material = new Material({
@@ -40,7 +41,7 @@ router.post('/', verify, async (req, res) => {
 } )
 
 /* --- DELETE: specific Material --- */
-router.delete('/:materialId', verify, getMaterial, async (req, res) => {
+router.delete('/:materialId', verify, authorization, getMaterial, async (req, res) => {
     try {
         //removing material
         const removedmaterial = await res.material.remove()
