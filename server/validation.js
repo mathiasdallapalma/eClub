@@ -94,11 +94,9 @@ const materialValidation = (data) => {
     const schema = Joi.object({
         description: Joi.string()
             .required()
-            .min(3)
             .max(255),
-        player: Joi.string()
-            .min(3)
-            .max(255),
+        player: Joi.string(),
+        added_by: Joi.string(),
         given_at: Joi.date(),
         returned_at: Joi.date(),
     });

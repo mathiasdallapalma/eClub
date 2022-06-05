@@ -9,8 +9,8 @@ const authorization = require('./authToken');
 router.get('/', verify, authorization, async(req, res) => {
     try{
         //loading all materials
-        const material = await Material.find();
-        res.json(material);
+        const material = await Material.find().populate("player", ["_id", "name", "surname"]).populate("added_by", ["_id", "name", "surname"]);
+        res.status(200).json(material);
     }catch(err){
         res.status(500).json({ message: err });
     }
@@ -18,7 +18,7 @@ router.get('/', verify, authorization, async(req, res) => {
 
 /* --- GET: specific Material --- */
 router.get('/:materialId', verify, authorization, getMaterial, async (req, res) => {
-    res.json(res.material)
+    res.status(200).json(res.material)
 })
 
 
@@ -31,6 +31,7 @@ router.post('/', verify, authorization, async (req, res) => {
         player: req.body.player,
         given_at: req.body.given_at,
         returned_at: req.body.returned_at,
+        added_by: req.body.added_by,
     })
     try{
         const savedMaterial = await material.save();
@@ -60,9 +61,9 @@ router.patch('/:materialId', async(req,res)=>{
     },{
         $set:req.body
     }).then(()=>{
-        res.sendStatus({message:"Success"});
+        res.status(200).json({message:"Success"});
     }).catch(err => {
-       res.status(500).send(err.message);
+       res.status(500).json(err.message);
     })
 });
 
@@ -70,7 +71,7 @@ router.patch('/:materialId', async(req,res)=>{
 async function getMaterial(req, res, next) {
     let material
     try {
-        material = await Material.findById(req.params.materialId)
+        material = await Material.findById(req.params.materialId).populate("player", ["_id", "name", "surname"]).populate("added_by", ["_id", "name", "surname"]);
         if (material == null) {
             return res.status(404).json({ message: 'Cannot find material' })
         }
