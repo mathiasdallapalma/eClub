@@ -16,7 +16,7 @@ const AttendanceSchema = new mongoose.Schema({
         default: '0'
     },
     added_by:{
-        type: String,
+        type: mongoose.Schema.Types.ObjectId, ref: 'User',
         required: true
     },
     created_at:{
