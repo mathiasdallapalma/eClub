@@ -7,7 +7,9 @@ const MaterialSchema = new mongoose.Schema({
         max: 255,
     },
     player:{
-        type: String, //TODO: da modificare
+         player:{
+        type: mongoose.Schema.Types.ObjectId, ref: 'User',
+        required: true,
     },
     given_at:{
         type: Date,
