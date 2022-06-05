@@ -7,7 +7,6 @@ const MaterialSchema = new mongoose.Schema({
         max: 255,
     },
     player:{
-         player:{
         type: mongoose.Schema.Types.ObjectId, ref: 'User',
         required: true,
     },
