@@ -18,7 +18,6 @@ const userRoute = require('./routes/User');
 const userTypeRoute = require('./routes/UserType');
 const teamRoute = require('./routes/Team');
 const passwordResetRoute = require('./routes/password_reset');
-
 app.use("/api/v1/user", userRoute)
 app.use("/api/v1/usertype", userTypeRoute)
 app.use("/api/v1/team", teamRoute)
@@ -34,6 +33,7 @@ const summoningRoute = require('./routes/summoning');
 const paymentRoute = require ('./routes/Payment');
 const medRoute = require('./routes/med');
 const communicationRoute = require('./routes/communication');
+const materialRoute = require('./routes/material');
 
 app.use("/api/v2/event", eventRoute);
 app.use("/api/v2/eventtype", eventTypeRoute);
@@ -43,6 +43,8 @@ app.use("/api/v2/summoning", summoningRoute);
 app.use("/api/v2/payment", paymentRoute)
 app.use("/api/v2/med", medRoute)
 app.use("/api/v2/communication", communicationRoute);
+app.use("/api/v2/material", materialRoute)
+
 
 
 /* --- DB Connection --- */

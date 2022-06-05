@@ -143,6 +143,19 @@ const medValidation = (data) => {
         verified: Joi.bool(),
     });
     return schema.validate(data);
+}    
+/* --- VALIDATION: material schema --- */
+const materialValidation = (data) => {
+    const schema = Joi.object({
+        description: Joi.string()
+            .required()
+            .max(255),
+        player: Joi.string(),
+        added_by: Joi.string(),
+        given_at: Joi.date(),
+        returned_at: Joi.date(),
+    });
+    return schema.validate(data);
 }
 
 /* --- VALIDATION: event type schema --- */
@@ -211,11 +224,10 @@ module.exports.teamValidation = teamValidation;
 module.exports.userTypeValidation = userTypeValidation;
 module.exports.passwordResetValidation = passwordResetValidation;
 module.exports.paymentValidation = paymentValidation;
-
 module.exports.eventValidation = eventValidation;
 module.exports.eventTypeValidation = eventTypeValidation;
 module.exports.attendanceValidation = attendanceValidation;
 module.exports.evaluationValidation = evaluationValidation;
 module.exports.medValidation = medValidation;
 module.exports.communicationValidation = communicationValidation;
-    
+module.exports.materialValidation = materialValidation;
