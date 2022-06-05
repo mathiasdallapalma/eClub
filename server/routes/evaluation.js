@@ -4,10 +4,11 @@ const router = express.Router();
 const mongoose = require('mongoose');
 const Evaluation = require('../models/Evaluation')
 const {evaluationValidation}= require('../validation')
-const verify = require('./verifyToken');
+const \ = require('./verifyToken');
+const authorization = require('./authToken');
 
 /* --- GET: all Attends --- */
-router.get('/', verify, async(req, res) => {
+router.get('/', verify, authorization, async(req, res) => {
     try{
         //loading all evaluations
         const evaluation = await Evaluation.find().populate("player",["name","surname"]).populate("event",["title","date"]);;
@@ -19,23 +20,23 @@ router.get('/', verify, async(req, res) => {
 
 /* --- GET: specific Evaluation --- */
 /* IO la toglierei
-router.get('/:evaluationId', verify, getEvaluation, async (req, res) => {
+router.get('/:evaluationId', verify, authorization, getEvaluation, async (req, res) => {
     res.json(res.evaluation)
 })
 */
 
 /* --- GET: Evaluation by event --- */
-router.get('/event/:eventId', verify, getEvaluationByEvent, async (req, res) => {
+router.get('/event/:eventId', verify, authorization, getEvaluationByEvent, async (req, res) => {
     res.json(res.evaluation)
 })
 
 /* --- GET: Evaluation by player --- */
-router.get('/player/:playerId', verify, getEvaluationByPlayer, async (req, res) => {
+router.get('/player/:playerId', verify, authorization, getEvaluationByPlayer, async (req, res) => {
     res.json(res.evaluation)
 })
 
 /* --- POST: creating one Evaluation --- */
-router.post('/', verify, async (req, res) => {
+router.post('/', verify, authorization, async (req, res) => {
 
     //validation data before creating Evaluation 
     const {error} = evaluationValidation(req.body)
@@ -65,7 +66,7 @@ router.post('/', verify, async (req, res) => {
 } )
 
 /* --- DELETE: specific Evaluation --- */
-router.delete('/:evaluationId', verify, getEvaluation, async (req, res) => {
+router.delete('/:evaluationId', verify, authorization, getEvaluation, async (req, res) => {
     try {
         //removing evaluation
         const removedEvaluation = await res.evaluation.remove()

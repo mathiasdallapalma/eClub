@@ -5,9 +5,10 @@ const mongoose = require('mongoose');
 const Attendance = require('../models/Attendance')
 const {attendanceValidation}= require('../validation')
 const verify = require('./verifyToken');
+const authorization = require('./authToken');
 
 /* --- GET: all Attends --- */
-router.get('/', verify, async(req, res) => {
+router.get('/', verify, authorization, async(req, res) => {
     try{
         //loading all attendances
         const attendance = await Attendance.find().populate("player",["name","surname"]).populate("event",["title","date"]);
@@ -19,23 +20,23 @@ router.get('/', verify, async(req, res) => {
 
 /* --- GET: specific Attendance --- */
 /* IO la toglierei
-router.get('/:attendanceId', verify, getAttendance, async (req, res) => {
+router.get('/:attendanceId', verify, authorization, getAttendance, async (req, res) => {
     res.json(res.attendance)
 })
 */
 
 /* --- GET: Attendance by event --- */
-router.get('/event/:eventId', verify, getAttendanceByEvent, async (req, res) => {
+router.get('/event/:eventId', verify, authorization, getAttendanceByEvent, async (req, res) => {
     res.json(res.attendance)
 })
 
 /* --- GET: Attendance by player --- */
-router.get('/player/:playerId', verify, getAttendanceByPlayer, async (req, res) => {
+router.get('/player/:playerId', verify, authorization, getAttendanceByPlayer, async (req, res) => {
     res.json(res.attendance)
 })
 
 /* --- POST: creating one Attendance --- */
-router.post('/', verify, async (req, res) => {
+router.post('/', verify, authorization, async (req, res) => {
 
     //validation data before creating Attendance 
     const {error} = attendanceValidation(req.body)
@@ -65,7 +66,7 @@ router.post('/', verify, async (req, res) => {
 } )
 
 /* --- DELETE: specific Attendance --- */
-router.delete('/:attendanceId', verify, getAttendance, async (req, res) => {
+router.delete('/:attendanceId', verify, authorization, getAttendance, async (req, res) => {
     try {
         //removing attendance
         const removedAttendance = await res.attendance.remove()

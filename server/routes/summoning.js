@@ -5,9 +5,11 @@ const mongoose = require('mongoose');
 const Summoning = require('../models/Summoning')
 const {summoningValidation}= require('../validation')
 const verify = require('./verifyToken');
+const authorization = require('./authToken');
+
 
 /* --- GET: all Summoning --- */
-router.get('/', verify, async(req, res) => {
+router.get('/', verify, authorization, async(req, res) => {
     try{
         //loading all summonings
         const summoning = await Summoning.find().populate("player",["name","surname"]).populate("event",["title","date"]);
@@ -19,23 +21,23 @@ router.get('/', verify, async(req, res) => {
 
 /* --- GET: specific Summoning --- */
 /* IO la toglierei
-router.get('/:summoningId', verify, getSummoning, async (req, res) => {
+router.get('/:summoningId', verify, authorization, getSummoning, async (req, res) => {
     res.json(res.summoning)
 })
 */
 
 /* --- GET: Summoning by event --- */
-router.get('/event/:eventId', verify, getSummoningByEvent, async (req, res) => {
+router.get('/event/:eventId', verify, authorization, getSummoningByEvent, async (req, res) => {
     res.json(res.summoning)
 })
 
 /* --- GET: Summoning by player --- */
-router.get('/player/:playerId', verify, getSummoningByPlayer, async (req, res) => {
+router.get('/player/:playerId', verify, authorization, getSummoningByPlayer, async (req, res) => {
     res.json(res.summoning)
 })
 
 /* --- POST: creating one Summoning --- */
-router.post('/', verify, async (req, res) => {
+router.post('/', verify, authorization, async (req, res) => {
 
     //validation data before creating Summoning 
     const {error} = summoningValidation(req.body)
@@ -65,7 +67,7 @@ router.post('/', verify, async (req, res) => {
 } )
 
 /* --- DELETE: specific Summoning --- */
-router.delete('/:summoningId', verify, getSummoning, async (req, res) => {
+router.delete('/:summoningId', verify, authorization, getSummoning, async (req, res) => {
     try {
         //removing summoning
         const removedSummoning = await res.summoning.remove()

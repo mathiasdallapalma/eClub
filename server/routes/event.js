@@ -7,6 +7,8 @@ var ObjectId = require('mongoose').Types.ObjectId;
 const bcrypt = require('bcryptjs')
 const {eventValidation}= require('../validation')
 const verify = require('./verifyToken');
+const authorization = require('./authToken');
+
 
 /* --- Importing models--- */
 const Event = require('../models/Event');
@@ -17,7 +19,7 @@ const Summoning = require('../models/Summoning');
 const Evaluation = require('../models/Evaluation');
 
 /* --- GET: all Events --- */
-router.get('/', verify, async(req, res) => {
+router.get('/', verify, authorization, async(req, res) => {
     try{
         //loading all events
         const events = await Event.find().populate("teams",["category"]).populate("e_type",["name"]);
@@ -28,18 +30,18 @@ router.get('/', verify, async(req, res) => {
 })
 
 /* --- GET: specific Event --- */
-router.get('/:eventId', verify, getEvent, async (req, res) => {
+router.get('/:eventId', verify, authorization, getEvent, async (req, res) => {
     res.json(res.event)
 })
 
 /* --- GET: Events by Team --- */
-router.get('/team/:teamId', verify, getEventByTeam, async (req, res) => {
+router.get('/team/:teamId', verify, authorization, getEventByTeam, async (req, res) => {
     res.json(res.evaluation)
 })
 
 
 /* --- POST: creating one Event --- */
-router.post('/', verify, async (req, res) => {
+router.post('/', verify, authorization, async (req, res) => {
 
     //validation data before creating event 
     const {error} = eventValidation(req.body)
@@ -125,7 +127,7 @@ router.post('/', verify, async (req, res) => {
 } )
 
 /* --- DELETE: specific Event --- */
-router.delete('/:eventId', verify, getEvent, async (req, res) => {
+router.delete('/:eventId', verify, authorization, getEvent, async (req, res) => {
     try {
         //removing event
         const removedEvent = await res.event.remove()
@@ -136,7 +138,7 @@ router.delete('/:eventId', verify, getEvent, async (req, res) => {
 })
 
 /* --- PATCH: update Event --- */
-router.patch('/:eventId', verify, async(req,res)=>{
+router.patch('/:eventId', verify, authorization, async(req,res)=>{
 
 
     Event.findByIdAndUpdate({
