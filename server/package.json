@@ -19,7 +19,8 @@
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.3.3",
     "nodemailer": "^6.7.5",
-    "notenv": "^2.0.3"
+    "notenv": "^2.0.3",
+    "supertest": "^6.2.3"
   },
   "devDependencies": {
     "dotenv": "^16.0.1",
