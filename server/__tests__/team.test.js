@@ -1,8 +1,7 @@
-const app = require('../index.js');
+const app = require('../app');
 const request = require('supertest');
 const jwt = require('jsonwebtoken');
 const mongoose = require("mongoose");
-const User = require('../models/User');
 const Team = require('../models/Team');
 
 require("dotenv").config();
@@ -10,24 +9,28 @@ require("dotenv").config();
 /* --- Set Timeout --- */
 jest.setTimeout(9000);
 
-/* --- Connection to Database --- */
-let BACKUP_USER
-let BACKUP_TEAM
+let teamTest //data testing
+let WrongId = "629cd06cf9407f999c3b2632";
+let WrongFormatId = "ciao";
 
+/* --- Connection to Database --- */
 beforeAll( async () => {
     jest.setTimeout(8000);
-    app.locals.db = await mongoose.connect(process.env.DATABASE_URL);
-    BACKUP_USER = await User.find({}).exec()
-    BACKUP_TEAM = await Team.find({}).exec()
+    app.locals.db = await mongoose.connect(process.env.DATABASE_TEST_URL);
+
+    teamTest = new Team({ 
+        category:"Test",
+        added_by:"62987f9e04224e2d33075e28" 
+
+});
+await teamTest.save();
+
 })
 
 /* --- Close Connection to Database--- */
 afterAll( async () =>{
-    await User.deleteMany({})
+    
     await Team.deleteMany({})
-    await User.insertMany(BACKUP_USER)
-    await Team.insertMany(BACKUP_TEAM)
-
     mongoose.connection.close(true);
 })
 
@@ -46,26 +49,21 @@ describe('[SUPERTEST] [TEAM]  /api/v1/team', () => {
     });
 
     /* ---  GET SPECIFIC TEAM --- */
-    let id = "6298c3103818deda59b34104";
 
     test('<200> GET specific team', () => {
-        return request(app).get('/api/v1/team/'+id+'/')
+        return request(app).get('/api/v1/team/'+teamTest._id+'/')
         .set('auth-token', token).set('Accept', 'application/json')
         .expect(200)
     });
 
-    let id1 = "6298c3103818deda59b34132";
-
     test('<404> GET all team with not found id', () => {
-        return request(app).get('/api/v1/team/'+id1+'/')
+        return request(app).get('/api/v1/team/'+WrongId+'/')
         .set('auth-token', token).set('Accept', 'application/json')
         .expect(404)
     });
 
-    let id2 = "ciao";
-
     test('<500> GET all team with wrong id format', () => {
-        return request(app).get('/api/v1/team/'+id2+'/')
+        return request(app).get('/api/v1/team/'+WrongFormatId+'/')
         .set('auth-token', token).set('Accept', 'application/json')
         .expect(500)
     });
@@ -74,8 +72,8 @@ describe('[SUPERTEST] [TEAM]  /api/v1/team', () => {
     test('<200> POST new team', () => {
         return request(app).post('/api/v1/team/')
         .send({ 
-                category:"Test",
-                added_by:"62987f9e04224e2d33075e28" 
+                category:"Test2",
+                added_by:"62987f9e04224e2d33075e28"
         })
         .set('auth-token', token).set('Accept', 'application/json')
         .expect(200)
@@ -90,7 +88,7 @@ describe('[SUPERTEST] [TEAM]  /api/v1/team', () => {
 
     /* --- PATCH TEAM --- */
     test('<200> PATCH specific team', () => {
-        return request(app).patch('/api/v1/team/'+id+'/')
+        return request(app).patch('/api/v1/team/'+teamTest._id+'/')
         .send({ 
             category:"Test3",
         })  
@@ -98,10 +96,8 @@ describe('[SUPERTEST] [TEAM]  /api/v1/team', () => {
         .expect(200)
     });
 
-    let id10="6298c3103818deda59b34110"
-
     test('<404> PATCH specific team with wrong id', () => {
-        return request(app).patch('/api/v1/team/'+id10+'/')
+        return request(app).patch('/api/v1/team/'+WrongId+'/')
         .send({ 
             amount:"10.9", 
             description:"prova",
@@ -112,8 +108,8 @@ describe('[SUPERTEST] [TEAM]  /api/v1/team', () => {
         .expect(404)
     });
 
-    test('<400> PATCH specific payment', () => {
-        return request(app).patch('/api/v1/team/'+id+'/')
+    test('<400> PATCH specific team with validation error', () => {
+        return request(app).patch('/api/v1/team/'+WrongFormatId+'/')
         .send({ 
             category:"Test3", 
         })  
@@ -121,23 +117,21 @@ describe('[SUPERTEST] [TEAM]  /api/v1/team', () => {
         .expect(400)
     });
 
-    let id11="ciao"
-
     /* --- DELETE TEAM--- */
     test('<200> DELETE specific team', () => {
-        return request(app).delete('/api/v1/team/'+id+'/')
+        return request(app).delete('/api/v1/team/'+teamTest._id+'/')
         .set('auth-token', token).set('Accept', 'application/json')
         .expect(200)
     });
 
     test('<404> DELETE specific team with not found id', () => {
-        return request(app).delete('/api/v1/team/'+id10+'/')
+        return request(app).delete('/api/v1/team/'+WrongId+'/')
         .set('auth-token', token).set('Accept', 'application/json')
         .expect(404)
     });
 
-    test('<500> DELETE specific payment with wrong id format', () => {
-        return request(app).delete('/api/v1/team/'+id11+'/')
+    test('<500> DELETE specific team with wrong id format', () => {
+        return request(app).delete('/api/v1/team/'+WrongFormatId+'/')
         .set('auth-token', token).set('Accept', 'application/json')
         .expect(500)
     });

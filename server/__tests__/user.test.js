@@ -1,46 +1,50 @@
-const app = require('../index.js');
+const app = require('../app');
 const request = require('supertest');
 const jwt = require('jsonwebtoken');
 const mongoose = require("mongoose");
 const User = require('../models/User');
-const Team = require('../models/Team');
-const UserType = require('../models/UserType');
+const crypto = require('node:crypto')
+
 
 require("dotenv").config();
 
 /* --- Set Timeout --- */
 jest.setTimeout(9000);
 
+let userTest //data testing
+let WrongId = "629cd06cf9407f999c3b2632";
+let WrongFormatId = "ciao";
+
+
 /* --- Connection to Database --- */
-let BACKUP_USER
-let BACKUP_TEAM
-let BACKUP_USERTYPE
-
-
 beforeAll( async () => {
     jest.setTimeout(8000);
-    app.locals.db = await mongoose.connect(process.env.DATABASE_URL);
-    BACKUP_USER = await User.find({}).exec()
-    BACKUP_TEAM = await Team.find({}).exec()
-    BACKUP_USERTYPE = await UserType.find({}).exec()
+    app.locals.db = await mongoose.connect(process.env.DATABASE_TEST_URL);
+
+
+    userTest = new User({email: "test@test.com", 
+                        name: "Luca", 
+                        surname:"Test", 
+                        birth:"01/01/1001", 
+                        a_type:"629883bd16e83ec5f33247bf",
+                        added_by:"629883bd16e83ec5f33247bf"
+    });
+    await userTest.save();
+
+
 })
 
 /* --- Close Connection to Database--- */
 afterAll( async () =>{
-    await User.deleteMany({})
-    await Team.deleteMany({})
-    await UserType.deleteMany({})
-    await User.insertMany(BACKUP_USER)
-    await Team.insertMany(BACKUP_TEAM)
-    await UserType.insertMany(BACKUP_USERTYPE)
 
+    await User.deleteMany({})
     mongoose.connection.close(true);
 })
 
 
 describe('[SUPERTEST] [USER]  /api/v1/user', () => {
 
-    var token = jwt.sign({email:"dd@eclub.com"}, process.env.TOKEN_SECRET, {expiresIn: 86400});
+    var token = jwt.sign({email:"test@test.com"}, process.env.TOKEN_SECRET, {expiresIn: 86400});
     header={'Content-Type':'application/json', token:token};
     console.log(header)
 
@@ -49,29 +53,25 @@ describe('[SUPERTEST] [USER]  /api/v1/user', () => {
         return request(app).get('/api/v1/user')
         .set('auth-token', token).set('Accept', 'application/json')
         .expect(200)
+       
     });
 
     /* ---  GET SPECIFIC USER --- */
-    let id = "629cd06cf9407f999c3b26ed";
 
     test('<200> GET specific user', () => {
-        return request(app).get('/api/v1/user/'+id+'/')
+        return request(app).get('/api/v1/user/'+userTest._id+'/')
         .set('auth-token', token).set('Accept', 'application/json')
         .expect(200)
     });
 
-    let id1 = "629cd06cf9407f999c3b2632";
-
     test('<404> GET all user with not found id', () => {
-        return request(app).get('/api/v1/user/'+id1+'/')
+        return request(app).get('/api/v1/user/'+WrongId+'/')
         .set('auth-token', token).set('Accept', 'application/json')
         .expect(404)
     });
 
-    let id2 = "ciao";
-
     test('<500> GET all user with wrong id format', () => {
-        return request(app).get('/api/v1/user/'+id2+'/')
+        return request(app).get('/api/v1/user/'+WrongFormatId+'/')
         .set('auth-token', token).set('Accept', 'application/json')
         .expect(500)
     });
@@ -80,12 +80,12 @@ describe('[SUPERTEST] [USER]  /api/v1/user', () => {
     test('<200> POST new user', () => {
         return request(app).post('/api/v1/user/')
         .send({ 
-                email:"test@test.it",
+                email:"test2@test.it",
                 password:"testtest",
                 name:"Test",
                 surname:"Test",
                 birth:"01/01/1111",
-                a_type:"62987f2b04224e2d33075e22",
+                a_type:"629883bd16e83ec5f33247bf",
                 added_by:"62987f9e04224e2d33075e28" 
         })
         .set('auth-token', token).set('Accept', 'application/json')
@@ -101,18 +101,17 @@ describe('[SUPERTEST] [USER]  /api/v1/user', () => {
 
     /* --- PATCH TEAM --- */
     test('<200> PATCH specific user', () => {
-        return request(app).patch('/api/v1/user/'+id+'/')
+        return request(app).patch('/api/v1/user/'+userTest._id+'/')
         .send({ 
-            name:"Test3",
+            name:"Marco",
         })  
         .set('auth-token', token).set('Accept', 'application/json')
         .expect(200)
     });
 
-    let id10="629cd06cf9407f999c3b2610"
 
     test('<404> PATCH specific user with wrong id', () => {
-        return request(app).patch('/api/v1/user/'+id10+'/')
+        return request(app).patch('/api/v1/user/'+WrongId+'/')
         .send({ 
             name:"Test3",
         })  
@@ -121,34 +120,31 @@ describe('[SUPERTEST] [USER]  /api/v1/user', () => {
     });
 
     test('<400> PATCH specific user', () => {
-        return request(app).patch('/api/v1/user/'+id+'/')
+        return request(app).patch('/api/v1/user/'+userTest._id+'/')
         .send({ 
-            email:"dd@eclub.com" 
+            email:"test@test.com" 
         })  
         .set('auth-token', token).set('Accept', 'application/json')
         .expect(400)
     });
 
-    let id11="ciao"
-
     /* --- DELETE USER--- */
     test('<200> DELETE specific user', () => {
-        return request(app).delete('/api/v1/user/'+id+'/')
+        return request(app).delete('/api/v1/user/'+userTest._id+'/')
         .set('auth-token', token).set('Accept', 'application/json')
         .expect(200)
     });
 
     test('<404> DELETE specific user with not found id', () => {
-        return request(app).delete('/api/v1/user/'+id10+'/')
+        return request(app).delete('/api/v1/user/'+WrongId+'/')
         .set('auth-token', token).set('Accept', 'application/json')
         .expect(404)
     });
 
     test('<500> DELETE specific user with wrong id format', () => {
-        return request(app).delete('/api/v1/user/'+id11+'/')
+        return request(app).delete('/api/v1/user/'+WrongFormatId+'/')
         .set('auth-token', token).set('Accept', 'application/json')
         .expect(500)
     });
-
    
 })

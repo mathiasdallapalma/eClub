@@ -1,4 +1,4 @@
-const app = require('../index.js');
+const app = require('../app');
 const request = require('supertest');
 const jwt = require('jsonwebtoken');
 const mongoose = require("mongoose");
@@ -11,17 +11,46 @@ require("dotenv").config();
 /* --- Set Timeout --- */
 jest.setTimeout(9000);
 
-/* --- Connection to Database --- */
-let BACKUP_USER
-let BACKUP_EVENT
-let BACKUP_SUMMONING
+let userTest
+let sumTest
+let eventTest
 
+/* --- Connection to Database --- */
 beforeAll( async () => {
     jest.setTimeout(8000);
-    app.locals.db = await mongoose.connect(process.env.DATABASE_URL);
-    BACKUP_USER = await User.find({}).exec()
-    BACKUP_EVENT = await Event.find({}).exec()
-    BACKUP_SUMMONING = await Summoning.find({}).exec()
+    app.locals.db = await mongoose.connect(process.env.DATABASE_TEST_URL);
+
+    userTest = new User({
+                        email: "test@test.com", 
+                        name: "Luca", 
+                        surname:"Test", 
+                        birth:"01/01/1001", 
+                        a_type:"629883bd16e83ec5f33247bf",
+                        added_by:"629883bd16e83ec5f33247bf"
+    });
+    await userTest.save();
+
+    eventTest = new Event({
+                        title: "Evento", 
+                        date: "10/10/2010", 
+                        teams: "", 
+                        birth:"01/01/1001", 
+                        a_type:"629883bd16e83ec5f33247bf",
+                        added_by:"629883bd16e83ec5f33247bf"
+    });
+    await eventTest.save();
+
+    sumTest = new Summoning({
+                        email: "test@test.com", 
+                        name: "Luca", 
+                        surname:"Test", 
+                        birth:"01/01/1001", 
+                        a_type:"629883bd16e83ec5f33247bf",
+                        added_by:"629883bd16e83ec5f33247bf"
+    });
+    await sumTest.save();
+
+
 })
 
 /* --- Close Connection to Database--- */
@@ -121,7 +150,7 @@ describe('[SUPERTEST] [SUMMONING]  /api/v2/summoning', () => {
     });
 
     /* --- PATCH summoning--- */
-    let id="629b19c417d2c125ef102c6f";
+    let id="629b19c417d2c125ef102c72";
 
     test('<200> PATCH specific summoning', () => {
         return request(app).patch('/api/v2/summoning/'+id+'/')
@@ -142,7 +171,7 @@ describe('[SUPERTEST] [SUMMONING]  /api/v2/summoning', () => {
         .expect(404)
     });
 
-    /* --- DELETE PAYMENT--- */
+    /* --- DELETE SUMMONING--- */
     test('<200> DELETE specific summoning', () => {
         return request(app).delete('/api/v2/summoning/'+id+'/')
         .set('auth-token', token).set('Accept', 'application/json')

@@ -1,4 +1,4 @@
-const app = require('../index.js');
+const app = require('../app');
 const request = require('supertest');
 const jwt = require('jsonwebtoken');
 const mongoose = require("mongoose");
@@ -9,21 +9,27 @@ require("dotenv").config();
 /* --- Set Timeout --- */
 jest.setTimeout(9000);
 
+let utTest //data testing
+let WrongId = "629cd06cf9407f999c3b2632";
+let WrongFormatId = "ciao";
+
 /* --- Connection to Database --- */
-let BACKUP_USERTYPE
-
-
 beforeAll( async () => {
     jest.setTimeout(8000);
-    app.locals.db = await mongoose.connect(process.env.DATABASE_URL);
-    BACKUP_USERTYPE = await UserType.find({}).exec()
+    app.locals.db = await mongoose.connect(process.env.DATABASE_TEST_URL);
+
+    utTest = new UserType({
+                        name: "Dirigente del Direttivo", 
+                        type: "0"
+                        
+    });
+    await utTest.save();
 })
 
 /* --- Close Connection to Database--- */
 afterAll( async () =>{
-    await UserType.deleteMany({})
-    await UserType.insertMany(BACKUP_USERTYPE)
 
+    await UserType.deleteMany({})
     mongoose.connection.close(true);
 })
 
@@ -41,7 +47,7 @@ describe('[SUPERTEST] [USER TYPE]  /api/v1/usertype', () => {
         .expect(200)
     });
 
-    /* --- POST USER--- */
+    /* --- POST USERTYPE--- */
     test('<200> POST new usertype', () => {
         return request(app).post('/api/v1/usertype/')
         .send({ 
@@ -59,10 +65,9 @@ describe('[SUPERTEST] [USER TYPE]  /api/v1/usertype', () => {
         .expect(400)
     });
 
-    /* --- PATCH TEAM --- */
-    let id="62987f2b04224e2d33075e22";
+    /* --- PATCH USERTYPE --- */
     test('<200> PATCH specific usertype', () => {
-        return request(app).patch('/api/v1/usertype/'+id+'/')
+        return request(app).patch('/api/v1/usertype/'+utTest._id+'/')
         .send({ 
             name:"Test modificato"
         })  
@@ -70,10 +75,9 @@ describe('[SUPERTEST] [USER TYPE]  /api/v1/usertype', () => {
         .expect(200)
     });
 
-    let id10="62987f2b04224e2d33075e10"
 
     test('<404> PATCH specific usertype with wrong id', () => {
-        return request(app).patch('/api/v1/usertype/'+id10+'/')
+        return request(app).patch('/api/v1/usertype/'+WrongId+'/')
         .send({ 
             name:"Test3",
         })  
@@ -81,9 +85,8 @@ describe('[SUPERTEST] [USER TYPE]  /api/v1/usertype', () => {
         .expect(404)
     });
     
-    let id11="ciao"
     test('<400> PATCH specific usertype', () => {
-        return request(app).patch('/api/v1/usertype/'+id+'/')
+        return request(app).patch('/api/v1/usertype/'+utTest._id+'/')
         .send({
             type:"0"
         })  
@@ -91,21 +94,21 @@ describe('[SUPERTEST] [USER TYPE]  /api/v1/usertype', () => {
         .expect(400)
     });
 
-    /* --- DELETE USER--- */
+    /* --- DELETE USERTYPE --- */
     test('<200> DELETE specific usertype', () => {
-        return request(app).delete('/api/v1/usertype/'+id+'/')
+        return request(app).delete('/api/v1/usertype/'+utTest._id+'/')
         .set('auth-token', token).set('Accept', 'application/json')
         .expect(200)
     });
 
     test('<404> DELETE specific usertype with not found id', () => {
-        return request(app).delete('/api/v1/usertype/'+id10+'/')
+        return request(app).delete('/api/v1/usertype/'+WrongId+'/')
         .set('auth-token', token).set('Accept', 'application/json')
         .expect(404)
     });
 
     test('<500> DELETE specific usertype with wrong id format', () => {
-        return request(app).delete('/api/v1/usertype/'+id11+'/')
+        return request(app).delete('/api/v1/usertype/'+WrongFormatId+'/')
         .set('auth-token', token).set('Accept', 'application/json')
         .expect(500)
     });
