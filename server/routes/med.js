@@ -4,6 +4,7 @@ const router = express.Router();
 const Med = require('../models/med');
 const verify = require('./verifyToken');
 const authorization = require('./authToken');
+const med = require('../models/med');
 
 
 /* --- GET: all Meds --- */
@@ -29,7 +30,7 @@ router.get('/player/:playerId', verify, authorization, async (req, res) => {
     let med
     try {
         med = await Med.find({player : req.params.playerId}).populate("player",["name","surname"]);
-        if (med == null) {
+        if (med.length == 0) {
             return res.status(404).json({ message: 'Cannot find player' })
         }
     } catch (err) {
@@ -46,11 +47,12 @@ router.post('/', verify, authorization, async (req, res) => {
         released_at: req.body.released_at,
         expiring_at: req.body.expiring_at,
         player: req.body.player,
-        verified: req.body.verified
+        verified: req.body.verified,
+        added_by:req.body.added_by
     })
     try{
         const savedMed = await med.save();
-        res.status(201).json({ med: med._id })
+        res.status(200).json({ med: med._id })
     }catch(err){
         res.status(500).json({ message: err });
     }
@@ -69,17 +71,17 @@ router.delete('/:medId', verify, authorization, getMed, async (req, res) => {
 
 /* --- PATCH: update Med --- */
 router.patch('/:medId', verify, authorization, async(req,res)=>{
-    console.log(req.body);
-
-    Med.findByIdAndUpdate({
-        _id:req.params.medId
-    },{
-        $set:req.body
-    }).then(()=>{
-        res.status(200).send({message:"Success"});
-    }).catch(err => {
-       res.status(500).send(err.message);
-    })
+    try {
+        const meds = await Med.findById({_id: req.params.medId})
+        if(!meds){
+            return res.status(404).json("med not found")
+        }else{
+            Med.updateOne({_id: req.params.medId}, {$set:req.body}).exec()
+            res.status(200).json({ message: 'success' })
+        }
+    }catch(err){
+        res.status(500).json({ message: err.message })
+    }
 });
 
 /* --- FUNCTION: get Med --- */

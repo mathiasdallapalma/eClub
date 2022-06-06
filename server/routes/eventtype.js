@@ -31,11 +31,12 @@ router.post('/', verify, authorization, async (req, res) => {
     //create new event type
     const eventType = new EventType({
         name: req.body.name,
-        type: req.body.type
+        type: req.body.type,
+        added_by: req.body.added_by
     })
     try{
         const savedEventType = await eventType.save();
-        res.status(201).json({ eventType: eventType._id })
+        res.status(200).json({ eventType: eventType._id })
     }catch(err){
         res.status(400).json({ message: err });
     }
@@ -53,24 +54,20 @@ router.delete('/:eventTypeId', verify, authorization, getEventType, async (req, 
 
 /* --- PATCH: update Event --- */
 router.patch('/:eventTypeId', verify, authorization, async(req,res)=>{
-    console.log(req.body);
-
-    //checking if the eventType is already in the database
-    const typeExist = await EventType.findOne({type: req.body.type});
-    if(typeExist) return res.status(400).send('Type already exists')
-
-    EventType.findByIdAndUpdate({
-        _id:req.params.eventTypeId
-    },{
-        $set:req.body
-    }).then(()=>{
-        res.sendStatus({message:"Success"});
-    }).catch(err => {
-       res.status(500).send(err.message);
-    })
+    try {
+        const eventType = await EventType.findById({_id: req.params.eventTypeId})
+        if(!eventType){
+            return res.status(404).json("eventType not found")
+        }else{
+            EventType.updateOne({_id: req.params.eventTypeId}, {$set:req.body}).exec()
+            res.status(200).json({ message: 'success' })
+        }
+    }catch(err){
+        res.status(500).json({ message: err.message })
+    }
 });
 
-/* --- FUNCTION: get Team --- */
+/* --- FUNCTION: get EventType --- */
 async function getEventType(req, res, next) {
     let eventType
     try {

@@ -14,5 +14,3 @@ mongoose.connect(process.env.DATABASE_URL, { useNewUrlParser: true , useUnifiedT
 
 
 module.exports = app;
-
-

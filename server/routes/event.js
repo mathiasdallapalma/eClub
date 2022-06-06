@@ -36,7 +36,7 @@ router.get('/:eventId', verify, authorization, getEvent, async (req, res) => {
 
 /* --- GET: Events by Team --- */
 router.get('/team/:teamId', verify, authorization, getEventByTeam, async (req, res) => {
-    res.json(res.evaluation)
+    res.json(res.event)
 })
 
 
@@ -62,7 +62,7 @@ router.post('/', verify, authorization, async (req, res) => {
     })
     try{
         const savedEvent = await event.save();
-        res.status(201).json({ event: event._id })
+        res.status(200).json({ event: event._id })
     }catch(err){
         res.status(500).json({ message: err });
     }
@@ -139,17 +139,17 @@ router.delete('/:eventId', verify, authorization, getEvent, async (req, res) => 
 
 /* --- PATCH: update Event --- */
 router.patch('/:eventId', verify, authorization, async(req,res)=>{
-
-
-    Event.findByIdAndUpdate({
-        _id:req.params.eventId
-    },{
-        $set:req.body
-    }).then(()=>{
-        res.status(201).send({message: "Success"});
-    }).catch(err => {
-       res.status(500).send(err.message);
-    })
+    try {
+        const event = await Event.findById({_id: req.params.eventId})
+        if(!event){
+            return res.status(404).json("event not found")
+        }else{
+            Event.updateOne({_id: req.params.eventId}, {$set:req.body}).exec()
+            res.status(200).json({ message: 'success' })
+        }
+    }catch(err){
+        res.status(500).json({ message: err.message })
+    }
 });
 
 /* --- FUNCTION: get Event --- */
@@ -171,8 +171,8 @@ async function getEvent(req, res, next) {
 async function getEventByTeam(req, res, next) {
     let event
     try {
-        event = await Attendance.find({player : req.params.teamId}).populate("team",["category"]);
-        if (event == null) {
+        event = await Event.find({teams : req.params.teamId}).populate("teams",["category"]).populate("e_type",["name"]);
+        if (event.length==0) {
             return res.status(404).json({ message: 'Cannot find event' })
         }
     } catch (err) {
