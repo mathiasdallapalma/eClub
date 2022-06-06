@@ -48,7 +48,7 @@ app.use("/api/v2/material", materialRoute)
 
 
 /* --- DB Connection --- */
-mongoose.connect(process.env.DATABASE_URL, { useNewUrlParser: true })
+mongoose.connect(process.env.DATABASETEST_URL, { useNewUrlParser: true })
 .then(() => {
     console.log("Connected to database")
     /* --- Server Starting --- */
