@@ -105,6 +105,8 @@ const paymentValidation = (data) => {
             .required(),
         player: Joi.string()
             .required(),
+        added_by: Joi.string()
+        .required(),
     })
     return schema.validate(data);
 }
@@ -137,10 +139,15 @@ const medValidation = (data) => {
             .required(),
         expiring_at: Joi.date()
             .required,
-        player: Joi.string(),
-        doctor: Joi.string(),
-        med_type: Joi.string(),
+        player: Joi.string()
+            .required(),
+        doctor: Joi.string()
+            .required(),
+        med_type: Joi.string()
+            .required(),
         verified: Joi.bool(),
+        added_by: Joi.string()
+            .required() 
     });
     return schema.validate(data);
 }    
@@ -150,10 +157,14 @@ const materialValidation = (data) => {
         description: Joi.string()
             .required()
             .max(255),
-        player: Joi.string(),
-        added_by: Joi.string(),
-        given_at: Joi.date(),
-        returned_at: Joi.date(),
+        player: Joi.string()
+            .required(),
+        added_by: Joi.string()
+            .required(),
+        given_at: Joi.date()
+            .required(),
+        returned_at: Joi.date()
+            .required(),
     });
     return schema.validate(data);
 }
@@ -165,6 +176,8 @@ const eventTypeValidation = (data) => {
             .required(), 
         type: Joi.number()
             .required(),
+        added_by: Joi.string()
+            .required()
     });
     return schema.validate(data);
 }

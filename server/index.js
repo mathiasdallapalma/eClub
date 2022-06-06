@@ -49,11 +49,12 @@ app.use("/api/v2/material", materialRoute)
 
 /* --- DB Connection --- */
 mongoose.connect(process.env.DATABASE_URL, { useNewUrlParser: true })
-const db = mongoose.connection
-db.on('error', (error) => console.error(error))
-db.once('open', () => console.log('Connected to Database'))
+.then(() => {
+    console.log("Connected to database")
+    /* --- Server Starting --- */
+    app.listen(3001, () => console.log("Server started"));
+})
+.catch((error) => console.error("Error connecting to database: ${error}"));
 
-/* --- Server Starting --- */
-app.listen(3001, () => console.log("Server started"));
 
-
+module.exports = app;

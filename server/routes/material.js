@@ -4,6 +4,7 @@ const router = express.Router();
 const Material = require('../models/material');
 const verify = require('./verifyToken');
 const authorization = require('./authToken');
+const material = require('../models/material');
 
 /* --- GET: all materials --- */
 router.get('/', verify, authorization, async(req, res) => {
@@ -21,6 +22,21 @@ router.get('/:materialId', verify, authorization, getMaterial, async (req, res) 
     res.status(200).json(res.material)
 })
 
+/* --- GET: Material by player --- */
+router.get('/player/:playerId', verify, authorization, async (req, res) => {
+    
+    let material
+    try {
+        material = await Material.find({player : req.params.playerId}).populate("player",["name","surname"]);
+        if (material.length == 0) {
+            return res.status(404).json({ message: 'Cannot find player' })
+        }
+    } catch (err) {
+        return res.status(500).json({ message: err.message })
+    }
+    res.status(200).json(material)
+})
+
 
 /* --- POST: creating one material --- */
 router.post('/', verify, authorization, async (req, res) => {
@@ -35,7 +51,7 @@ router.post('/', verify, authorization, async (req, res) => {
     })
     try{
         const savedMaterial = await material.save();
-        res.status(201).json({ material: material._id })
+        res.status(200).json({ material: material._id })
     }catch(err){
         res.status(500).json({ message: err });
     }
@@ -54,17 +70,17 @@ router.delete('/:materialId', verify, authorization, getMaterial, async (req, re
 
 /* --- PATCH: update material --- */
 router.patch('/:materialId', async(req,res)=>{
-    console.log(req.body);
-
-    Material.findByIdAndUpdate({
-        _id:req.params.materialId
-    },{
-        $set:req.body
-    }).then(()=>{
-        res.status(200).json({message:"Success"});
-    }).catch(err => {
-       res.status(500).json(err.message);
-    })
+    try {
+        const material = await Material.findById({_id: req.params.materialId})
+        if(!material){
+            return res.status(404).json("material not found")
+        }else{
+            Material.updateOne({_id: req.params.materialId}, {$set:req.body}).exec()
+            res.status(200).json({ message: 'success' })
+        }
+    }catch(err){
+        res.status(500).json({ message: err.message })
+    }
 });
 
 /* --- FUNCTION: get material --- */
