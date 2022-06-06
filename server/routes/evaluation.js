@@ -12,27 +12,20 @@ router.get('/', verify, authorization, async(req, res) => {
     try{
         //loading all evaluations
         const evaluation = await Evaluation.find().populate("player",["name","surname"]).populate("event",["title","date"]);;
-        res.json(evaluation);
+        res.status(200).json(evaluation);
     }catch(err){
         res.status(500).json({ message: err });
     }
 })
 
-/* --- GET: specific Evaluation --- */
-/* IO la toglierei
-router.get('/:evaluationId', verify, authorization, getEvaluation, async (req, res) => {
-    res.json(res.evaluation)
-})
-*/
-
 /* --- GET: Evaluation by event --- */
 router.get('/event/:eventId', verify, authorization, getEvaluationByEvent, async (req, res) => {
-    res.json(res.evaluation)
+    res.status(200).json(res.evaluation)
 })
 
 /* --- GET: Evaluation by player --- */
 router.get('/player/:playerId', verify, authorization, getEvaluationByPlayer, async (req, res) => {
-    res.json(res.evaluation)
+    res.status(200).json(res.evaluation)
 })
 
 /* --- POST: creating one Evaluation --- */
@@ -58,10 +51,9 @@ router.post('/', verify, authorization, async (req, res) => {
     })
     try{
         const savedEvaluation = await evaluation.save();
-        res.status(201).json({ evaluation: evaluation._id })
+        res.status(200).json({ evaluation: evaluation._id })
     }catch(err){
         res.status(500).json({ message: err });
-        console.log("asd");
     }
 } )
 
@@ -77,18 +69,18 @@ router.delete('/:evaluationId', verify, authorization, getEvaluation, async (req
 })
 
 /* --- PATCH: update Evaluation --- */
-router.patch('/:evaluationId', async(req,res)=>{
-    console.log(req.body);
-
-    Evaluation.findByIdAndUpdate({
-        _id:req.params.evaluationId
-    },{
-        $set:req.body
-    }).then(()=>{
-        res.sendStatus({message:"Success"});
-    }).catch(err => {
-       res.status(500).send(err.message);
-    })
+router.patch('/:evaluationId', verify, authorization, async(req,res)=>{
+    try {
+        const evaluation = await Evaluation.findById({_id: req.params.evaluationId})
+        if(!evaluation){
+            return res.status(404).json("Evaluation not found")
+        }else{
+            Evaluation.updateOne({_id: req.params.evaluationId}, {$set:req.body}).exec()
+            res.status(200).json({message: 'success'})
+        }
+    }catch(err){
+        res.status(500).json({message: err.message})
+    }
 });
 
 /* --- FUNCTION: get Evaluation --- */
@@ -110,8 +102,8 @@ async function getEvaluation(req, res, next) {
 async function getEvaluationByEvent(req, res, next) {
     let evaluation
     try {
-        evaluation = await Evaluation.find({player : req.params.eventId}).populate("player",["name","surname"]);
-        if (evaluation == null) {
+        evaluation = await Evaluation.find({event : req.params.eventId}).populate("player",["name","surname"]);
+        if (evaluation.length == "0") {
             return res.status(404).json({ message: 'Cannot find evaluation' })
         }
     } catch (err) {
@@ -125,7 +117,7 @@ async function getEvaluationByPlayer(req, res, next) {
     let evaluation
     try {
         evaluation = await Evaluation.find({player : req.params.playerId}).populate("event",["title","date"]);
-        if (evaluation == null) {
+        if (evaluation.length == "0") {
             return res.status(404).json({ message: 'Cannot find evaluation' })
         }
     } catch (err) {

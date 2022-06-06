@@ -12,27 +12,20 @@ router.get('/', verify, authorization, async(req, res) => {
     try{
         //loading all attendances
         const attendance = await Attendance.find().populate("player",["name","surname"]).populate("event",["title","date"]);
-        res.json(attendance);
+        res.status(200).json(attendance);
     }catch(err){
         res.status(500).json({ message: err });
     }
 })
 
-/* --- GET: specific Attendance --- */
-/* IO la toglierei
-router.get('/:attendanceId', verify, authorization, getAttendance, async (req, res) => {
-    res.json(res.attendance)
-})
-*/
-
 /* --- GET: Attendance by event --- */
 router.get('/event/:eventId', verify, authorization, getAttendanceByEvent, async (req, res) => {
-    res.json(res.attendance)
+    res.status(200).json(res.attendance)
 })
 
 /* --- GET: Attendance by player --- */
 router.get('/player/:playerId', verify, authorization, getAttendanceByPlayer, async (req, res) => {
-    res.json(res.attendance)
+    res.status(200).json(res.attendance)
 })
 
 /* --- POST: creating one Attendance --- */
@@ -58,7 +51,7 @@ router.post('/', verify, authorization, async (req, res) => {
     })
     try{
         const savedAttendance = await attendance.save();
-        res.status(201).json({ attendance: attendance._id })
+        res.status(200).json({ attendance: attendance._id })
     }catch(err){
         res.status(500).json({ message: err });
         console.log("asd");
@@ -77,18 +70,18 @@ router.delete('/:attendanceId', verify, authorization, getAttendance, async (req
 })
 
 /* --- PATCH: update Attendance --- */
-router.patch('/:attendanceId', async(req,res)=>{
-    console.log(req.body);
-
-    Attendance.findByIdAndUpdate({
-        _id:req.params.attendanceId
-    },{
-        $set:req.body
-    }).then(()=>{
-        res.sendStatus({message:"Success"});
-    }).catch(err => {
-       res.status(500).send(err.message);
-    })
+router.patch('/:attendanceId', verify, authorization, async(req,res)=>{
+    try {
+        const attendance = await Attendance.findById({_id: req.params.attendanceId})
+        if(!attendance){
+            return res.status(404).json("Attendance not found")
+        }else{
+            Attendance.updateOne({_id: req.params.attendanceId}, {$set:req.body}).exec()
+            res.status(200).json({message: 'success'})
+        }
+    }catch(err){
+        res.status(500).json({message: err.message})
+    }
 });
 
 /* --- FUNCTION: get Attendance --- */
@@ -110,8 +103,8 @@ async function getAttendance(req, res, next) {
 async function getAttendanceByEvent(req, res, next) {
     let attendance
     try {
-        attendance = await Attendance.find({player : req.params.eventId}).populate("player",["name","surname"]);
-        if (attendance == null) {
+        attendance = await Attendance.find({event : req.params.eventId}).populate("player",["name","surname"]);
+        if (attendance.length == "0") {
             return res.status(404).json({ message: 'Cannot find attendance' })
         }
     } catch (err) {
@@ -125,7 +118,7 @@ async function getAttendanceByPlayer(req, res, next) {
     let attendance
     try {
         attendance = await Attendance.find({player : req.params.playerId}).populate("event",["title","date"]);
-        if (attendance == null) {
+        if (attendance.length == "0") {
             return res.status(404).json({ message: 'Cannot find attendance' })
         }
     } catch (err) {

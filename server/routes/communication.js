@@ -36,14 +36,14 @@ router.post('/', verify, authorization, async (req, res) => {
 
     //create new communication
     const communication = new Communication({
-        teams: req.body.team,
+        teams: req.body.teams,
         subject: req.body.subject,
         text: req.body.text,
         added_by: req.body.added_by
     })
     try{
         const savedCommunication = await communication.save();
-        res.status(201).json({ communication: communication._id })
+        res.status(200).json({ communication: communication._id })
     }catch(err){
         res.status(500).json({ message: err });
     }
@@ -62,17 +62,17 @@ router.delete('/:communicationId', verify, authorization, getCommunication, asyn
 
 /* --- PATCH: update Communication --- */
 router.patch('/:communicationId', verify, authorization, async(req,res)=>{
-    console.log(req.body);
-
-    Communication.findByIdAndUpdate({
-        _id:req.params.communicationId
-    },{
-        $set:req.body
-    }).then(()=>{
-        res.status(201).json({message:"Success"});
-    }).catch(err => {
-       res.status(500).send(err.message);
-    })
+    try {
+        const communication = await Communication.findById({_id: req.params.communicationId})
+        if(!communication){
+            return res.status(404).json("Communication not found")
+        }else{
+            Communication.updateOne({_id: req.params.communicationId}, {$set:req.body}).exec()
+            res.status(200).json({message: 'success'})
+        }
+    }catch(err){
+        res.status(500).json({message: err.message})
+    }
 });
 
 /* --- FUNCTION: get Communication --- */
