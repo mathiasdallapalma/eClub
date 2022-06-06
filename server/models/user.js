@@ -68,7 +68,6 @@ const UserSchema = new mongoose.Schema({
     },
     added_by:{
         type: mongoose.Schema.Types.ObjectId, ref: 'User',
-        required: true
     },
     created_at:{
         type: Date,

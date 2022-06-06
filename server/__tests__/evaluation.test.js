@@ -16,6 +16,7 @@ let userTest
 let teamTest
 let EventTypeTest
 let evaluationTest
+let eventTest
 
 let WrongId = "629cd06cf9407f999c3b2632";
 let WrongFormatId = "ciao";
@@ -74,6 +75,7 @@ beforeAll( async () => {
 afterAll( async () =>{
     await User.deleteMany({})
     await Evaluation.deleteMany({})
+    await Event.deleteMany({})
     await Team.deleteMany({})
     await EventType.deleteMany({})
 

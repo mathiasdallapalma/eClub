@@ -33,8 +33,7 @@ const registerUserValidation = (data) => {
             .max(255),
         phone: Joi.string()
             .max(30),
-        added_by: Joi.string()
-            .required(),
+        added_by: Joi.string(),
         team_id:Joi.string()
     });
     return schema.validate(data);
@@ -172,10 +171,8 @@ const eventTypeValidation = (data) => {
 /* --- ATTENDANCE: event type schema --- */
 const attendanceValidation = (data) => {
     const schema = Joi.object({
-        player: Joi.string()
-            .required(), 
-        event: Joi.string()
-            .required(),
+        player: Joi.string(),
+        event: Joi.string(),
         value: Joi.bool()
             .required(),
         added_by: Joi.string()
