@@ -58,7 +58,7 @@ router.post('/', verify, authorization, async (req, res) => {
     })
     try{
         const savedAttendance = await attendance.save();
-        res.status(201).json({ attendance: attendance._id })
+        res.status(200).json({ attendance: attendance._id })
     }catch(err){
         res.status(500).json({ message: err });
         console.log("asd");
@@ -78,17 +78,17 @@ router.delete('/:attendanceId', verify, authorization, getAttendance, async (req
 
 /* --- PATCH: update Attendance --- */
 router.patch('/:attendanceId', async(req,res)=>{
-    console.log(req.body);
-
-    Attendance.findByIdAndUpdate({
-        _id:req.params.attendanceId
-    },{
-        $set:req.body
-    }).then(()=>{
-        res.sendStatus({message:"Success"});
-    }).catch(err => {
-       res.status(500).send(err.message);
-    })
+    try {
+        const attendance = await Attendance.findById({_id: req.params.attendanceId})
+        if(!attendance){
+            return res.status(404).json("Attendance not found")
+        }else{
+            Attendance.updateOne({_id: req.params.attendanceId}, {$set:req.body}).exec()
+            res.status(200).json({message: 'success'})
+        }
+    }catch(err){
+        res.status(500).json({message: err.message})
+    }
 });
 
 /* --- FUNCTION: get Attendance --- */

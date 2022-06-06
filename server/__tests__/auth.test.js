@@ -53,7 +53,7 @@ describe('[SUPERTEST] [attendance]  /api/v1/auth', () => {
         .expect(401)
     });
 
-    let wrongtoken = 'asdjnsfinwsed'
+    let wrongtoken = "asdjnsfinwsed"
     test('<403> get with wrong token', () => {
         return request(app).get('/api/v1/auth')
         .set('auth-token', wrongtoken).set('Accept', 'application/json')

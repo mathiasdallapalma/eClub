@@ -52,28 +52,28 @@ describe('[SUPERTEST] [evaluation]  /api/v2/evaluation', () => {
 
     //---GET specific
     
-    let rightid = '629b19c417d2c125ef102c70';
+    let rightid = "629b19c417d2c125ef102c70";
     test('<200>', () => {
         return request(app).get('/api/v2/evaluation/'+rightid)
         .set('auth-token', token).set('Accept', 'application/json')
         .expect(200)
     });
 
-    let wrongid1 = '629b19c417d2c125ef200c71';
+    let wrongid1 = "629b19c417d2c125ef200c71";
     test('<400> get specific with existing id but wrong object', () => {
         return request(app).get('/api/v2/evaluation/'+wrongid1)
         .set('auth-token', token).set('Accept', 'application/json')
         .expect(400)
     });
 
-    let wrongid2 = '142345456342424';
+    let wrongid2 = "142345456342424";
     test('<404> get specific with non existing id', () => {
         return request(app).get('/api/v2/evaluation/'+wrongid2)
         .set('auth-token', token).set('Accept', 'application/json')
         .expect(404)
     });
 
-    let wrongid500 = 'ciaociao';
+    let wrongid500 = "ciaociao";
     test('<500> get specific with wrong format of id', () => {
         return request(app).get('/api/v2/evaluation/'+wrongid500)
         .set('auth-token', token).set('Accept', 'application/json')
@@ -129,7 +129,7 @@ describe('[SUPERTEST] [evaluation]  /api/v2/evaluation', () => {
         .expect(401)
     });
 
-    let wrongtoken = 'asdjnsfinwsed'
+    let wrongtoken = "asdjnsfinwsed"
     test('<403> get with wrong token', () => {
         return request(app).get('/api/v2/evaluation')
         .set('auth-token', wrongtoken).set('Accept', 'application/json')

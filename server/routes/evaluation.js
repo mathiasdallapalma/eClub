@@ -4,7 +4,7 @@ const router = express.Router();
 const mongoose = require('mongoose');
 const Evaluation = require('../models/Evaluation')
 const {evaluationValidation}= require('../validation')
-const \ = require('./verifyToken');
+const verify = require('./verifyToken');
 const authorization = require('./authToken');
 
 /* --- GET: all Attends --- */
@@ -58,7 +58,7 @@ router.post('/', verify, authorization, async (req, res) => {
     })
     try{
         const savedEvaluation = await evaluation.save();
-        res.status(201).json({ evaluation: evaluation._id })
+        res.status(200).json({ evaluation: evaluation._id })
     }catch(err){
         res.status(500).json({ message: err });
         console.log("asd");
@@ -78,17 +78,17 @@ router.delete('/:evaluationId', verify, authorization, getEvaluation, async (req
 
 /* --- PATCH: update Evaluation --- */
 router.patch('/:evaluationId', async(req,res)=>{
-    console.log(req.body);
-
-    Evaluation.findByIdAndUpdate({
-        _id:req.params.evaluationId
-    },{
-        $set:req.body
-    }).then(()=>{
-        res.sendStatus({message:"Success"});
-    }).catch(err => {
-       res.status(500).send(err.message);
-    })
+    try {
+        const evaluation = await Evaluation.findById({_id: req.params.evaluationId})
+        if(!evaluation){
+            return res.status(404).json("Evaluation not found")
+        }else{
+            Evaluation.updateOne({_id: req.params.evaluationId}, {$set:req.body}).exec()
+            res.status(200).json({message: 'success'})
+        }
+    }catch(err){
+        res.status(500).json({message: err.message})
+    }
 });
 
 /* --- FUNCTION: get Evaluation --- */
