@@ -24,6 +24,7 @@ beforeAll( async () => {
 
     userTest = new User({email: "test@test.com", 
                         name: "Luca", 
+                        password: "ciaociao",
                         surname:"Test", 
                         birth:"01/01/1001", 
                         a_type:"629883bd16e83ec5f33247bf",

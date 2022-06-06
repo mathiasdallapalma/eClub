@@ -9,7 +9,8 @@ const registerUserValidation = (data) => {
             .required(),
         password: Joi.string()
             .min(6)
-            .max(1024),
+            .max(1024)
+            .required(),
         name: Joi.string()
             .max(255)
             .required(),

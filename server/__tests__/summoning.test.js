@@ -30,6 +30,7 @@ beforeAll( async () => {
 
     userTest = new User({
                         email: "test@test.com", 
+                        password: "ciaociao",
                         name: "Luca", 
                         surname:"Test", 
                         birth:"01/01/1001", 
