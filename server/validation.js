@@ -187,10 +187,8 @@ const attendanceValidation = (data) => {
 /* --- EVALUATION: event type schema --- */
 const evaluationValidation = (data) => {
     const schema = Joi.object({
-        player: Joi.string()
-            .required(), 
-        event: Joi.string()
-            .required(),
+        player: Joi.string(),
+        event: Joi.string(),
         value: Joi.number()
             .max(10)
             .min(0)
