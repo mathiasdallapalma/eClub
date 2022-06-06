@@ -10,33 +10,39 @@ require("dotenv").config();
 
 jest.setTimeout(9000);
 
-let BACKUP_EVALUATION
-let BACKUP_EVENT
-let BACKUP_USER
+let userTest
+let evaluationTest
+let WrongId = "629cd06cf9407f999c3b2632";
+let WrongFormatId = "ciao";
 
 
 beforeAll( async () => {
     jest.setTimeout(8000);
     app.locals.db = await mongoose.connect(process.env.DATABASE_URL);
-    BACKUP_USER = await User.find({}).exec()
-    BACKUP_EVALUATION = await Evaluation.find({}).exec()
-    BACKUP_EVENT = await Event.find({}).exec()
+
+    userTest = new User({email: "test@test.com", 
+                        name: "Luca", 
+                        password: "ciaociao",
+                        surname:"Test", 
+                        birth:"01/01/1001", 
+                        a_type:"629883bd16e83ec5f33247bf",
+                        added_by:"629883bd16e83ec5f33247bf"})
+    await userTest.save();    
+
+    evaluationTest = new Evaluation({value: "7",
+                                    added_by: userTest._id})
 })
 
 
 afterAll( () =>{
     await User.deleteMany({})
     await Evaluation.deleteMany({})
-    await Event.deleteMany({})
-    await User.insertMany(BACKUP_USER)
-    await Evaluation.insertMany(BACKUP_EVALUATION)
-    await Event.insertMany(BACKUP_EVENT)
 
     mongoose.connection.close(true);
 })
 
 describe('[SUPERTEST] [evaluation]  /api/v2/evaluation', () => {
-    var token = jwt.sign({email:"giovanni@storti.it"}, process.env.TOKEN_SECRET, {expiresIn: 86400});
+    var token = jwt.sign({email:"test@test.com"}, process.env.TOKEN_SECRET, {expiresIn: 86400});
     header={'Content-Type':'application/json', token:token};
     console.log(header)
 
@@ -52,72 +58,85 @@ describe('[SUPERTEST] [evaluation]  /api/v2/evaluation', () => {
 
     //---GET specific
     
-    let rightid = "629b19c417d2c125ef102c70";
     test('<200>', () => {
-        return request(app).get('/api/v2/evaluation/'+rightid)
+        return request(app).get('/api/v2/evaluation/'+evaluationTest._id+'/')
         .set('auth-token', token).set('Accept', 'application/json')
         .expect(200)
     });
 
-    let wrongid1 = "629b19c417d2c125ef200c71";
-    test('<400> get specific with existing id but wrong object', () => {
-        return request(app).get('/api/v2/evaluation/'+wrongid1)
-        .set('auth-token', token).set('Accept', 'application/json')
-        .expect(400)
-    });
-
-    let wrongid2 = "142345456342424";
     test('<404> get specific with non existing id', () => {
-        return request(app).get('/api/v2/evaluation/'+wrongid2)
+        return request(app).get('/api/v2/evaluation/'+WrongFormatId+'/')
         .set('auth-token', token).set('Accept', 'application/json')
         .expect(404)
     });
 
-    let wrongid500 = "ciaociao";
     test('<500> get specific with wrong format of id', () => {
-        return request(app).get('/api/v2/evaluation/'+wrongid500)
+        return request(app).get('/api/v2/evaluation/'+WrongFormatId+'/')
         .set('auth-token', token).set('Accept', 'application/json')
         .expect(500)
     });
 
 
-    //---POST a evaluation
+    //---POST
 
     test('<200>', () => {
         return request(app).post('/api/v2/evaluation')
-        .send({event: "629b19c317d2c125ef102c69", player:"62987f9e04224e2d33075e28", value:"7",added_by:"62987f9e04224e2d33075e28" })
+        .send({value: "7",
+               added_by: userTest._id})
         .set('auth-token', token).set('Accept', 'application/json')
         .expect(200)
     });
 
-    test('<400> post with empty request body', () => {
+    test('<400> post with error in body validation', () => {
         return request(app).post('/api/v2/evaluation')
-        .send()
+        .send({})
         .set('auth-token', token).set('Accept', 'application/json')
         .expect(400)
     });
 
-    //---DELETE a evaluation
+    //---PATCH
 
-    test('<200>', () => {
-        return request(app).delete('/api/v2/evaluation'+rightid)
+     test('<200>', () => {
+        return request(app).patch('/api/v2/evaluation'+evaluationTest._id)
+        .send({value: "7",
+               added_by: userTest._id})
         .set('auth-token', token).set('Accept', 'application/json')
         .expect(200)
     });
 
+    test('<400>patch with validation error', () => {
+        return request(app).patch('/api/v1/team/'+WrongFormatId+'/')
+        .send({value: "7",
+               added_by: userTest._id})
+        .set('auth-token', token).set('Accept', 'application/json')
+        .expect(400)
+    });
 
-    //---PATCH a evaluation
+    test('<404> patch with non existing id', () => {
+        return request(app).patch('/api/v2/evaluation/'+WrongId+'/')
+        .send({value: "7",
+              added_by: userTest._id }) 
+        .set('auth-token', token).set('Accept', 'application/json')
+        .expect(404)
+    });
+
+
+    //---DELETE
 
     test('<200>', () => {
-        return request(app).patch('/api/v2/evaluation'+rightid)
-        .send({event: "629b19c317d2c125ef102c69", player:"62987f9e04224e2d33075e28", value:"7",added_by:"62987f9e04224e2d33075e28" })
+        return request(app).delete('/api/v2/evaluation'+evaluationTest._id+'/')
         .set('auth-token', token).set('Accept', 'application/json')
         .expect(200)
     });
 
-    test('<500> patch with wrong format of id', () => {
-        return request(app).patch('/api/v2/evaluation/'+wrongid500)
-        .send({event: "629b19c317d2c125ef102c69", player:"62987f9e04224e2d33075e28", value:"7",added_by:"62987f9e04224e2d33075e28" })
+    test('<400> delete with non existing id', () => {
+        return request(app).patch('/api/v1/team/'+WrongId+'/')
+        .set('auth-token', token).set('Accept', 'application/json')
+        .expect(400)
+    });
+
+    test('<500>', () => {
+        return request(app).delete('/api/v2/evaluation'+WrongFormatId+'/')
         .set('auth-token', token).set('Accept', 'application/json')
         .expect(500)
     });

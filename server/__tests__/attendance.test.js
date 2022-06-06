@@ -5,38 +5,48 @@ const mongoose = require("mongoose");
 const Attendance = require('../models/Attendance');
 const Event = require('../models/Event');
 const User = require('../models/User');
+const { EventEmitter } = require('nodemailer/lib/xoauth2');
+const { date } = require('joi');
 
 require("dotenv").config();
 
 jest.setTimeout(9000);
 
-let BACKUP_ATTENDANCE
-let BACKUP_EVENT
-let BACKUP_USER
+let userTest
+let attendanceTest
+let WrongId = "629cd06cf9407f999c3b2632";
+let WrongFormatId = "ciao";
 
 
 beforeAll( async () => {
     jest.setTimeout(8000);
     app.locals.db = await mongoose.connect(process.env.DATABASE_URL);
-    BACKUP_USER = await User.find({}).exec()
-    BACKUP_ATTENDANCE = await Attendance.find({}).exec()
-    BACKUP_EVENT = await Event.find({}).exec()
+    
+    userTest = new User({email: "test@test.com", 
+                        name: "Luca", 
+                        password: "ciaociao",
+                        surname:"Test", 
+                        birth:"01/01/1001", 
+                        a_type:"629883bd16e83ec5f33247bf",
+                        added_by:"629883bd16e83ec5f33247bf"})
+    await userTest.save();               
+    
+    attendanceTest = new Attendance({
+                        value: "7",
+                        added_by: userTest._id})
+    await attendanceTest.save();                   
 })
 
 
 afterAll( () =>{
     await User.deleteMany({})
     await Attendance.deleteMany({})
-    await Event.deleteMany({})
-    await User.insertMany(BACKUP_USER)
-    await Attendance.insertMany(BACKUP_ATTENDANCE)
-    await Event.insertMany(BACKUP_EVENT)
 
     mongoose.connection.close(true);
 })
 
 describe('[SUPERTEST] [attendance]  /api/v2/attendance', () => {
-    var token = jwt.sign({email:"giovanni@storti.it"}, process.env.TOKEN_SECRET, {expiresIn: 86400});
+    var token = jwt.sign({email:"test@test.com"}, process.env.TOKEN_SECRET, {expiresIn: 86400});
     header={'Content-Type':'application/json', token:token};
     console.log(header)
 
@@ -50,32 +60,22 @@ describe('[SUPERTEST] [attendance]  /api/v2/attendance', () => {
     });
 
 
-    //---GET specific attendance
+    //---GET specific
     
-    let rightid = "629b19c417d2c125ef102c71";
     test('<200>', () => {
-        return request(app).get('/api/v2/attendance/'+rightid)
+        return request(app).get('/api/v2/attendance/'+attendanceTest._id+'/')
         .set('auth-token', token).set('Accept', 'application/json')
         .expect(200)
     });
 
-    let wrongid1 = "629b19c417d2c125ef200c71";
-    test('<400> get specific with existing id but wrong object', () => {
-        return request(app).get('/api/v2/attendance/'+wrongid1)
-        .set('auth-token', token).set('Accept', 'application/json')
-        .expect(400)
-    });
-
-    let wrongid2 = "142345456342424";
     test('<404> get specific with non existing id', () => {
-        return request(app).get('/api/v2/attendance/'+wrongid2)
+        return request(app).get('/api/v2/attendance/'+WrongFormatId+'/')
         .set('auth-token', token).set('Accept', 'application/json')
         .expect(404)
     });
 
-    let wrongid500 = "ciaociao";
     test('<500> get specific with wrong format of id', () => {
-        return request(app).get('/api/v2/attendance/'+wrongid500)
+        return request(app).get('/api/v2/attendance/'+WrongFormatId+'/')
         .set('auth-token', token).set('Accept', 'application/json')
         .expect(500)
     });
@@ -85,42 +85,66 @@ describe('[SUPERTEST] [attendance]  /api/v2/attendance', () => {
 
     test('<200>', () => {
         return request(app).post('/api/v2/attendance')
-        .send({event: "629b19c317d2c125ef102c69", player:"62987f9e04224e2d33075e28", value:"0",added_by:"62987f9e04224e2d33075e28" })
+        .send({value: "7",
+               added_by: userTest._id})
         .set('auth-token', token).set('Accept', 'application/json')
         .expect(200)
     });
 
-    test('<400> post with empty request body', () => {
+    test('<400> post with error in body validation', () => {
         return request(app).post('/api/v2/attendance')
-        .send()
+        .send({})
         .set('auth-token', token).set('Accept', 'application/json')
         .expect(400)
     });
 
+    //---PATCH
+
+     test('<200>', () => {
+        return request(app).patch('/api/v2/attendance'+attendanceTest._id)
+        .send({value: "7",
+               added_by: userTest._id})
+        .set('auth-token', token).set('Accept', 'application/json')
+        .expect(200)
+    });
+
+    test('<400>patch with validation error', () => {
+        return request(app).patch('/api/v1/team/'+WrongFormatId+'/')
+        .send({value: "7",
+               added_by: userTest._id})
+        .set('auth-token', token).set('Accept', 'application/json')
+        .expect(400)
+    });
+
+    test('<404> patch with non existing id', () => {
+        return request(app).patch('/api/v2/attendance/'+WrongId+'/')
+        .send({value: "7",
+              added_by: userTest._id }) 
+        .set('auth-token', token).set('Accept', 'application/json')
+        .expect(404)
+    });
+
+
     //---DELETE
 
     test('<200>', () => {
-        return request(app).delete('/api/v2/attendance'+rightid)
+        return request(app).delete('/api/v2/attendance'+attendanceTest._id+'/')
         .set('auth-token', token).set('Accept', 'application/json')
         .expect(200)
     });
 
-
-    //---PATCH
-
-    test('<200>', () => {
-        return request(app).patch('/api/v2/attendance'+rightid)
-        .send({event: "629b19c317d2c125ef102c69", player:"62987f9e04224e2d33075e28", value:"0",added_by:"62987f9e04224e2d33075e28" })
+    test('<400> delete with non existing id', () => {
+        return request(app).patch('/api/v1/team/'+WrongId+'/')
         .set('auth-token', token).set('Accept', 'application/json')
-        .expect(200)
+        .expect(400)
     });
 
-    test('<500> patch with wrong format of id', () => {
-        return request(app).patch('/api/v2/attendance/'+wrongid500)
-        .send({event: "629b19c317d2c125ef102c69", player:"62987f9e04224e2d33075e28", value:"7",added_by:"62987f9e04224e2d33075e28" })
+    test('<500>', () => {
+        return request(app).delete('/api/v2/attendance'+WrongFormatId+'/')
         .set('auth-token', token).set('Accept', 'application/json')
         .expect(500)
     });
+
 
     //---token related error
     test('<401> get without token', () => {
