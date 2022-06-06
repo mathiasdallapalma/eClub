@@ -96,8 +96,6 @@ const paymentValidation = (data) => {
         paid_at: Joi.date(),
         player: Joi.string()
             .required(),
-        added_by: Joi.string()
-        .required(),
     })
     return schema.validate(data);
 }
