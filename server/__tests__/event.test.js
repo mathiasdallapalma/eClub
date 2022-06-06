@@ -1,4 +1,4 @@
-const app = require('../index');
+const app = require('../app');
 const request = require('supertest');
 const jwt = require('jsonwebtoken');
 const mongoose = require("mongoose");
@@ -8,35 +8,69 @@ const Summoning = require('../models/Summoning');
 const Event = require('../models/Event');
 const Evaluation = require('../models/Evaluation');
 const Attendance = require('../models/Attendance');
+const Team = require('../models/Team');
+const EventType = require('../models/EventType');
 
-let BACKUP_EVENT
-let BACKUP_SUMMONING
-let BACKUP_EVALUATION
-let BACKUP_ATTENDANCE
+let validEvent_id=""
+let InvalidEvent_id="629b19c317d2c125ef112c69"
+let Invalid_id="aa"
+let validTeam_id="";
+let validEventType_id="";
 
 jest.setTimeout(9000);
 
 beforeAll( async () => {
     jest.setTimeout(8000);
-    app.locals.db = await mongoose.connect(process.env.DATABASETEST_URL);
 
-    BACKUP_EVENT = await Event.find({}).exec()
-    BACKUP_SUMMONING = await Summoning.find({}).exec()
-    BACKUP_EVALUATION = await Evaluation.find({}).exec()
-    BACKUP_ATTENDANCE = await Attendance.find({}).exec()
+    app.locals.db = await mongoose.connect(process.env.DATABASE_TEST_URL);
+
+    eventTypeTest = new EventType({
+                                    name: "Test",
+                                    type: "7"
+                                });
+    await eventTypeTest.save();
+
+    teamTest = new Team({
+                        category: "Esordienti",
+                        status: "0",
+                        hidden: "0",
+                        added_by: "956bca9fd92d45c042f24945"
+                    });
+    await teamTest.save(); 
+
+    eventTest = new Event({
+                        title: "Partita Finale",
+                        date: "2020-03-29T15:30:00.000",
+                        description: "Finale di campionato contro Mezzoorona AC",
+                        added_by: "deade23131d123d1e1",
+                        e_type: eventTypeTest._id,
+                        teams: [
+                            teamTest._id
+                        ]
+                    });
+
+    
+    await eventTest.save();  
+    
+    validEventType_id=eventTypeTest._id; 
+
+    validEvent_id=eventTest._id
+    validTeam_id=teamTest._id
+
+    
+
+    
 })
 
 afterAll( async () =>{
 
+    
+    await Team.deleteMany({})
     await Event.deleteMany({})
     await Summoning.deleteMany({})
     await Evaluation.deleteMany({})
     await Attendance.deleteMany({})
-
-    await Event.insertMany(BACKUP_EVENT)
-    await Summoning.insertMany(BACKUP_SUMMONING)
-    await Evaluation.insertMany(BACKUP_EVALUATION)
-    await Attendance.insertMany(BACKUP_ATTENDANCE)
+    
 
     mongoose.connection.close(true);
 })
@@ -47,10 +81,7 @@ describe('[SUPERTEST] [Eventi]  /api/v2/event', () => {
     var token = jwt.sign({email:"carlo@carletto.it"}, process.env.TOKEN_SECRET, {expiresIn: 86400});
     header={'Content-Type':'application/json', token:token};
     console.log(header)
-    let validEvent_id="629df8dad687388020536ee0"
-    let InvalidEvent_id="629b19c317d2c125ef112c69"
-    let Invalid_id="aa"
-    let validTeam_id='629df54bda461f6de74cc39b';
+    
 
     /* ---  GET EVENTS --- */
 
@@ -89,7 +120,7 @@ describe('[SUPERTEST] [Eventi]  /api/v2/event', () => {
     });
    
     test('<404> GET Events by specific Team with not found id', () => {
-        return request(app).get('/api/v2/event/team/'+InvalidTeam_id)
+        return request(app).get('/api/v2/event/team/'+InvalidEvent_id)
         .set('auth-token', token).set('Accept', 'application/json')
         .expect(404)
     });
@@ -110,7 +141,7 @@ describe('[SUPERTEST] [Eventi]  /api/v2/event', () => {
             date: "2022-06-05T12:30",
             description: "descrizione",
             teams:["629df54bda461f6de74cc39b"],
-            e_type:"629643542cfad8fa95f70c1e",
+            e_type: validEventType_id,
             added_by: "628905acfc8a650ccd42368e",})
         .set('auth-token', token).set('Accept', 'application/json')
         .expect(200)
@@ -128,7 +159,7 @@ describe('[SUPERTEST] [Eventi]  /api/v2/event', () => {
     test('<200> PATCH Event', () => {
         return request(app).patch('/api/v2/event/'+validEvent_id)
         .send({
-            title: "titolo2",
+            title: "titolo2"
             })
         .set('auth-token', token).set('Accept', 'application/json')
         .expect(200)
@@ -140,6 +171,7 @@ describe('[SUPERTEST] [Eventi]  /api/v2/event', () => {
         .set('auth-token', token).set('Accept', 'application/json')
         .expect(404)
     });
+    
 
     /* ---  DELETE EVENT --- */
 

@@ -1,36 +1,65 @@
-const app = require('../index');
+const app = require('../app');
 const request = require('supertest');
 const jwt = require('jsonwebtoken');
 const mongoose = require("mongoose");
+
 const material = require('../models/material');
+const User = require('../models/User');
+
 require("dotenv").config();
 
 jest.setTimeout(9000);
 
-let BACKUP_MATERIALS
+let validMaterial_id=""
+let InvalidMaterial_id="629b19c317d2c125ef112c69"
+let Invalid_id="aa"
+
+let validPlayer_id=""
 
 
 beforeAll( async () => {
     jest.setTimeout(8000);
+    app.locals.db = await mongoose.connect(process.env.DATABASE_TEST_URL);
 
-    BACKUP_MATERIALS = await material.find({}).exec()
+    userTest = new User({email: "test@test.com", 
+                        name: "Luca", 
+                        surname:"Test",
+                        password:"asd",
+                        birth:"01/01/1001", 
+                        a_type:"629883bd16e83ec5f33247bf",
+                        added_by:"629883bd16e83ec5f33247bf"
+    });
+    materialTest = new material({description: "scarpe 42",
+                                player: userTest._id,
+                                given_at: "2022-06-05",
+                                returned_at: "2022-06-06",
+                                added_by: "628905acfc8a650ccd42368e"
+    });
 
-    app.locals.db = await mongoose.connect(process.env.DATABASE_URL);
+    await userTest.save();
+    await materialTest.save();
+
+    validMaterial_id=materialTest._id
+    validPlayer_id=userTest._id
+
+    
 })
 
 afterAll( async () =>{
-
+    await User.deleteMany({})
     await material.deleteMany({})
-    await material.insertMany(BACKUP_MATERIALS)
+    
 
     mongoose.connection.close(true);
 })
 
 describe('[SUPERTEST] [Material]  /api/v2/material', () => {
 
-    var token = jwt.sign({email:"carlo@carletto.it"}, process.env.TOKEN_SECRET, {expiresIn: 86400});
+    var token = jwt.sign({email:"test@test.com"}, process.env.TOKEN_SECRET, {expiresIn: 86400});
     header={'Content-Type':'application/json', token:token};
     console.log(header)
+
+    
 
     /* ---  GET MATERIALS --- */
 
@@ -40,9 +69,7 @@ describe('[SUPERTEST] [Material]  /api/v2/material', () => {
         .expect(200)
     });
 
-    let validMaterial_id="629c6cb28caaffd8a28ed69a"
-    let InvalidMaterial_id="629b19c317d2c125ef112c69"
-    let Invalid_id="aa"
+    
 
     /* ---  GET SPECIFIC MATERIAL --- */
 
@@ -65,8 +92,6 @@ describe('[SUPERTEST] [Material]  /api/v2/material', () => {
     });
 
     /* ---  GET MATERIAL BY SPECIFIC PLAYER --- */
-
-    let validPlayer_id='62987f9e04224e2d33075e28'
 
     test('<200> GET specific Material by Player', () => {
         return request(app).get('/api/v2/material/player/'+validPlayer_id)

@@ -1,26 +1,51 @@
-const app = require('../index');
+const app = require('../app');
 const request = require('supertest');
 const jwt = require('jsonwebtoken');
 const mongoose = require("mongoose");
 const med = require('../models/med');
+const User = require('../models/User');
 require("dotenv").config();
 
 jest.setTimeout(9000);
 
-let BACKUP_MED
+    let validMeds_id=""
+    let InvalidMeds_id="629b19c311111125ef112c69"
+    let Invalid_id="aa"
+    let validPlayer_id=""
 
 beforeAll( async () => {
     jest.setTimeout(8000);
+    app.locals.db = await mongoose.connect(process.env.DATABASE_TEST_URL);
 
-    BACKUP_MED = await med.find({}).exec()
+    userTest = new User({email: "test@test.com", 
+                        name: "Luca", 
+                        surname:"Test",
+                        password:"asd",
+                        birth:"01/01/1001", 
+                        a_type:"629883bd16e83ec5f33247bf",
+                        added_by:"629883bd16e83ec5f33247bf"
+    });
+    medTest = new med({
+        released_at: "2022-06-02T09:15:10.502Z",
+        expiring_at: "2023-06-02T09:15:10.502Z",
+        player: userTest._id,
+        doctor: "Studio Medicina dello Sport Enrico Rossi",
+        med_type: "Certificato medico agonistico",
+        verified: true
+      });
 
-    app.locals.db = await mongoose.connect(process.env.DATABASE_URL);
+    await userTest.save();
+    await medTest.save();
+
+    validMeds_id=medTest._id
+    validPlayer_id=userTest._id
+
+   
 })
 
 afterAll( async () =>{
-
+    await User.deleteMany({})
     await med.deleteMany({})
-    await med.insertMany(BACKUP_MED)
     mongoose.connection.close(true);
 })
 
@@ -37,10 +62,6 @@ describe('[SUPERTEST] [Meds Certificate]  /api/v2/meds', () => {
         .set('auth-token', token).set('Accept', 'application/json')
         .expect(200)
     });
-
-    let validMeds_id="629b6c2bc210a21256ce6154"
-    let InvalidMeds_id="629b19c311111125ef112c69"
-    let Invalid_id="aa"
 
     /* ---  GET SPECIFIC MEDS --- */
 
@@ -63,8 +84,6 @@ describe('[SUPERTEST] [Meds Certificate]  /api/v2/meds', () => {
     });
 
     /* ---  GET MED BY SPECIFIC PLAYER --- */
-
-    let validPlayer_id='62987f9e04224e2d33075e28'
 
     test('<200> GET specific Meds Certificate by Player', () => {
         return request(app).get('/api/v2/med/player/'+validPlayer_id)

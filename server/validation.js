@@ -62,12 +62,7 @@ const teamValidation = (data) => {
             .min(3)
             .max(255)
             .required(),
-        players: Joi.string()
-            .required(),
-        coach: Joi.string()
-            .required(),
-        tm: Joi.string()
-            .required(),
+        
         added_by: Joi.string()
             .required()
     });

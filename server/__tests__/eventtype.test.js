@@ -1,4 +1,4 @@
-const app = require('../index');
+const app = require('../app');
 const request = require('supertest');
 const jwt = require('jsonwebtoken');
 const mongoose = require("mongoose");
@@ -7,20 +7,28 @@ require("dotenv").config();
 
 jest.setTimeout(9000);
 
-let BACKUP_EVENTTYPE
+let validEventType_id=""
+let InvalidEventType_id="629b19c317d2c125ef112c69"
+let Invalid_id="aa"
 
 beforeAll( async () => {
     jest.setTimeout(8000);
+    app.locals.db = await mongoose.connect(process.env.DATABASE_TEST_URL);
 
-    BACKUP_EVENTTYPE = await EventType.find({}).exec()
+    eventTypeTest = new EventType({
+        name: "Partita",
+        type: "1"
+      });
 
-    app.locals.db = await mongoose.connect(process.env.DATABASE_URL);
+    await eventTypeTest.save();
+
+    validEventType_id=eventTypeTest._id
+    
+    
 })
 
 afterAll( async () =>{
-
     await EventType.deleteMany({})
-    await EventType.insertMany(BACKUP_EVENTTYPE)
 
     mongoose.connection.close(true);
 })
@@ -31,6 +39,8 @@ describe('[SUPERTEST] [EventType]  /api/v2/eventtype', () => {
     header={'Content-Type':'application/json', token:token};
     console.log(header)
 
+    
+
      /* ---  GET EVENT_TYPES --- */
 
     test('<200> GET all EventTypes', () => {
@@ -38,10 +48,6 @@ describe('[SUPERTEST] [EventType]  /api/v2/eventtype', () => {
         .set('auth-token', token).set('Accept', 'application/json')
         .expect(200)
     });
-
-    let validEventType_id="6296433c2cfad8fa95f70c1b"
-    let InvalidEventType_id="629b19c317d2c125ef112c69"
-    let Invalid_id="aa"
 
     /* ---  POST EVENT_TYPE --- */
     
