@@ -5,6 +5,9 @@ const mongoose = require("mongoose");
 const User = require('../models/User');
 const Event = require('../models/Event');
 const Summoning = require('../models/Summoning');
+const EventType = require('../models/EventType');
+const Team = require('../models/Team');
+
 
 require("dotenv").config();
 
@@ -12,8 +15,13 @@ require("dotenv").config();
 jest.setTimeout(9000);
 
 let userTest
+let EventTypeTest
+let teamTest
 let sumTest
 let eventTest
+
+let WrongId = "629cd06cf9407f999c3b2632";
+let WrongFormatId = "ciao";
 
 /* --- Connection to Database --- */
 beforeAll( async () => {
@@ -30,23 +38,34 @@ beforeAll( async () => {
     });
     await userTest.save();
 
+    teamTest = new Team({ 
+        category:"Test",
+        added_by:"62987f9e04224e2d33075e28" 
+
+    });
+    await teamTest.save();
+
+    EventTypeTest = new EventType({
+        name: "Partita",
+        type: "0"
+    });
+    await EventTypeTest.save();
+
     eventTest = new Event({
                         title: "Evento", 
                         date: "10/10/2010", 
-                        teams: "", 
-                        birth:"01/01/1001", 
-                        a_type:"629883bd16e83ec5f33247bf",
-                        added_by:"629883bd16e83ec5f33247bf"
+                        teams: teamTest._id, 
+                        describe:"Descrizione Evento", 
+                        e_type: EventTypeTest._id,
+                        added_by:userTest._id,
     });
     await eventTest.save();
 
     sumTest = new Summoning({
-                        email: "test@test.com", 
-                        name: "Luca", 
-                        surname:"Test", 
-                        birth:"01/01/1001", 
-                        a_type:"629883bd16e83ec5f33247bf",
-                        added_by:"629883bd16e83ec5f33247bf"
+                        event: eventTest._id,
+                        player: userTest._id,
+                        value: "false", 
+                        added_by: userTest._id
     });
     await sumTest.save();
 
@@ -58,9 +77,8 @@ afterAll( async () =>{
     await User.deleteMany({})
     await Event.deleteMany({})
     await Summoning.deleteMany({})
-    await User.insertMany(BACKUP_USER)
-    await Event.insertMany(BACKUP_EVENT)
-    await Summoning.insertMany(BACKUP_SUMMONING)
+    await EventType.deleteMany({})
+    await Team.deleteMany({})
 
     mongoose.connection.close(true);
 })
@@ -83,7 +101,7 @@ describe('[SUPERTEST] [SUMMONING]  /api/v2/summoning', () => {
     let id3 = "629b19c317d2c125ef102c69"
 
     test('<200> GET all summoning of a specific event', () => {
-        return request(app).get('/api/v2/summoning/event/'+id3+'/')
+        return request(app).get('/api/v2/summoning/event/'+eventTest._id+'/')
         .set('auth-token', token).set('Accept', 'application/json')
         .expect(200)
     });
@@ -91,7 +109,7 @@ describe('[SUPERTEST] [SUMMONING]  /api/v2/summoning', () => {
     let id5 = "629b19c317d2c125ef102c54";
 
     test('<404> GET all summoning with wrong id', () => {
-        return request(app).get('/api/v2/summoning/event/'+id5+'/')
+        return request(app).get('/api/v2/summoning/event/'+WrongId+'/')
         .set('auth-token', token).set('Accept', 'application/json')
         .expect(404)
     });
@@ -99,7 +117,7 @@ describe('[SUPERTEST] [SUMMONING]  /api/v2/summoning', () => {
     let id6 = "ciao";
 
     test('<500> GET all summoning with wrong id format', () => {
-        return request(app).get('/api/v2/summoning/event/'+id2+'/')
+        return request(app).get('/api/v2/summoning/event/'+WrongFormatId+'/')
         .set('auth-token', token).set('Accept', 'application/json')
         .expect(500)
     });
@@ -108,7 +126,7 @@ describe('[SUPERTEST] [SUMMONING]  /api/v2/summoning', () => {
     let id7 = "629ccffef9407f999c3b26e4"
 
     test('<200> GET all summoning of a specific player', () => {
-        return request(app).get('/api/v2/summoning/player/'+id7+'/')
+        return request(app).get('/api/v2/summoning/player/'+userTest._id+'/')
         .set('auth-token', token).set('Accept', 'application/json')
         .expect(200)
     });
@@ -116,7 +134,7 @@ describe('[SUPERTEST] [SUMMONING]  /api/v2/summoning', () => {
     let id8 = "629ccffef9407f999c3b2632";
 
     test('<404> GET all summoning with wrong id', () => {
-        return request(app).get('/api/v2/summoning/player/'+id8+'/')
+        return request(app).get('/api/v2/summoning/player/'+WrongId+'/')
         .set('auth-token', token).set('Accept', 'application/json')
         .expect(404)
     });
@@ -124,7 +142,7 @@ describe('[SUPERTEST] [SUMMONING]  /api/v2/summoning', () => {
     let id9 = "ciao";
 
     test('<500> GET all summoning with wrong id format', () => {
-        return request(app).get('/api/v2/summoning/player/'+id9+'/')
+        return request(app).get('/api/v2/summoning/player/'+WrongFormatId+'/')
         .set('auth-token', token).set('Accept', 'application/json')
         .expect(500)
     });
@@ -153,7 +171,7 @@ describe('[SUPERTEST] [SUMMONING]  /api/v2/summoning', () => {
     let id="629b19c417d2c125ef102c72";
 
     test('<200> PATCH specific summoning', () => {
-        return request(app).patch('/api/v2/summoning/'+id+'/')
+        return request(app).patch('/api/v2/summoning/'+sumTest._id+'/')
         .send({ 
             value:"true"
         })  
@@ -163,7 +181,7 @@ describe('[SUPERTEST] [SUMMONING]  /api/v2/summoning', () => {
     let id10="629b19c417d2c125ef102234";
 
     test('<404> PATCH specific summoning with wrong id', () => {
-        return request(app).patch('/api/v2/summoning/'+id10+'/')
+        return request(app).patch('/api/v2/summoning/'+WrongId+'/')
         .send({ 
             value:"true"
         })  
@@ -173,7 +191,7 @@ describe('[SUPERTEST] [SUMMONING]  /api/v2/summoning', () => {
 
     /* --- DELETE SUMMONING--- */
     test('<200> DELETE specific summoning', () => {
-        return request(app).delete('/api/v2/summoning/'+id+'/')
+        return request(app).delete('/api/v2/summoning/'+sumTest._id+'/')
         .set('auth-token', token).set('Accept', 'application/json')
         .expect(200)
     });
@@ -181,7 +199,7 @@ describe('[SUPERTEST] [SUMMONING]  /api/v2/summoning', () => {
     let id4="629b19c417d2c125ef102c32";
 
     test('<404> DELETE specific summoning with not found id', () => {
-        return request(app).delete('/api/v2/payment/'+id4+'/')
+        return request(app).delete('/api/v2/payment/'+WrongId+'/')
         .set('auth-token', token).set('Accept', 'application/json')
         .expect(404)
     });
@@ -189,7 +207,7 @@ describe('[SUPERTEST] [SUMMONING]  /api/v2/summoning', () => {
     let id2="ciaociao";
 
     test('<500> DELETE specif payment with wrong id format', () => {
-        return request(app).delete('/api/v2/payment/'+id2+'/')
+        return request(app).delete('/api/v2/payment/'+WrongFormatId+'/')
         .set('auth-token', token).set('Accept', 'application/json')
         .expect(500)
     });
