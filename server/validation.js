@@ -198,7 +198,7 @@ const evaluationValidation = (data) => {
 
 const communicationValidation = (data) => {
     const schema = Joi.object({
-        teams: Joi.array(),
+        teams: Joi.string(),
         subject: Joi.string()
             .max(200)
             .required(),

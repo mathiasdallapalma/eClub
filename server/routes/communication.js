@@ -36,7 +36,7 @@ router.post('/', verify, authorization, async (req, res) => {
 
     //create new communication
     const communication = new Communication({
-        teams: req.body.team,
+        teams: req.body.teams,
         subject: req.body.subject,
         text: req.body.text,
         added_by: req.body.added_by
@@ -64,7 +64,7 @@ router.delete('/:communicationId', verify, authorization, getCommunication, asyn
 router.patch('/:communicationId', verify, authorization, async(req,res)=>{
     try {
         const communication = await Communication.findById({_id: req.params.communicationId})
-        if(!payment){
+        if(!communication){
             return res.status(404).json("Communication not found")
         }else{
             Communication.updateOne({_id: req.params.communicationId}, {$set:req.body}).exec()
