@@ -429,10 +429,10 @@ You may add a new team using this action. It takes a JSON object containing the 
     + Body
 
             {
-                "category":"Esordienti",x
+                "category":"Esordienti",
                 "status":"0",
                 "hidden":"0",
-                "added_by":"1"
+                "added_by":"956bca9fd92d45c042f24945"
             }
 
 + Response 201 (application/json)
@@ -658,7 +658,7 @@ You may add a new user type using this action. It takes a JSON object containing
 
             {
                 "name":"Team Manager",
-                "type": "3",
+                "type": "3"
             }
 
 + Response 201 (application/json)
@@ -1031,13 +1031,12 @@ You may add a new event using this action. It takes a JSON object containing the
     + Body
 
             {
-                "title":"Quarto di andata",
+                "title":"Partita Finale",
                 "date":"2020-03-29T15:30:00.000",
-                "description":"desc",
+                "description":"Finale di campionato contro Mezzoorona AC",
                 "added_by":"deade23131d123d1e1",
                 "e_type":"6296433c2cfad8fa95f70c1b",
-                "teams":["6297c78a46b44412fbc25485"],
-                "added_by":"628905acfc8a650ccd42368e"
+                "teams":["6297c78a46b44412fbc25485"]
             }
             
 + Response 201 (application/json)
@@ -1329,7 +1328,7 @@ You may add a new event type using this action. It takes a JSON object containin
 
             {
                 "name":"Partita",
-                "type": "1",
+                "type": "1"
             }
 
 + Response 201 (application/json)
@@ -2623,7 +2622,7 @@ You may add a new payment using this action. It takes a JSON object containing t
                 "amount": "200",
                 "description":"prima rata",
                 "paid_at": "05/06/2022",
-                "player": "628905acfc8a650ccd42368e",
+                "player": "628905acfc8a650ccd42368e"
             }
 
 + Response 201 (application/json)
@@ -2901,7 +2900,7 @@ You may add a new med certificate using this action. It takes a JSON object cont
                 "player": "62987f2b04224e2d33075e22",
                 "doctor": "Studio Medicina dello Sport Enrico Rossi",
                 "med_type": "Certificato medico agonistico",
-                "verified": "True"
+                "verified": true
             }
             
 + Response 201 (application/json)
@@ -2963,7 +2962,7 @@ You may add a new med certificate using this action. It takes a JSON object cont
                     },
                     "doctor": "Studio Medicina dello Sport Enrico Rossi",
                     "med_type": "Certificato medico agonistico",
-                    "verified": "True"
+                    "verified": true
                 }
             ]
 
@@ -3008,7 +3007,7 @@ You may update an existing med certificate using this action. It takes a JSON ob
                 "player": "62987f2b04224e2d33075e22",
                 "doctor": "Studio Medicina dello Sport Enrico Rossi",
                 "med_type": "Certificato medico agonistico",
-                "verified": "True"
+                "verified": true
             }
 
 + Response 200 (application/json)
@@ -3235,7 +3234,7 @@ You may add a new material using this action. It takes a JSON object containing 
                 "surname": "Rossi"
             },
             "given_at": "05/06/2022",
-            "returned_at": "05/06/2022",
+            "returned_at": "05/06/2022"
         ]
 
 + Response 401 (application/json)
