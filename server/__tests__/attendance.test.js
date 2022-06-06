@@ -1,4 +1,4 @@
-const app = require('../index')
+const app = require('../app')
 const request = require('supertest');
 const jwt = require('jsonwebtoken');
 const mongoose = require("mongoose");
@@ -20,7 +20,7 @@ let WrongFormatId = "ciao";
 
 beforeAll( async () => {
     jest.setTimeout(8000);
-    app.locals.db = await mongoose.connect(process.env.DATABASE_URL);
+    app.locals.db = await mongoose.connect(process.env.DATABASE_TEST_URL);
     
     userTest = new User({email: "test@test.com", 
                         name: "Luca", 
