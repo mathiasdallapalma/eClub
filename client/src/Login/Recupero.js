@@ -8,7 +8,7 @@ const Recupero = ()=>{
 
     const recupero=()=>{
         console.log(email);
-        Axios.post(process.env.URL+'/api/v1/password_reset',{
+        Axios.post('https://is-eclub.herokuapp.com/api/v1/password_reset',{
             user: email,
         }).then((response)=>{
             if(response.status=="201"){

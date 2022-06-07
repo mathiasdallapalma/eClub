@@ -17,7 +17,7 @@ const Sidebar = ()=>{
     //setUser(JSON.parse(sessionStorage.getItem("user")));
 
     const fetchData = async(handler) => {
-        let response= await Axios.get(process.env.URL+'/api/v1/user/'+sessionStorage.getItem('user_id'),{
+        let response= await Axios.get('https://is-eclub.herokuapp.com/api/v1/user/'+sessionStorage.getItem('user_id'),{
         headers:{
             "auth-token":sessionStorage.getItem('token')}
         })

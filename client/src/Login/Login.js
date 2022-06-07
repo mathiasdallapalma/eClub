@@ -17,7 +17,7 @@ const Login = ()=>{
 
     const login=()=>{
         console.log(email+' '+password);
-        Axios.post(process.env.URL+'/api/v1/auth',{
+        Axios.post('https://is-eclub.herokuapp.com/api/v1/auth',{
             email: email,
             password: password,
         }).then((response)=>{

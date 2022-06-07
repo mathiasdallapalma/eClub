@@ -24,7 +24,7 @@ const CreaSquadra = ()=>{
     const [gas,setGas]=useState([]);
 
     const fetchData = async(handler) => {
-        let response= await Axios.get(process.env.URL+'/api/v1/user',{
+        let response= await Axios.get('https://is-eclub.herokuapp.com/api/v1/user',{
         headers:{
             "auth-token":sessionStorage.getItem('token')}
         })
@@ -80,7 +80,7 @@ const CreaSquadra = ()=>{
         temp=temp.concat(checked);
         var newTeam_id;
         
-        Axios.post(process.env.URL+'/api/v1/team',{
+        Axios.post('https://is-eclub.herokuapp.com/api/v1/team',{
                 category: categoria,
                 added_by:sessionStorage.getItem("user_id")},
         {headers:{
@@ -89,7 +89,7 @@ const CreaSquadra = ()=>{
             newTeam_id= response.data.team
             
             temp.forEach(element => {
-            Axios.patch("http://localhost:3001/api/v1/user/"+element,{
+            Axios.patch("https://is-eclub.herokuapp.com/api/v1/user/"+element,{
                         team_id: newTeam_id,
                 },
                 {headers:{

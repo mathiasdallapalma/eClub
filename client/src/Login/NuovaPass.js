@@ -10,7 +10,7 @@ const NuovaPass = ()=>{
     const reimposta=()=>{
         if(pass==pass1){
             console.log(pass+pass1);
-            Axios.post(process.env.URL+'/recupero',{
+            Axios.post('https://is-eclub.herokuapp.com/recupero',{
                 user: pass,
             });
         }else{

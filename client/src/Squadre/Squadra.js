@@ -32,7 +32,7 @@ const Squadra = ()=>{
     const params=useParams();
 
     const getSquadra = async(handler) => {
-        let response= await Axios.get(process.env.URL+'/api/v1/team/'+params.id,{
+        let response= await Axios.get('https://is-eclub.herokuapp.com/api/v1/team/'+params.id,{
             headers:{
                 "auth-token":sessionStorage.getItem('token')}
             }).then((response)=>{
@@ -69,7 +69,7 @@ const Squadra = ()=>{
     },[squadra]);
 
     const getTesserati = async(handler) => {
-        let response= await Axios.get(process.env.URL+'/api/v1/user',{
+        let response= await Axios.get('https://is-eclub.herokuapp.com/api/v1/user',{
             headers:{
                 "auth-token":sessionStorage.getItem('token')}
             }).then((response)=>{
@@ -110,7 +110,7 @@ const Squadra = ()=>{
 
     const elimina=()=>{
         //TODO eliminare team da users 
-        Axios.delete(process.env.URL+'/api/v1/team/'+params.id,{
+        Axios.delete('https://is-eclub.herokuapp.com/api/v1/team/'+params.id,{
         headers:{
             "auth-token":sessionStorage.getItem('token')},
         params:{
@@ -123,7 +123,7 @@ const Squadra = ()=>{
         });
 
         gas.forEach(element => {
-            Axios.patch(process.env.URL+'/api/v1/user/'+element._id,{
+            Axios.patch('https://is-eclub.herokuapp.com/api/v1/user/'+element._id,{
                 team_id:"000000000000000000000000"
             },
             {headers:{
@@ -135,7 +135,7 @@ const Squadra = ()=>{
                 window.alert(error.response.data);
             })
         })
-        Axios.patch(process.env.URL+'/api/v1/user/'+tm._id,{
+        Axios.patch('https://is-eclub.herokuapp.com/api/v1/user/'+tm._id,{
                 team_id:"000000000000000000000000"
             },
             {headers:{
@@ -146,7 +146,7 @@ const Squadra = ()=>{
                 console.log(error.response.data)
                 window.alert(error.response.data);
             })
-        Axios.patch(process.env.URL+'/api/v1/user/'+ch._id,{
+        Axios.patch('https://is-eclub.herokuapp.com/api/v1/user/'+ch._id,{
             team_id:"000000000000000000000000"
         },
         {headers:{

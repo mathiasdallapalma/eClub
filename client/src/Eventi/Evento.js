@@ -23,7 +23,7 @@ const Evento = ()=>{
     const [dateString,setDateString]=useState("");
 
     const fetchData = async(handler) => {
-        let response= await Axios.get(process.env.URL+'/api/v2/event/'+params.id,{
+        let response= await Axios.get('https://is-eclub.herokuapp.com/api/v2/event/'+params.id,{
         headers:{
             "auth-token":sessionStorage.getItem('token')}
         })
@@ -77,7 +77,7 @@ const Evento = ()=>{
     const [tesseratiList,settesseratiList]=useState([]);
 
     const getUsers = async(handler) => {
-        let response= await Axios.get(process.env.URL+'/api/v2/summoning/event/'+params.id,{
+        let response= await Axios.get('https://is-eclub.herokuapp.com/api/v2/summoning/event/'+params.id,{
         headers:{
             "auth-token":sessionStorage.getItem('token')}
         })
@@ -126,7 +126,7 @@ const Evento = ()=>{
         },[evento]);
 
     const elimina=()=>{
-        Axios.delete(process.env.URL+'/api/v2/event/'+params.id,{
+        Axios.delete('https://is-eclub.herokuapp.com/api/v2/event/'+params.id,{
         headers:{
             "auth-token":sessionStorage.getItem('token')},
         params:{
@@ -146,7 +146,7 @@ const Evento = ()=>{
             return element._id ==id;
         });
         if(found.value==false){
-            Axios.patch("http://localhost:3001/api/v2/summoning/"+id,{
+            Axios.patch("https://is-eclub.herokuapp.com/api/v2/summoning/"+id,{
                 value: true,
             },
             {headers:{
@@ -157,7 +157,7 @@ const Evento = ()=>{
             })
             found.value=true
         }else{
-            Axios.patch("http://localhost:3001/api/v2/summoning/"+id,{
+            Axios.patch("https://is-eclub.herokuapp.com/api/v2/summoning/"+id,{
                 value: false,
             },
             {headers:{

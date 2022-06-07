@@ -21,7 +21,7 @@ const Profilo = ()=>{
     const [user,setUser]=useState(0);
 
     const fetchData = async(handler) => {
-        let response= await Axios.get(process.env.URL+'/api/v1/user/'+params.id,{
+        let response= await Axios.get('https://is-eclub.herokuapp.com/api/v1/user/'+params.id,{
         headers:{
             "auth-token":sessionStorage.getItem('token')}
         })
@@ -68,7 +68,7 @@ const Profilo = ()=>{
     };
 
     const elimina=()=>{
-        Axios.delete(process.env.URL+'/api/v1/user/'+params.id,{
+        Axios.delete('https://is-eclub.herokuapp.com/api/v1/user/'+params.id,{
         headers:{
             "auth-token":sessionStorage.getItem('token')},
         params:{

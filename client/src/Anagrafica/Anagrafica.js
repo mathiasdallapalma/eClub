@@ -19,7 +19,7 @@ const Anagrafica = ()=>{
     //setUser(JSON.parse(sessionStorage.getItem("user")));
 
     const fetchData = async(handler) => {
-        let response= await Axios.get(process.env.URL+'/api/v1/user',{
+        let response= await Axios.get('https://is-eclub.herokuapp.com/api/v1/user',{
         headers:{
             "auth-token":sessionStorage.getItem('token')}
         })

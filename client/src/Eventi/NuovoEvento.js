@@ -23,7 +23,7 @@ const NuovoEvento = ()=>{
 
 
     const getEventType = async(handler) => {
-        let response= await Axios.get(process.env.URL+'/api/v2/eventtype',{
+        let response= await Axios.get('https://is-eclub.herokuapp.com/api/v2/eventtype',{
         headers:{
             "auth-token":sessionStorage.getItem('token')}
         })
@@ -40,7 +40,7 @@ const NuovoEvento = ()=>{
 
 
     const getTeams = async(handler) => {
-        let response= await Axios.get(process.env.URL+'/api/v1/team',{
+        let response= await Axios.get('https://is-eclub.herokuapp.com/api/v1/team',{
         headers:{
             "auth-token":sessionStorage.getItem('token')}
         })
@@ -55,7 +55,7 @@ const NuovoEvento = ()=>{
     const salva=()=>{
         console.log(titolo+" "+descrizione+" "+data+" "+type+" "+checked)
         
-        Axios.post(process.env.URL+'/api/v2/event',{
+        Axios.post('https://is-eclub.herokuapp.com/api/v2/event',{
                 title: titolo,
                 description: descrizione,
                 date: data,

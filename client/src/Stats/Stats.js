@@ -47,7 +47,7 @@ const Stats = ()=>{
     },[evaluations]);
 
     const getEvaluations = async(handler) => {
-        let response= await Axios.get(process.env.URL+'/api/v2/evaluation',{
+        let response= await Axios.get('https://is-eclub.herokuapp.com/api/v2/evaluation',{
             headers:{
                 "auth-token":sessionStorage.getItem('token')}
             })
@@ -65,7 +65,7 @@ const Stats = ()=>{
     },[attendances]);
 
     const getAttendances = async(handler) => {
-        let response= await Axios.get(process.env.URL+'/api/v2/attendance',{
+        let response= await Axios.get('https://is-eclub.herokuapp.com/api/v2/attendance',{
         headers:{
             "auth-token":sessionStorage.getItem('token')}
         })
@@ -80,7 +80,7 @@ const Stats = ()=>{
                 return element._id ==id;
             });
             if(found.value==false){
-                Axios.patch("http://localhost:3001/api/v2/attendance/"+id,{
+                Axios.patch("https://is-eclub.herokuapp.com/api/v2/attendance/"+id,{
                     value: true,
                 },
                 {headers:{
@@ -91,7 +91,7 @@ const Stats = ()=>{
                 })
                 found.value=true
             }else{
-                Axios.patch("http://localhost:3001/api/v2/attendance/"+id,{
+                Axios.patch("https://is-eclub.herokuapp.com/api/v2/attendance/"+id,{
                     value: false,
                 },
                 {headers:{
@@ -112,7 +112,7 @@ const Stats = ()=>{
                 var found = attendances.find(function (element) {
                     return element._id ==id;
                 });
-                Axios.patch("http://localhost:3001/api/v2/evaluation/"+id,{
+                Axios.patch("https://is-eclub.herokuapp.com/api/v2/evaluation/"+id,{
                     value: newVal,
                 },
                 {headers:{
