@@ -4,7 +4,7 @@
    <a href="">
     <img src="https://github.com/pietrolechthaler/eClub/blob/master/banner.png">
   </a>
-  <h2 align="center">eClub</h2>
+  <h2 align="center">eClub - Gestionale Sportivo</h2>
 
   <p align="center">
     Progetto d'esame del corso di Ingegneria del Software
