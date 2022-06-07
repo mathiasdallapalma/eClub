@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "test": "cd server && jest --setupFiles dotenv/config",
     "start": "node server/index.js",
-    "test": "jest -setupFiles dotenv/config",
     "heroku-postbuild": "cd client && npm install && npm run build"
   },
   "repository": {
