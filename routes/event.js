@@ -16,7 +16,7 @@ const EventType = require('../models/eventtype.js');
 const User = require('../models/user.js');
 const Attendance = require('../models/attendance.js');
 const Summoning = require('../models/summoning.js');
-const Evaluation = require('../models/evalution.js');
+const Evaluation = require('../models/evaluation.js');
 
 /* --- GET: all Events --- */
 router.get('/', verify, authorization, async(req, res) => {

@@ -1,5 +1,5 @@
 const mongoose = require('mongoose')
-const User = require('./User')
+const User = require('./user.js')
 const EvaluationSchema = new mongoose.Schema({
     event: { type: mongoose.Schema.Types.ObjectId, ref: 'Event' },
     player: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }, //nested array of users reference ids

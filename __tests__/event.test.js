@@ -6,7 +6,7 @@ require("dotenv").config();
 
 const Summoning = require('../models/summoning.js');
 const Event = require('../models/event.js');
-const Evaluation = require('../models/evalution.js');
+const Evaluation = require('../models/evaluation.js');
 const Attendance = require('../models/attendance.js');
 const Team = require('../models/team.js');
 const EventType = require('../models/eventtype.js');

@@ -1,5 +1,5 @@
 const mongoose = require('mongoose')
-const User = require('./User')
+const User = require('./user.js')
 const TeamSchema = new mongoose.Schema({
     category:{
         type: String,
