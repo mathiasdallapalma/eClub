@@ -2,7 +2,7 @@
 
 <p align="center">
    <a href="">
-    <img src="https://github.com/pietrolechthaler/eClub//blob/main/banner.png">
+    <img src="https://github.com/pietrolechthaler/eClub/blob/main/banner.png">
   </a>
   <h2 align="center">eClub</h2>
 
