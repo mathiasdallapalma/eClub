@@ -44,4 +44,16 @@ app.use("/api/v2/med", medRoute)
 app.use("/api/v2/communication", communicationRoute);
 app.use("/api/v2/material", materialRoute)
 
+app.use(express.static(path.join(__dirname, '../../client/build')))
+
+app.get('*', (req, res) => {
+     res.sendFile(path.join(__dirname, '../../client/build/index.html'))
+ })
+
+app.use((req, res) => {
+    res.status(404);
+    res.json({ error: 'Not found' });
+});
+
+
 module.exports = app;

@@ -5,7 +5,12 @@
   "main": "index.js",
   "scripts": {
     "start": "node server/index.js",
-    "test": "jest -setupFiles dotenv/config"
+    "test": "jest -setupFiles dotenv/config",
+    "heroku-postbuild": "cd client && npm install && npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pietrolechthaler/eClub.git"
   },
   "jest": {
     "testEnvironment": "node",
