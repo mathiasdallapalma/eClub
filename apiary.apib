@@ -121,7 +121,7 @@ You may add a new user using this action. It takes a JSON object containing the 
                 "street":"Via Arrotati 10",
                 "phone":"340432543",
                 "added_by":"628905acfc8a650ccd42368e",
-                "team_id": 628905acfc8a650ccd42368e",
+                "team_id": "628905acfc8a650ccd42368e",
                 "hidden": "0",
                 "created_at": "2022-05-22T19:12:13.819Z",
                 "updated_at": "2022-05-22T19:12:13.819Z",
@@ -212,6 +212,9 @@ You may add a new user using this action. It takes a JSON object containing the 
                     "created_at": "2022-06-02T09:15:10.502Z",
                     "__v": 0,
                     "birth": "1966-03-12T00:00:00.000Z"
+                    "team_id": "628905acfc8a650ccd42368e",
+                    "updated_at": "2022-05-22T19:12:13.819Z",
+                    "deleted_at": "2022-05-22T19:12:13.819Z",
                 }
             ]
 
@@ -3350,10 +3353,301 @@ You may delete an existing material using this action. It takes a JSON object co
             }
 
 
+
 + Response 200 (application/json)
     + Headers
 
             Location: /api/v2/material/
+            
+    + Body
+
+            {
+                "result":"Succesfully removed `req.body.id`"
+            }
+
++ Response 400 (application/json)
+
+
+    + Body
+
+            {
+                "error":"Object passed has incorrect values."
+            }
+
++ Response 401 (application/json)
+
+
+    + Body
+
+            {
+                "error":"No token provided."
+            }
+            
++ Response 403 (application/json)
+
+
+    + Body
+
+            {
+                "error":"Invalid token. / User is not admin."
+            }
+
++ Response 500 (application/json)
+
+            {
+                "error": "Database error message"
+            }
+            
+## Communication [/api/v2/communication]
+
+### List All Communications [GET]
+
++ Response 200 (application/json)
+
+        [
+            {
+                "teams": [
+                        {
+                            "_id": "6298c3103818deda59b34104",
+                            "category": "Esordienti"
+                        }
+                    ],
+                "subject":"cena di squadra",
+                "text": "cena di squadra",
+                "added_by": "628905acfc8a650ccd42368e",
+                "created_at": "2022-06-04T08:37:23.993Z",
+                },
+
+            }
+        ]
++ Response 401 (application/json)
+
+    + Body
+
+            {
+                "error":"Invalid Token"
+            }
++ Response 403 (application/json)
+
+
+    + Body
+
+            {
+                "error":"Invalid token. / User is not admin."
+            }
+
++ Response 500 (application/json)
+
+            {
+                "error": "Database error message"
+            }
+### Add a new communication [POST]
+You may add a new communication using this action. It takes a JSON object containing the necessary information.
+
++ Parameters
+
+    - team: 200 (Number) - ###### required
+    - subject: cena di squadra (String) - ###### required
+    - text: cena di squadra (String) - ###### required
+    - added_by: 628905acfc8a650ccd42368e (ObjectId) - ###### required
+    - created_at: 05/06/2022 (date) - ###### required
++ Request (application/json)
+
+    + Headers
+    
+            auth-token: token
+    
+    + Body
+
+            {
+                "teams": [
+                        {
+                            "_id": "6298c3103818deda59b34104",
+                            "category": "Esordienti"
+                        }
+                    ],
+                "subject":"cena di squadra",
+                "text": "cena di squadra",
+                "added_by": "628905acfc8a650ccd42368e",
+                "created_at": "2022-06-04T08:37:23.993Z",
+            }
+
++ Response 200 (application/json)
+
+    + Headers
+
+            Location: /api/v2/communication/
+
+    + Body
+
+            {
+                "communication": "628905acfc8a650ccd42368e"
+            }
++ Response 401 (application/json)
+
+
+    + Body
+
+            {
+                "error":"Invalid Token"
+            }
+            
++ Response 403 (application/json)
+
+
+    + Body
+
+            {
+                "error":"Invalid token. / User is not admin."
+            }
+
++ Response 500 (application/json)
+
+            {
+                "error": "Database error message"
+            }
+
+## Specific communication [/api/v2/communication/{idcommunication}]
+
+### Getting specific communication[GET]
+
++ Request (application/json)
+
+    + Headers
+    
+            auth-token: token
+
++ Response 200 (application/json)
+
+        [
+            {
+            "teams": [
+                        {
+                            "_id": "6298c3103818deda59b34104",
+                            "category": "Esordienti"
+                        }
+                    ],
+                "subject":"cena di squadra",
+                "text": "cena di squadra",
+                "added_by": "628905acfc8a650ccd42368e",
+                "created_at": "2022-06-04T08:37:23.993Z",
+            },
+        ]
+
++ Response 401 (application/json)
+
+    + Body
+
+            {
+                "error":"Invalid Token"
+            }
+            
++ Response 403 (application/json)
+
+
+    + Body
+
+            {
+                "error":"Invalid token. / User is not admin."
+            }
+
++ Response 500 (application/json)
+
+            {
+                "error": "Database error message"
+            }
+
+### Update a specific communication [PATCH]
+
+You may update an existing communication using this action. It takes a JSON object containing the new complete information.
+
++ Request (application/json)
+
+    + Headers
+    
+            auth-token: token
+    
+    + Body
+
+            {
+                "teams": [
+                        {
+                            "_id": "6298c3103818deda59b34104",
+                            "category": "Esordienti"
+                        }
+                    ],
+                "subject":"cena di squadra",
+                "text": "cena di squadra",
+                "added_by": "628905acfc8a650ccd42368e",
+                "created_at": "2022-06-04T08:37:23.993Z",
+            }
+
++ Response 200 (application/json)
+
+    + Headers
+
+            Location: /api/v2/communication/
+
+    + Body
+
+            {
+                "message": "Success updating"
+            }
+
++ Response 400 (application/json)
+
+
+    + Body
+
+            {
+                "error":"Object sent is not a communication."
+            }
+
++ Response 401 (application/json)
+
+
+    + Body
+
+            {
+                "error":"No token provided."
+            }
+            
++ Response 403 (application/json)
+
+
+    + Body
+
+            {
+                "error":"Invalid token. / User is not admin."
+            }
+
++ Response 500 (application/json)
+
+            {
+                "error": "Database error message"
+            }
+            
+### Delete a specific communication [DELETE]
+
+You may delete an existing communication using this action. It takes a JSON object containing the id of the communication to delete.
+
++ Request (application/json)
+
+    + Headers
+    
+            auth-token: token
+    
+    + Body
+
+            {
+                "_id": "62894da00842bba6fcfbc9a3",
+            }
+
+
++ Response 200 (application/json)
+    + Headers
+
+            Location: /api/v2/communication/
             
     + Body
 
