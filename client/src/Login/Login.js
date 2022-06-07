@@ -9,6 +9,7 @@ import { Checkbox } from '@mui/material';
 
 /*Style*/
 import './Login.css';
+const url = process.env.HEROKU
 
 import session from '../index.js';
 
@@ -18,7 +19,7 @@ const Login = ()=>{
 
     const login=()=>{
         console.log(email+' '+password);
-        Axios.post('https://is-eclub.herokuapp.com/api/v1/auth',{
+        Axios.post(url+'/api/v1/auth',{
             email: email,
             password: password,
         }).then((response)=>{
