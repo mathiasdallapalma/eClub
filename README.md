@@ -1,6 +1,9 @@
 ![example workflow](https://github.com/matteo-gatti/IS2-MSGC-Parket/actions/workflows/node.js.yml/badge.svg)
 
 <p align="center">
+   <a href="">
+    <img src="https://github.com/pietrolechthaler/eClub//blob/main/banner.png">
+  </a>
   <h2 align="center">eClub</h2>
 
   <p align="center">
