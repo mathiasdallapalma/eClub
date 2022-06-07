@@ -1,4 +1,3 @@
-require('dotenv').config() 
 const bcrypt = require('bcryptjs')
 const express = require('express');
 const req = require('express/lib/request');
