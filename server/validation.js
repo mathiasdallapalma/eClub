@@ -227,6 +227,7 @@ const summoningValidation = (data) => {
 
 
 
+
 module.exports.registerUserValidation = registerUserValidation;
 module.exports.loginValidation = loginValidation;
 module.exports.teamValidation = teamValidation;
