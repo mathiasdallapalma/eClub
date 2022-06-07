@@ -27,32 +27,27 @@ const ModificaProfilo = ()=>{
 
     const[ruoliOptions,setRuoliOptions]=useState([]);
 
-    const user=JSON.parse(sessionStorage.getItem("user_toModify"))
+    
+    const params=useParams();
 
-    const salva=()=>{
-        Axios.patch('https://is-eclub.herokuapp.com/api/v1/user/'+user._id,{
-                name: nome,
-                surname: cognome,
-                password: "1234567",
-                zip:zip,
-                birth:dataNascita,
-                city:comune,
-                province:provincia,
-                nation:nazione,
-                street:via,
-                phone:telefono,
-                added_by:sessionStorage.getItem("user_id")},
-        {headers:{
+    const [user,setUser]=useState(0);
+
+    const fetchData = async(handler) => {
+        let response= await Axios.get('https://is-eclub.herokuapp.com/api/v1/user/'+params.id,{
+        headers:{
             "auth-token":sessionStorage.getItem('token')}
-        }).then((response)=>{
-            window.alert("Profilo modificato correttamente");
-        }).catch((error)=>{
-            console.log(error.response.data)
-            window.alert(error.response.data);
         })
-    };
+        
+        console.log(response.data)
+        handler(response.data);
+    }
 
-    useEffect(()=>{     
+   
+
+    useEffect(()=>{   
+        if(!user){
+            fetchData(setUser);
+        }  
 
         setNome(user.name);
         document.getElementById('nome').value = user.name;
@@ -60,8 +55,8 @@ const ModificaProfilo = ()=>{
         setCognome(user.surname);
         document.getElementById('cognome').value = user.surname;
 
-        setDataNascita(user.birth.split("T")[0]);
-        document.getElementById('data_nascita').value = user.birth.split("T")[0];
+        //setDataNascita(user.birth.split("T")[0]);
+        //document.getElementById('data_nascita').value = user.birth.split("T")[0];
 
         setTelefono(user.phone);
         document.getElementById('telefono').value = user.phone;
@@ -99,7 +94,29 @@ const ModificaProfilo = ()=>{
                 document.getElementById("indirizzo").style.display="none";
                 break;
         }
-    },[]);
+    },[user]);
+
+    const salva=()=>{
+        Axios.patch('https://is-eclub.herokuapp.com/api/v1/user/'+user._id,{
+                name: nome,
+                surname: cognome,
+                password: "1234567",
+                zip:zip,
+                city:comune,
+                province:provincia,
+                nation:nazione,
+                street:via,
+                phone:telefono,
+                added_by:sessionStorage.getItem("user_id")},
+        {headers:{
+            "auth-token":sessionStorage.getItem('token')}
+        }).then((response)=>{
+            window.alert("Profilo modificato correttamente");
+        }).catch((error)=>{
+            console.log(error.response.data)
+            window.alert(error.response.data);
+        })
+    };
 
     const customStyles = {
         option: (provided, state) => ({
@@ -171,9 +188,7 @@ const ModificaProfilo = ()=>{
                         <td colSpan={2}>
                             <InputText type={"text"} label={"Cognome"} id={"cognome"} onChangeHeadline={handleChangeInputText} />
                         </td> 
-                        <td colSpan={2}>
-                            <InputText type={"date"} label={"Data di nascita"} id={"data_nascita"} onChangeHeadline={handleChangeInputText} />
-                        </td>
+                        
                     </tr>
                     <tr id="indirizzo">
                         <td colSpan={5} >
