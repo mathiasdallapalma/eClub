@@ -10,7 +10,7 @@ const NuovaPass = ()=>{
     const reimposta=()=>{
         if(pass==pass1){
             console.log(pass+pass1);
-            Axios.post('http://localhost:3001/recupero',{
+            Axios.post(process.env.URL+'/recupero',{
                 user: pass,
             });
         }else{

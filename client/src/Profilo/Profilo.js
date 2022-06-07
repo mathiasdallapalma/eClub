@@ -18,10 +18,10 @@ const Profilo = ()=>{
     /*getting user id*/
     const params=useParams();
 
-    const [user,setUser]=useState("");
+    const [user,setUser]=useState(0);
 
     const fetchData = async(handler) => {
-        let response= await Axios.get('http://localhost:3001/api/v1/user/'+params.id,{
+        let response= await Axios.get(process.env.URL+'/api/v1/user/'+params.id,{
         headers:{
             "auth-token":sessionStorage.getItem('token')}
         })
@@ -60,7 +60,7 @@ const Profilo = ()=>{
                 document.getElementById("modificaBtn").style.display="none";
                 break;
         }
-    },[user]); //TODO useffect keeps calling
+    },[]);
 
     const modifica=()=>{
         const path=params.id+"/modifica"
@@ -68,7 +68,7 @@ const Profilo = ()=>{
     };
 
     const elimina=()=>{
-        Axios.delete('http://localhost:3001/api/v1/user/'+params.id,{
+        Axios.delete(process.env.URL+'/api/v1/user/'+params.id,{
         headers:{
             "auth-token":sessionStorage.getItem('token')},
         params:{

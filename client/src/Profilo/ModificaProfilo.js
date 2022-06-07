@@ -18,7 +18,6 @@ const ModificaProfilo = ()=>{
     const[cognome,setCognome]=useState("");
     const[dataNascita,setDataNascita]=useState("");
     const[telefono,setTelefono]=useState("");
-    const[email,setEmail]=useState("");
     const[comune,setComune]=useState([]);
     const[via,setVia]=useState([]);
     const[provincia,setProvincia]=useState([]);
@@ -31,13 +30,12 @@ const ModificaProfilo = ()=>{
     const user=JSON.parse(sessionStorage.getItem("user_toModify"))
 
     const salva=()=>{
-        Axios.patch('http://localhost:3001/api/v1/user/'+user._id,{
-                email: email,
+        Axios.patch(process.env.URL+'/api/v1/user/'+user._id,{
                 name: nome,
                 surname: cognome,
                 password: "1234567",
-                a_type:tipo,
                 zip:zip,
+                birth:dataNascita,
                 city:comune,
                 province:provincia,
                 nation:nazione,
@@ -55,48 +53,39 @@ const ModificaProfilo = ()=>{
     };
 
     useEffect(()=>{     
-        ruoliOptions.push({ value: '2', label: 'TeamManager' });
-        ruoliOptions.push({ value: '3', label: 'Coach' });
-        ruoliOptions.push({ value: '0', label: 'Genitore/Atleta' });
 
-        setNome(user.nome);
+        setNome(user.name);
         document.getElementById('nome').value = user.name;
 
-        setCognome(user.cognome);
+        setCognome(user.surname);
         document.getElementById('cognome').value = user.surname;
 
-        setDataNascita(user.dataNascita);
-        document.getElementById('data_nascita').value = user.dataNascita;
+        setDataNascita(user.birth.split("T")[0]);
+        document.getElementById('data_nascita').value = user.birth.split("T")[0];
 
-        setTelefono(user.telefono);
+        setTelefono(user.phone);
         document.getElementById('telefono').value = user.phone;
 
-        setEmail(user.email);
-        document.getElementById('email').value = user.email;
-
-        setComune(user.comune);
+        setComune(user.city);
         document.getElementById('comune').value = user.city;
 
-        setVia(user.via);
+        setVia(user.street);
         document.getElementById('via').value = user.street;
 
-        setProvincia(user.provincia);
+        setProvincia(user.province);
         document.getElementById('provincia').value = user.province;
 
-        setNazione(user.nazione);
+        setNazione(user.nation);
         document.getElementById('nazione').value = user.nation;
 
         setZip(user.zip);
         document.getElementById('zip').value = user.zip;
 
-        setTipo(user.tipo);
-        document.getElementById('ruolo').value = user.a_type; // TODO Non funziona bene 
 
         switch(sessionStorage.getItem('user_a_type')){
             case "0": //ga
                 document.getElementById("anagrafic").style.display="none";
                 document.getElementById("indirizzo").style.display="none";
-                document.getElementById("tipo").style.display="none";
                 break;
             case "1": //dd
                 
@@ -104,21 +93,13 @@ const ModificaProfilo = ()=>{
             case "2": //tm
                 document.getElementById("anagrafic").style.display="none";
                 document.getElementById("indirizzo").style.display="none";
-                document.getElementById("tipo").style.display="none";
                 break;
             case"3":
                 document.getElementById("anagrafic").style.display="none";
                 document.getElementById("indirizzo").style.display="none";
-                document.getElementById("tipo").style.display="none";
                 break;
         }
     },[]);
-
-   
-
-    
-
-   
 
     const customStyles = {
         option: (provided, state) => ({
@@ -137,10 +118,6 @@ const ModificaProfilo = ()=>{
         return { ...provided, opacity, transition };
         }
     }
-
-    const handleChange = (event) => {
-        setTipo(event.value);
-      };
 
     const handleChangeInputText = (event) => {
         console.log(event.target.value);
@@ -174,14 +151,8 @@ const ModificaProfilo = ()=>{
             case "telefono":
                 setTelefono(event.target.value);
                 break;
-            case "email":
-                setEmail(event.target.value);
-            break;
         }
     };
-
-
-    
 
     return (
         <div className="ModificaProfilo">
@@ -219,23 +190,6 @@ const ModificaProfilo = ()=>{
                     <tr>
                         <td colSpan={2}>
                             <InputText type={"text"} label={"Telefono"} id={"telefono"} onChangeHeadline={handleChangeInputText} />
-                        </td>
-                        <td colSpan={2}>
-                            <InputText type={"text"} label={"Email"} id={"email"} onChangeHeadline={handleChangeInputText} />
-                        </td>
-                    </tr>
-                    <tr id="tipo">
-                        <td colSpan="2">
-                        <label>Ruolo</label>
-                        <div className='ruoloInput'>        
-                            <Select id="ruolo" 
-                                styles={customStyles} 
-                                options={ruoliOptions} 
-                                placeholder={" "} 
-                                onChange={event => handleChange(event)
-                                        } 
-                            />
-                        </div>
                         </td>
                     </tr>
                 </table>           

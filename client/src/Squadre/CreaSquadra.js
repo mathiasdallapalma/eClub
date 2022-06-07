@@ -11,6 +11,7 @@ import Topbar from '../components/Topbar';
 
 //import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import "./CreaSquadra.css"
+import axios from 'axios';
 
 
 
@@ -23,7 +24,7 @@ const CreaSquadra = ()=>{
     const [gas,setGas]=useState([]);
 
     const fetchData = async(handler) => {
-        let response= await Axios.get('http://localhost:3001/api/v1/user',{
+        let response= await Axios.get(process.env.URL+'/api/v1/user',{
         headers:{
             "auth-token":sessionStorage.getItem('token')}
         })
@@ -38,19 +39,20 @@ const CreaSquadra = ()=>{
             if(tesseratiList.length==0){
                 fetchData(settesseratiList);  
             } else{
-                for(var i=0;i<tesseratiList.length;i++){
-                    switch(tesseratiList[i].a_type){
+                tesseratiList.forEach(element => {
+                    if(element.team_id=="000000000000000000000000")
+                    switch(element.a_type.type){
                         case 0: //ga
-                            temp.push(tesseratiList[i]);
+                            temp.push(element);
                             break;
                         case 2: //tm
-                            tms.push({ value: tesseratiList[i]._id, label: tesseratiList[i].name+" "+tesseratiList[i].surname });
+                            tms.push({ value: element._id, label: element.name+" "+element.surname });
                             break;
                         case 3: //ch
-                            coaches.push({ value: tesseratiList[i]._id, label: tesseratiList[i].name+" "+tesseratiList[i].surname });
+                            coaches.push({ value: element._id, label: element.name+" "+element.surname });
                             break;
                     }
-                }
+                });
                 setGas(temp); 
             }
         }
@@ -62,27 +64,49 @@ const CreaSquadra = ()=>{
     var teamManager="";
 
     const salva=()=>{
-        Axios.post('http://localhost:3001/api/v1/team',{
+
+        var temp=[];
+        if(teamManager!=""){
+            temp.push(teamManager);
+        }else{
+            window.alert("TeamManager non selezionato")
+        }
+
+        if(coach!=""){
+            temp.push(coach);
+        }else{
+            window.alert("Coach non selezionato")
+        }
+        temp=temp.concat(checked);
+        var newTeam_id;
+        
+        Axios.post(process.env.URL+'/api/v1/team',{
                 category: categoria,
-                players: JSON.stringify(checked),
-                coach:coach,
-                tm:teamManager,
                 added_by:sessionStorage.getItem("user_id")},
         {headers:{
             "auth-token":sessionStorage.getItem('token')}
         }).then((response)=>{
-            window.alert("Squadra inserita correttamente");
+            newTeam_id= response.data.team
+            
+            temp.forEach(element => {
+            Axios.patch("http://localhost:3001/api/v1/user/"+element,{
+                        team_id: newTeam_id,
+                },
+                {headers:{
+                    "auth-token":sessionStorage.getItem('token')}
+                }).catch((error)=>{
+                    console.log(error.response.data)
+                    window.alert(error.response.data);
+                })
+            });
         }).catch((error)=>{
             console.log(error.response.data)
             window.alert(error.response.data);
         })
+
+       window.location.href="/squadre" 
+
     };
-
-    
-
-    
-
-   
 
     const customStyles = {
         option: (provided, state) => ({
@@ -121,7 +145,6 @@ const CreaSquadra = ()=>{
     };
 
     function arrayRemove(arr, value) { 
-    
         return arr.filter(function(ele){ 
             return ele != value; 
         });
@@ -173,9 +196,10 @@ const CreaSquadra = ()=>{
                         return( 
                             <tr id="row">
                                 {" "}
-                                <td><h1><Checkbox
+                                <td id="checbox_td"><Checkbox
                                     onChange={event =>handleCheckBox(val._id,event)} />
-                                </h1></td> <td><h2>{val.name}</h2></td> <td><h2>{val.birth}</h2></td> <td><h2>{val.street},{val.city}</h2></td> <td><h2>{val.iscritto}</h2></td>{" "}
+                                </td> 
+                                <td><h2>{val.name} {val.surname}</h2></td> <td><h2>{(val.birth).split('T')[0]}</h2></td> <td><h2>{val.street} {val.city}</h2></td> <td><h2>{val.iscritto}</h2></td>{" "}
                             </tr>
                         );
                     })}

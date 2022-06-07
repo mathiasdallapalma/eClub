@@ -9,7 +9,7 @@ import { Checkbox } from '@mui/material';
 
 /*Style*/
 import './Login.css';
-const url = process.env.HEROKU
+
 
 const Login = ()=>{
     const[email,setEmail]=useState("");
@@ -17,7 +17,7 @@ const Login = ()=>{
 
     const login=()=>{
         console.log(email+' '+password);
-        Axios.post(url+'/api/v1/auth',{
+        Axios.post(process.env.URL+'/api/v1/auth',{
             email: email,
             password: password,
         }).then((response)=>{
@@ -28,8 +28,8 @@ const Login = ()=>{
                     sessionStorage.setItem("token",token);
                     sessionStorage.setItem("loggedIn",true);
                     sessionStorage.setItem("user_id",user_data._id);
-                    sessionStorage.setItem("user_a_type",user_data.a_type);
-
+                    sessionStorage.setItem("user_a_type",user_data.a_type.type);
+                    sessionStorage.setItem("user_a_type_all",user_data.a_type);
 
                     window.location.href="/home";
                 }else{

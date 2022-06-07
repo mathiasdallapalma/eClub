@@ -9,6 +9,9 @@ import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import LogoutIcon from '@mui/icons-material/Logout';
 import ContactMailIcon from '@mui/icons-material/ContactMail';
 
+import Sidebar from "./Sidebar";
+import user from "./Sidebar";
+
 
 const SidebarData=[
     {
@@ -20,7 +23,7 @@ const SidebarData=[
     {
         title:"Squadra",
         icon:<GroupsIcon />,
-        link:"/squadre/",
+        link:"",
         id:"squadra"
     },
     {

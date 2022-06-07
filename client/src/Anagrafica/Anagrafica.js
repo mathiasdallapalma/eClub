@@ -19,7 +19,7 @@ const Anagrafica = ()=>{
     //setUser(JSON.parse(sessionStorage.getItem("user")));
 
     const fetchData = async(handler) => {
-        let response= await Axios.get('http://localhost:3001/api/v1/user',{
+        let response= await Axios.get(process.env.URL+'/api/v1/user',{
         headers:{
             "auth-token":sessionStorage.getItem('token')}
         })
@@ -28,13 +28,11 @@ const Anagrafica = ()=>{
     }
 
     useEffect(()=>{
-        if(sessionStorage.getItem('loggedIn')==false){
-            window.location.href="/login";
-        }else{
-            if(tesseratiList.length==0){
-                fetchData(settesseratiList);
-            }
+        
+        if(tesseratiList.length==0){
+            fetchData(settesseratiList);
         }
+        
 
         switch(sessionStorage.getItem('user_a_type')){
             case "0": //ga
@@ -66,13 +64,14 @@ const Anagrafica = ()=>{
                     <div className="btnContainer"><button id="CreaBtn1" onClick={crea}>Nuovo Tesserato</button></div>
                 </div>
                 <table cellspacing ="0" className='AnagraficaList'>
-                <tr id="header"> <td><h1></h1></td> <td><h1>Nome</h1></td> <td><h1>Data nascita</h1></td> <td><h1>Indirizzo</h1></td> <td><h1>Iscirizione</h1></td> <td><h1>Email</h1></td> <td><h1>Telefono</h1></td></tr>
+                <tr id="header"> <td><h1></h1></td> <td><h1>Nome</h1></td> <td><h1>Data nascita</h1></td> <td><h1>Indirizzo</h1></td>  <td><h1>Email</h1></td> <td><h1>Telefono</h1></td></tr>
                     {tesseratiList.map((val,key) => {
                         return( 
+                            
                             <tr id="row" onClick={()=>{const path="/anagrafica/"+val._id;
                                 window.location.pathname=path}}>
                                 {" "}
-                                <td style={{width:"20px"}}><PersonIcon id="icon"/></td> <td><h2>{val.name} {val.surname}</h2></td> <td><h2>{val.birth}</h2></td> <td><h2>{val.street} {val.city}</h2></td> <td><h2>{val.iscritto}</h2></td> <td><h2>{val.email}</h2></td> <td><h2>{val.phone}</h2></td>{" "}
+                                <td style={{width:"2%"}}><PersonIcon id="icon"/></td> <td style={{width:"15%"}}><h2>{val.name} {val.surname}</h2></td> <td style={{width:"12%"}}><h2>{(val.birth).split("T")[0]}</h2></td> <td style={{width:"25%"}}><h2>{val.street} {val.city}</h2></td>  <td style={{width:"13%"}}><h2>{val.email}</h2></td> <td><h2>{val.phone}</h2></td>{" "}
                             </tr>
                         );
                     })}

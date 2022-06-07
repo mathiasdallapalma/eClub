@@ -16,7 +16,6 @@ const NuovoTesserato = ()=>{
     const[nome,setNome]=useState("");
     const[cognome,setCognome]=useState("");
     const[dataNascita,setDataNascita]=useState("");
-    
     const[telefono,setTelefono]=useState("");
     const[email,setEmail]=useState("");
     const[comune,setComune]=useState([]);
@@ -29,11 +28,12 @@ const NuovoTesserato = ()=>{
     const[ruoliOptions,setRuoliOptions]=useState([]);
 
     const salva=()=>{
-        Axios.post('http://localhost:3001/api/v1/user',{
+        Axios.post(process.env.URL+'/api/v1/user',{
                 email: email,
                 name: nome,
                 surname: cognome,
-                password: "1234567",
+                password: "eClub2022",
+                birth:dataNascita,
                 a_type:tipo,
                 zip:zip,
                 city:comune,
@@ -49,13 +49,25 @@ const NuovoTesserato = ()=>{
         }).catch((error)=>{
             console.log(error.response.data)
             window.alert(error.response.data);
+            document.getElementById("ruolo").value="";
         })
     };
 
+    const fetchData = async(handler) => {
+        let response= await Axios.get(process.env.URL+'/api/v1/usertype',{
+        headers:{
+            "auth-token":sessionStorage.getItem('token')}
+        })
+        var temp=[]
+        response.data.forEach(element => {
+            temp.push({value:element._id, label:element.name})
+        });
+        console.log(temp)
+        handler(temp);
+    }
+
     useEffect(()=>{
-        ruoliOptions.push({ value: '2', label: 'TeamManager' });
-        ruoliOptions.push({ value: '3', label: 'Coach' });
-        ruoliOptions.push({ value: '0', label: 'Genitore/Atleta' });
+        fetchData(setRuoliOptions)
     },[]);
 
     const customStyles = {
@@ -78,6 +90,7 @@ const NuovoTesserato = ()=>{
 
     const handleChange = (event) => {
         tipo=event.value;
+        console.log(tipo)
       };
 
     const handleChangeInputText = (event) => {
