@@ -1,2 +1,2 @@
-web: cd client && npm start
-api: cd server && npm start
+web: node server/server.js
+test: jest
