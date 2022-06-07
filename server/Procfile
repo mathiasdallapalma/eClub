@@ -1,2 +1,1 @@
-api: node index.js
-test: jest
+web: node index.js
