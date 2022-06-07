@@ -8,7 +8,7 @@
 
   <p align="center">
     Progetto d'esame del corso di Ingegneria del Software
-  <br>Università deegli Studi di Trento - Prof. <a href="https://webapps.unitn.it/du/it/Persona/PER0228723/Curriculum">Sandro Luigi Fiore</a>
+  <br>Università degli Studi di Trento - Prof. <a href="https://webapps.unitn.it/du/it/Persona/PER0228723/Curriculum">Sandro Luigi Fiore</a>
   </p>
 </p>
 <br>
