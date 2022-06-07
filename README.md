@@ -1,5 +1,4 @@
-![example workflow](https://github.com/matteo-gatti/IS2-MSGC-Parket/actions/workflows/node.js.yml/badge.svg)
-
+[![Build Status](https://app.travis-ci.com/pietrolechthaler/eClub.svg?branch=master)](https://app.travis-ci.com/pietrolechthaler/eClub)
 
 <p align="center">
    <a href="">
