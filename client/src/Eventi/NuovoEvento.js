@@ -60,12 +60,13 @@ const NuovoEvento = ()=>{
                 description: descrizione,
                 date: data,
                 e_type: type,
-                teams:[], 
+                teams:checked, 
                 added_by:sessionStorage.getItem("user_id")},
         {headers:{
             "auth-token":sessionStorage.getItem('token')}
         }).then((response)=>{
             window.alert("Evento inserito correttamente");
+            window.location.href="/eventi"
         }).catch((error)=>{
             console.log(error.response.data)
             window.alert(error.response.data);

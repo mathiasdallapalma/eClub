@@ -69,13 +69,13 @@ const CreaSquadra = ()=>{
         if(teamManager!=""){
             temp.push(teamManager);
         }else{
-            //window.alert("TeamManager non selezionato")
+            window.alert("TeamManager non selezionato")
         }
 
         if(coach!=""){
             temp.push(coach);
         }else{
-            //window.alert("Coach non selezionato")
+            window.alert("Coach non selezionato")
         }
         temp=temp.concat(checked);
         var newTeam_id;
@@ -104,8 +104,7 @@ const CreaSquadra = ()=>{
             window.alert(error.response.data);
         })
 
-        
-        
+       window.location.href="/squadre" 
 
     };
 

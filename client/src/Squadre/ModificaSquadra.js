@@ -133,6 +133,7 @@ const ModificaSquadra = ()=>{
     },[tesseratiList]);
 
     const salva=()=>{
+        /*
         if(categoria!=squadra.category){
             Axios.patch('http://localhost:3001/api/v1/team/'+params.id,{
                 category:categoria
@@ -174,7 +175,7 @@ const ModificaSquadra = ()=>{
             window.alert(error.response.data);
         })
     })
-    
+    */
     window.location.href="/squadra/"+params.id
     };
     

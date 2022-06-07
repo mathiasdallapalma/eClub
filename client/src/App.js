@@ -18,6 +18,7 @@ import NuovaPass from './Login/NuovaPass'
 import Eventi from "./Eventi/Eventi"
 import Evento from './Eventi/Evento';
 import NuovoEvento from './Eventi/NuovoEvento';
+import Stats from './Stats/Stats';
 
 
 function App() {
@@ -75,6 +76,9 @@ function App() {
           </Route>
           <Route exact path="/creaEvento">
             <NuovoEvento />
+          </Route>
+          <Route exact path="/stats">
+            <Stats />
           </Route>
         </Switch>
       </div>

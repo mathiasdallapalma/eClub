@@ -52,7 +52,7 @@ const Eventi = ()=>{
 
         switch(sessionStorage.getItem('user_a_type')){
             case "0": //ga
-                window.location.href="/login";
+                //window.location.href="/login";
                 break;
             case "1": //dd
                
