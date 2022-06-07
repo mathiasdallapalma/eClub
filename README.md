@@ -1,5 +1,5 @@
-**![example workflow](https://github.com/matteo-gatti/IS2-MSGC-Parket/actions/workflows/node.js.yml/badge.svg)
-**
+![example workflow](https://github.com/matteo-gatti/IS2-MSGC-Parket/actions/workflows/node.js.yml/badge.svg)
+
 
 <p align="center">
    <a href="">
