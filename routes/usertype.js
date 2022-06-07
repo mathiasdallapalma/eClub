@@ -1,7 +1,7 @@
 const express = require('express');
 const req = require('express/lib/request');
 const router = express.Router();
-const UserType = require('../models/UserType')
+const UserType = require('../models/usertype.js')
 const bcrypt = require('bcryptjs')
 const {userTypeValidation}= require('../validation')
 const verify = require('./verifyToken');

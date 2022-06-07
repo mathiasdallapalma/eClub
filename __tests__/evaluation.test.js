@@ -2,11 +2,11 @@ const app = require('../app')
 const request = require('supertest');
 const jwt = require('jsonwebtoken');
 const mongoose = require("mongoose");
-const Evaluation = require('../models/Evaluation');
-const Event = require('../models/Event');
-const User = require('../models/User');
-const EventType = require('../models/EventType');
-const Team = require('../models/Team');
+const Evaluation = require('../models/evalution.js');
+const Event = require('../models/event.js');
+const User = require('../models/user.js');
+const EventType = require('../models/eventtype.js');
+const Team = require('../models/team.js');
 
 require("dotenv").config();
 

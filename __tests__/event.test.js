@@ -4,12 +4,12 @@ const jwt = require('jsonwebtoken');
 const mongoose = require("mongoose");
 require("dotenv").config();
 
-const Summoning = require('../models/Summoning');
-const Event = require('../models/Event');
-const Evaluation = require('../models/Evaluation');
-const Attendance = require('../models/Attendance');
-const Team = require('../models/Team');
-const EventType = require('../models/EventType');
+const Summoning = require('../models/summoning.js');
+const Event = require('../models/event.js');
+const Evaluation = require('../models/evalution.js');
+const Attendance = require('../models/attendance.js');
+const Team = require('../models/team.js');
+const EventType = require('../models/eventtype.js');
 
 let validEvent_id=""
 let InvalidEvent_id="629b19c317d2c125ef112c69"

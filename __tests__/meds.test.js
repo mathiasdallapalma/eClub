@@ -3,7 +3,7 @@ const request = require('supertest');
 const jwt = require('jsonwebtoken');
 const mongoose = require("mongoose");
 const med = require('../models/med');
-const User = require('../models/User');
+const User = require('../models/user.js');
 require("dotenv").config();
 
 jest.setTimeout(9000);

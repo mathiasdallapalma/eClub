@@ -2,7 +2,7 @@ const app = require('../app');
 const request = require('supertest');
 const jwt = require('jsonwebtoken');
 const mongoose = require("mongoose");
-const Team = require('../models/Team');
+const Team = require('../models/team.js');
 
 require("dotenv").config();
 

@@ -2,8 +2,8 @@ const app = require('../app');
 const request = require('supertest');
 const jwt = require('jsonwebtoken');
 const mongoose = require("mongoose");
-const User = require('../models/User');
-const Payment = require('../models/Payment');
+const User = require('../models/user.js');
+const Payment = require('../models/payment.js');
 
 require("dotenv").config();
 

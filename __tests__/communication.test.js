@@ -2,9 +2,9 @@ const app = require('../app')
 const request = require('supertest');
 const jwt = require('jsonwebtoken');
 const mongoose = require("mongoose");
-const User = require('../models/User');
-const Team = require('../models/Team');
-const Communication = require('../models/Communication');
+const User = require('../models/user.js');
+const Team = require('../models/team.js');
+const Communication = require('../models/communication.js');
 
 require("dotenv").config();
 

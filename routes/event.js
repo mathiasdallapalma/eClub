@@ -11,12 +11,12 @@ const authorization = require('./authToken');
 
 
 /* --- Importing models--- */
-const Event = require('../models/Event');
-const EventType = require('../models/EventType');
-const User = require('../models/User');
-const Attendance = require('../models/Attendance');
-const Summoning = require('../models/Summoning');
-const Evaluation = require('../models/Evaluation');
+const Event = require('../models/event.js');
+const EventType = require('../models/eventtype.js');
+const User = require('../models/user.js');
+const Attendance = require('../models/attendance.js');
+const Summoning = require('../models/summoning.js');
+const Evaluation = require('../models/evalution.js');
 
 /* --- GET: all Events --- */
 router.get('/', verify, authorization, async(req, res) => {

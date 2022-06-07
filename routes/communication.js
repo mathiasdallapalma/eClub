@@ -1,7 +1,7 @@
 const express = require('express');
 const req = require('express/lib/request');
 const router = express.Router();
-const Communication = require('../models/Communication')
+const Communication = require('../models/communication.js')
 const bcrypt = require('bcryptjs')
 const {communicationValidation}= require('../validation')
 const verify = require('./verifyToken');
