@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "cd server && jest --setupFiles dotenv/config",
-    "start": "node server/index.js",
+    "start": "node server/index.js"
   },
   "repository": {
     "type": "git",
