@@ -18,7 +18,7 @@ relative alle proprie squadre composte ciascuna da Team Manager, Coach e Atleti.
 
 ### List all users [GET]
 
-+ Response 201 (application/json)
++ Response 200 (application/json)
 
             [
                 {
@@ -46,6 +46,8 @@ relative alle proprie squadre composte ciascuna da Team Manager, Coach e Atleti.
                         "surname": "Rossi"
                     },
                     "created_at": "2022-06-02T09:15:10.502Z",
+                    "updated_at": "2022-06-04T08:37:24.931Z",
+                    "deleted_at": "2022-06-04T08:37:24.931Z",
                     "__v": 0,
                     "birth": "1966-03-12T00:00:00.000Z"
                 }
@@ -96,8 +98,8 @@ You may add a new user using this action. It takes a JSON object containing the 
     - team_id: wefwweewf (ObjectId) - ###### not required
     - added_by: sd3fe2w23 (ObjectId) - ###### required
     - created_at: 2020/12/13 (Date) - ###### required
-    - updated_at: 2020/12/13 (Date) - ###### required
-    - deleted_at: 2020/12/13 (Date) - ###### required
+    - updated_at: 2020/12/13 (Date) - ###### not required
+    - deleted_at: 2020/12/13 (Date) - ###### not required
 
 + Request (application/json)
 
@@ -120,10 +122,15 @@ You may add a new user using this action. It takes a JSON object containing the 
                 "nation":"IT",
                 "street":"Via Arrotati 10",
                 "phone":"340432543",
-                "added_by":"628905acfc8a650ccd42368e"
+                "added_by":"628905acfc8a650ccd42368e",
+                "team_id": "628905acfc8a650ccd42368e",
+                "hidden": "0",
+                "created_at": "2022-05-22T19:12:13.819Z",
+                "updated_at": "2022-05-22T19:12:13.819Z",
+                "deleted_at": "2022-05-22T19:12:13.819Z",
             }
             
-+ Response 201 (application/json)
++ Response 200 (application/json)
 
     + Headers
 
@@ -178,7 +185,7 @@ You may add a new user using this action. It takes a JSON object containing the 
     
             auth-token: token
 
-+ Response 201 (application/json)
++ Response 200 (application/json)
 
             [
                 {
@@ -207,6 +214,9 @@ You may add a new user using this action. It takes a JSON object containing the 
                     "created_at": "2022-06-02T09:15:10.502Z",
                     "__v": 0,
                     "birth": "1966-03-12T00:00:00.000Z"
+                    "team_id": "628905acfc8a650ccd42368e",
+                    "updated_at": "2022-05-22T19:12:13.819Z",
+                    "deleted_at": "2022-05-22T19:12:13.819Z",
                 }
             ]
 
@@ -369,7 +379,7 @@ You may delete an existing user using this action. It takes a JSON object contai
 ## Team [/api/v1/team]
 ### List all teams [GET]
 
-+ Response 201 (application/json)
++ Response 200 (application/json)
 
     [
         {
@@ -379,6 +389,8 @@ You may delete an existing user using this action. It takes a JSON object contai
             "hidden": 0,
             "added_by": "23",
             "created_at": "2022-05-22T19:12:13.819Z",
+            "updated_at": "2022-05-22T19:12:13.819Z",
+            "deleted_at": "2022-05-22T19:12:13.819Z",
             "__v": 0
         },
     ]
@@ -435,7 +447,7 @@ You may add a new team using this action. It takes a JSON object containing the 
                 "added_by":"956bca9fd92d45c042f24945"
             }
 
-+ Response 201 (application/json)
++ Response 200 (application/json)
 
     + Headers
 
@@ -605,7 +617,7 @@ You may delete an existing team using this action. It takes a JSON object contai
 ## User Type [/api/v1/usertype]
 ### List all User Type [GET]
 
-+ Response 201 (application/json)
++ Response 200 (application/json)
 
     [
         {
@@ -661,7 +673,7 @@ You may add a new user type using this action. It takes a JSON object containing
                 "type": "3"
             }
 
-+ Response 201 (application/json)
++ Response 200 (application/json)
 
     + Headers
 
@@ -849,7 +861,7 @@ You may delete an existing user type using this action. It takes a JSON object c
                 "password": "password",
             }
     
-+ Response 201 (application/json)
++ Response 200 (application/json)
 
             {
                 "jwt": "628905746649202d56fd402engrufsdi.fvdfgbfdgjythfgdbvcfghtfgdvcbnghg.dfcdseregfbvc-xsdfgh",
@@ -891,7 +903,7 @@ You may delete an existing user type using this action. It takes a JSON object c
                 "password": "password",
             }
 
-+ Response 201 (application/json)
++ Response 200 (application/json)
 
             {
                 "message": "Succesfully notified user",
@@ -915,7 +927,7 @@ You may delete an existing user type using this action. It takes a JSON object c
     - email: user@domain.com (String) - ###### required
     - password: "password" (String) - ###### required
 
-+ Response 201 (application/json)
++ Response 200 (application/json)
 
             {
                 "message": "Successfully changes user password",
@@ -955,7 +967,7 @@ You may delete an existing user type using this action. It takes a JSON object c
     
             auth-token: token
 
-+ Response 201 (application/json)
++ Response 200 (application/json)
 
             [
                 {
@@ -977,7 +989,8 @@ You may delete an existing user type using this action. It takes a JSON object c
                     "hidden": 0,
                     "added_by": "628905acfc8a650ccd42368e",
                     "created_at": "2022-06-04T08:37:23.993Z",
-                    "__v": 0,
+                    "updated_at": "2022-06-04T08:37:23.993Z",
+                    "deleted_at": "2022-06-04T08:37:23.993Z",
                     
                 }
             ]
@@ -1019,8 +1032,8 @@ You may add a new event using this action. It takes a JSON object containing the
     - hidden: 0 (Boolean) - ###### not required
     - added_by: sd3fe2w23 (ObjectId) - ###### required
     - created_at: 2020/12/13 (Date) - ###### required
-    - updated_at: 2020/12/13 (Date) - ###### required
-    - deleted_at: 2020/12/13 (Date) - ###### required
+    - updated_at: 2020/12/13 (Date) - ###### not required
+    - deleted_at: 2020/12/13 (Date) - ###### not required
 
 + Request (application/json)
 
@@ -1039,7 +1052,7 @@ You may add a new event using this action. It takes a JSON object containing the
                 "teams":["6297c78a46b44412fbc25485"]
             }
             
-+ Response 201 (application/json)
++ Response 200 (application/json)
 
     + Headers
 
@@ -1094,7 +1107,7 @@ You may add a new event using this action. It takes a JSON object containing the
     
             auth-token: token
 
-+ Response 201 (application/json)
++ Response 200 (application/json)
 
             
             {
@@ -1116,7 +1129,8 @@ You may add a new event using this action. It takes a JSON object containing the
                 "hidden": 0,
                 "added_by": "628905acfc8a650ccd42368e",
                 "created_at": "2022-06-04T08:37:23.993Z",
-                "__v": 0,
+                "updated_at": "2022-06-04T08:37:23.993Z",
+                "deleted_at": "2022-06-04T08:37:23.993Z",
             }
             
 
@@ -1275,7 +1289,7 @@ You may delete an existing user using this action. It takes a JSON object contai
 ## Event Type [/api/v2/eventtype]
 ### List all Event Type [GET]
 
-+ Response 201 (application/json)
++ Response 200 (application/json)
 
 [
     {
@@ -1331,7 +1345,7 @@ You may add a new event type using this action. It takes a JSON object containin
                 "type": "1"
             }
 
-+ Response 201 (application/json)
++ Response 200 (application/json)
 
     + Headers
 
@@ -1502,7 +1516,7 @@ You may delete an existing event type using this action. It takes a JSON object 
 
 ### List all Attendance [GET]
 
-+ Response 201 (application/json)
++ Response 200 (application/json)
 
            [
                 {
@@ -1522,7 +1536,8 @@ You may delete an existing event type using this action. It takes a JSON object 
                     "hidden": 0,
                     "added_by": "628905acfc8a650ccd42368e",
                     "created_at": "2022-06-04T08:37:24.931Z",
-                    "__v": 0
+                    "updated_at": "2022-06-04T08:37:24.931Z",
+                    "deleted_at": "2022-06-04T08:37:24.931Z",
                 }
             ]
 
@@ -1561,8 +1576,8 @@ You may add a new user using this action. It takes a JSON object containing the 
     - hidden: 0 (Boolean) - ###### not required
     - added_by: sd3fe2w23 (ObjectId) - ###### required
     - created_at: 2020/12/13 (Date) - ###### required
-    - updated_at: 2020/12/13 (Date) - ###### required
-    - deleted_at: 2020/12/13 (Date) - ###### required
+    - updated_at: 2020/12/13 (Date) - ###### not required
+    - deleted_at: 2020/12/13 (Date) - ###### not required
 
 + Request (application/json)
 
@@ -1579,7 +1594,7 @@ You may add a new user using this action. It takes a JSON object containing the 
                 "added_by": "62927232c8a1c137d5e6ca4f"
             }
             
-+ Response 201 (application/json)
++ Response 200 (application/json)
 
     + Headers
 
@@ -1632,7 +1647,7 @@ You may add a new user using this action. It takes a JSON object containing the 
     
             auth-token: token
 
-+ Response 201 (application/json)
++ Response 200 (application/json)
 
             [
                 {
@@ -1648,7 +1663,9 @@ You may add a new user using this action. It takes a JSON object containing the 
                     "hidden": 0,
                     "added_by": "628905acfc8a650ccd42368e",
                     "created_at": "2022-06-04T08:37:24.931Z",
-                    "__v": 0
+                    "updated_at": "2022-06-04T08:37:24.931Z",
+                    "deleted_at": "2022-06-04T08:37:24.931Z",
+                    
                 },
             ]
 
@@ -1683,7 +1700,7 @@ You may add a new user using this action. It takes a JSON object containing the 
     
             auth-token: token
 
-+ Response 201 (application/json)
++ Response 200 (application/json)
 
             [
                 {
@@ -1699,7 +1716,8 @@ You may add a new user using this action. It takes a JSON object containing the 
                     "hidden": 0,
                     "added_by": "628905acfc8a650ccd42368e",
                     "created_at": "2022-06-04T08:37:24.931Z",
-                    "__v": 0
+                    "updated_at": "2022-06-04T08:37:24.931Z",
+                    "deleted_at": "2022-06-04T08:37:24.931Z",
                 },
             ]
 
@@ -1856,7 +1874,7 @@ You may delete an existing attendance using this action. It takes a JSON object 
 
 ### List all Summonings [GET]
 
-+ Response 201 (application/json)
++ Response 200 (application/json)
 
            [
                 {
@@ -1876,7 +1894,8 @@ You may delete an existing attendance using this action. It takes a JSON object 
                     "hidden": 0,
                     "added_by": "628905acfc8a650ccd42368e",
                     "created_at": "2022-06-04T08:37:24.931Z",
-                    "__v": 0
+                    "updated_at": "2022-06-04T08:37:24.931Z",
+                    "deleted_at": "2022-06-04T08:37:24.931Z",
                 }
             ]
 
@@ -1915,8 +1934,8 @@ You may add a new summoning using this action. It takes a JSON object containing
     - hidden: 0 (Boolean) - ###### not required
     - added_by: sd3fe2w23 (ObjectId) - ###### required
     - created_at: 2020/12/13 (Date) - ###### required
-    - updated_at: 2020/12/13 (Date) - ###### required
-    - deleted_at: 2020/12/13 (Date) - ###### required
+    - updated_at: 2020/12/13 (Date) - ###### not required
+    - deleted_at: 2020/12/13 (Date) - ###### not required
 
 + Request (application/json)
 
@@ -1933,7 +1952,7 @@ You may add a new summoning using this action. It takes a JSON object containing
                 "added_by": "62927232c8a1c137d5e6ca4f"
             }
             
-+ Response 201 (application/json)
++ Response 200 (application/json)
 
     + Headers
 
@@ -1986,7 +2005,7 @@ You may add a new summoning using this action. It takes a JSON object containing
     
             auth-token: token
 
-+ Response 201 (application/json)
++ Response 200 (application/json)
 
             [
                 {
@@ -2002,7 +2021,8 @@ You may add a new summoning using this action. It takes a JSON object containing
                     "hidden": 0,
                     "added_by": "628905acfc8a650ccd42368e",
                     "created_at": "2022-06-04T08:37:24.931Z",
-                    "__v": 0
+                    "updated_at": "2022-06-04T08:37:24.931Z",
+                    "deleted_at": "2022-06-04T08:37:24.931Z",
                 },
             ]
 
@@ -2037,7 +2057,7 @@ You may add a new summoning using this action. It takes a JSON object containing
     
             auth-token: token
 
-+ Response 201 (application/json)
++ Response 200 (application/json)
 
             [
                 {
@@ -2053,7 +2073,8 @@ You may add a new summoning using this action. It takes a JSON object containing
                     "hidden": 0,
                     "added_by": "628905acfc8a650ccd42368e",
                     "created_at": "2022-06-04T08:37:24.931Z",
-                    "__v": 0
+                    "updated_at": "2022-06-04T08:37:24.931Z",
+                    "deleted_at": "2022-06-04T08:37:24.931Z",
                 },
             ]
 
@@ -2210,7 +2231,7 @@ You may delete an existing summoning using this action. It takes a JSON object c
 
 ### List all Evaluation [GET]
 
-+ Response 201 (application/json)
++ Response 200 (application/json)
 
            [
                 {
@@ -2230,7 +2251,8 @@ You may delete an existing summoning using this action. It takes a JSON object c
                     "hidden": 0,
                     "added_by": "628905acfc8a650ccd42368e",
                     "created_at": "2022-06-04T08:37:24.931Z",
-                    "__v": 0
+                    "updated_at": "2022-06-04T08:37:24.931Z",
+                    "deleted_at": "2022-06-04T08:37:24.931Z",
                 }
             ]
 
@@ -2269,8 +2291,8 @@ You may add a new evaluation using this action. It takes a JSON object containin
     - hidden: 0 (Boolean) - ###### not required
     - added_by: sd3fe2w23 (ObjectId) - ###### required
     - created_at: 2020/12/13 (Date) - ###### required
-    - updated_at: 2020/12/13 (Date) - ###### required
-    - deleted_at: 2020/12/13 (Date) - ###### required
+    - updated_at: 2020/12/13 (Date) - ###### not required
+    - deleted_at: 2020/12/13 (Date) - ###### not required
 
 + Request (application/json)
 
@@ -2287,7 +2309,7 @@ You may add a new evaluation using this action. It takes a JSON object containin
                 "added_by": "62927232c8a1c137d5e6ca4f"
             }
             
-+ Response 201 (application/json)
++ Response 200 (application/json)
 
     + Headers
 
@@ -2340,7 +2362,7 @@ You may add a new evaluation using this action. It takes a JSON object containin
     
             auth-token: token
 
-+ Response 201 (application/json)
++ Response 200 (application/json)
 
             [
                 {
@@ -2356,7 +2378,8 @@ You may add a new evaluation using this action. It takes a JSON object containin
                     "hidden": 0,
                     "added_by": "628905acfc8a650ccd42368e",
                     "created_at": "2022-06-04T08:37:24.931Z",
-                    "__v": 0
+                    "updated_at": "2022-06-04T08:37:24.931Z",
+                     "deleted_at": "2022-06-04T08:37:24.931Z",
                 },
             ]
 
@@ -2391,7 +2414,7 @@ You may add a new evaluation using this action. It takes a JSON object containin
     
             auth-token: token
 
-+ Response 201 (application/json)
++ Response 200 (application/json)
 
             [
                 {
@@ -2407,7 +2430,8 @@ You may add a new evaluation using this action. It takes a JSON object containin
                     "hidden": 0,
                     "added_by": "628905acfc8a650ccd42368e",
                     "created_at": "2022-06-04T08:37:24.931Z",
-                    "__v": 0
+                    "updated_at": "2022-06-04T08:37:24.931Z",
+                     "deleted_at": "2022-06-04T08:37:24.931Z",
                 },
             ]
 
@@ -2564,7 +2588,7 @@ You may delete an existing evaluation using this action. It takes a JSON object 
 
 ### List All Payments [GET]
 
-+ Response 201 (application/json)
++ Response 200 (application/json)
 
         [
             {
@@ -2625,7 +2649,7 @@ You may add a new payment using this action. It takes a JSON object containing t
                 "player": "628905acfc8a650ccd42368e"
             }
 
-+ Response 201 (application/json)
++ Response 200 (application/json)
 
     + Headers
 
@@ -2670,7 +2694,7 @@ You may add a new payment using this action. It takes a JSON object containing t
     
             auth-token: token
 
-+ Response 201 (application/json)
++ Response 200 (application/json)
 
         [
             {
@@ -2836,7 +2860,7 @@ You may delete an existing payment using this action. It takes a JSON object con
 
 ### List all med certificates [GET]
 
-+ Response 201 (application/json)
++ Response 200 (application/json)
 
             [
                 {
@@ -2903,7 +2927,7 @@ You may add a new med certificate using this action. It takes a JSON object cont
                 "verified": true
             }
             
-+ Response 201 (application/json)
++ Response 200 (application/json)
 
     + Headers
 
@@ -2949,7 +2973,7 @@ You may add a new med certificate using this action. It takes a JSON object cont
     
             auth-token: token
 
-+ Response 201 (application/json)
++ Response 200 (application/json)
 
             [
                 {
@@ -3120,7 +3144,7 @@ You may delete an existing med certificate using this action. It takes a JSON ob
 
 ### List All Materials [GET]
 
-+ Response 201 (application/json)
++ Response 200 (application/json)
 
         [
             {
@@ -3179,7 +3203,7 @@ You may add a new material using this action. It takes a JSON object containing 
                 "returned_at": "05/06/2022",
             }
 
-+ Response 201 (application/json)
++ Response 200 (application/json)
 
     + Headers
 
@@ -3224,7 +3248,7 @@ You may add a new material using this action. It takes a JSON object containing 
     
             auth-token: token
 
-+ Response 201 (application/json)
++ Response 200 (application/json)
 
         [
             "description":"borsone",
@@ -3341,10 +3365,301 @@ You may delete an existing material using this action. It takes a JSON object co
             }
 
 
+
 + Response 200 (application/json)
     + Headers
 
             Location: /api/v2/material/
+            
+    + Body
+
+            {
+                "result":"Succesfully removed `req.body.id`"
+            }
+
++ Response 400 (application/json)
+
+
+    + Body
+
+            {
+                "error":"Object passed has incorrect values."
+            }
+
++ Response 401 (application/json)
+
+
+    + Body
+
+            {
+                "error":"No token provided."
+            }
+            
++ Response 403 (application/json)
+
+
+    + Body
+
+            {
+                "error":"Invalid token. / User is not admin."
+            }
+
++ Response 500 (application/json)
+
+            {
+                "error": "Database error message"
+            }
+            
+## Communication [/api/v2/communication]
+
+### List All Communications [GET]
+
++ Response 200 (application/json)
+
+        [
+            {
+                "teams": [
+                        {
+                            "_id": "6298c3103818deda59b34104",
+                            "category": "Esordienti"
+                        }
+                    ],
+                "subject":"cena di squadra",
+                "text": "cena di squadra",
+                "added_by": "628905acfc8a650ccd42368e",
+                "created_at": "2022-06-04T08:37:23.993Z",
+                },
+
+            }
+        ]
++ Response 401 (application/json)
+
+    + Body
+
+            {
+                "error":"Invalid Token"
+            }
++ Response 403 (application/json)
+
+
+    + Body
+
+            {
+                "error":"Invalid token. / User is not admin."
+            }
+
++ Response 500 (application/json)
+
+            {
+                "error": "Database error message"
+            }
+### Add a new communication [POST]
+You may add a new communication using this action. It takes a JSON object containing the necessary information.
+
++ Parameters
+
+    - team: 200 (Number) - ###### required
+    - subject: cena di squadra (String) - ###### required
+    - text: cena di squadra (String) - ###### required
+    - added_by: 628905acfc8a650ccd42368e (ObjectId) - ###### required
+    - created_at: 05/06/2022 (date) - ###### required
++ Request (application/json)
+
+    + Headers
+    
+            auth-token: token
+    
+    + Body
+
+            {
+                "teams": [
+                        {
+                            "_id": "6298c3103818deda59b34104",
+                            "category": "Esordienti"
+                        }
+                    ],
+                "subject":"cena di squadra",
+                "text": "cena di squadra",
+                "added_by": "628905acfc8a650ccd42368e",
+                "created_at": "2022-06-04T08:37:23.993Z",
+            }
+
++ Response 200 (application/json)
+
+    + Headers
+
+            Location: /api/v2/communication/
+
+    + Body
+
+            {
+                "communication": "628905acfc8a650ccd42368e"
+            }
++ Response 401 (application/json)
+
+
+    + Body
+
+            {
+                "error":"Invalid Token"
+            }
+            
++ Response 403 (application/json)
+
+
+    + Body
+
+            {
+                "error":"Invalid token. / User is not admin."
+            }
+
++ Response 500 (application/json)
+
+            {
+                "error": "Database error message"
+            }
+
+## Specific communication [/api/v2/communication/{idcommunication}]
+
+### Getting specific communication[GET]
+
++ Request (application/json)
+
+    + Headers
+    
+            auth-token: token
+
++ Response 200 (application/json)
+
+        [
+            {
+            "teams": [
+                        {
+                            "_id": "6298c3103818deda59b34104",
+                            "category": "Esordienti"
+                        }
+                    ],
+                "subject":"cena di squadra",
+                "text": "cena di squadra",
+                "added_by": "628905acfc8a650ccd42368e",
+                "created_at": "2022-06-04T08:37:23.993Z",
+            },
+        ]
+
++ Response 401 (application/json)
+
+    + Body
+
+            {
+                "error":"Invalid Token"
+            }
+            
++ Response 403 (application/json)
+
+
+    + Body
+
+            {
+                "error":"Invalid token. / User is not admin."
+            }
+
++ Response 500 (application/json)
+
+            {
+                "error": "Database error message"
+            }
+
+### Update a specific communication [PATCH]
+
+You may update an existing communication using this action. It takes a JSON object containing the new complete information.
+
++ Request (application/json)
+
+    + Headers
+    
+            auth-token: token
+    
+    + Body
+
+            {
+                "teams": [
+                        {
+                            "_id": "6298c3103818deda59b34104",
+                            "category": "Esordienti"
+                        }
+                    ],
+                "subject":"cena di squadra",
+                "text": "cena di squadra",
+                "added_by": "628905acfc8a650ccd42368e",
+                "created_at": "2022-06-04T08:37:23.993Z",
+            }
+
++ Response 200 (application/json)
+
+    + Headers
+
+            Location: /api/v2/communication/
+
+    + Body
+
+            {
+                "message": "Success updating"
+            }
+
++ Response 400 (application/json)
+
+
+    + Body
+
+            {
+                "error":"Object sent is not a communication."
+            }
+
++ Response 401 (application/json)
+
+
+    + Body
+
+            {
+                "error":"No token provided."
+            }
+            
++ Response 403 (application/json)
+
+
+    + Body
+
+            {
+                "error":"Invalid token. / User is not admin."
+            }
+
++ Response 500 (application/json)
+
+            {
+                "error": "Database error message"
+            }
+            
+### Delete a specific communication [DELETE]
+
+You may delete an existing communication using this action. It takes a JSON object containing the id of the communication to delete.
+
++ Request (application/json)
+
+    + Headers
+    
+            auth-token: token
+    
+    + Body
+
+            {
+                "_id": "62894da00842bba6fcfbc9a3",
+            }
+
+
++ Response 200 (application/json)
+    + Headers
+
+            Location: /api/v2/communication/
             
     + Body
 
