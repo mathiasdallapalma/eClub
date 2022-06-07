@@ -1,2 +1,2 @@
-api: node server/server.js
+api: node server/index.js
 test: jest
