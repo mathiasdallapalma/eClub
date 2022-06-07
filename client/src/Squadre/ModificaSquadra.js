@@ -43,7 +43,7 @@ const ModificaSquadra = ()=>{
     
 
     const getSquadra = async(handler) => {
-        let response= await Axios.get('http://localhost:3001/api/v1/team/'+params.id,{
+        let response= await Axios.get(process.env.URL+'/api/v1/team/'+params.id,{
             headers:{
                 "auth-token":sessionStorage.getItem('token')}
             })
@@ -64,7 +64,7 @@ const ModificaSquadra = ()=>{
     },[squadra]);
 
     const getTesserati = async(handler) => {
-        let response= await Axios.get('http://localhost:3001/api/v1/user',{
+        let response= await Axios.get(process.env.URL+'/api/v1/user',{
             headers:{
                 "auth-token":sessionStorage.getItem('token')}
             });
@@ -135,7 +135,7 @@ const ModificaSquadra = ()=>{
     const salva=()=>{
         /*
         if(categoria!=squadra.category){
-            Axios.patch('http://localhost:3001/api/v1/team/'+params.id,{
+            Axios.patch(process.env.URL+'/api/v1/team/'+params.id,{
                 category:categoria
             },
             {headers:{
@@ -149,7 +149,7 @@ const ModificaSquadra = ()=>{
         }
 
     checked.forEach(element => {
-        Axios.patch('http://localhost:3001/api/v1/user/'+element,{
+        Axios.patch(process.env.URL+'/api/v1/user/'+element,{
             team_id:params.id
         },
         {headers:{
@@ -163,7 +163,7 @@ const ModificaSquadra = ()=>{
     });
 
     unchecked.forEach(element => {
-        Axios.patch('http://localhost:3001/api/v1/user/'+element,{
+        Axios.patch(process.env.URL+'/api/v1/user/'+element,{
             team_id:"000000000000000000000000"
         },
         {headers:{

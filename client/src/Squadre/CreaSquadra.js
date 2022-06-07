@@ -24,7 +24,7 @@ const CreaSquadra = ()=>{
     const [gas,setGas]=useState([]);
 
     const fetchData = async(handler) => {
-        let response= await Axios.get('http://localhost:3001/api/v1/user',{
+        let response= await Axios.get(process.env.URL+'/api/v1/user',{
         headers:{
             "auth-token":sessionStorage.getItem('token')}
         })
@@ -80,7 +80,7 @@ const CreaSquadra = ()=>{
         temp=temp.concat(checked);
         var newTeam_id;
         
-        Axios.post('http://localhost:3001/api/v1/team',{
+        Axios.post(process.env.URL+'/api/v1/team',{
                 category: categoria,
                 added_by:sessionStorage.getItem("user_id")},
         {headers:{

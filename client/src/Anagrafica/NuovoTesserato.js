@@ -28,7 +28,7 @@ const NuovoTesserato = ()=>{
     const[ruoliOptions,setRuoliOptions]=useState([]);
 
     const salva=()=>{
-        Axios.post('http://localhost:3001/api/v1/user',{
+        Axios.post(process.env.URL+'/api/v1/user',{
                 email: email,
                 name: nome,
                 surname: cognome,
@@ -54,7 +54,7 @@ const NuovoTesserato = ()=>{
     };
 
     const fetchData = async(handler) => {
-        let response= await Axios.get('http://localhost:3001/api/v1/usertype',{
+        let response= await Axios.get(process.env.URL+'/api/v1/usertype',{
         headers:{
             "auth-token":sessionStorage.getItem('token')}
         })

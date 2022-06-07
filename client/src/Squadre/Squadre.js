@@ -16,7 +16,7 @@ const Squadre = ()=>{
     const [tesseratiList,settesseratiList]=useState([]);
 
     const getSquadre = async(handler) => {
-        let response= await Axios.get('http://localhost:3001/api/v1/team',{
+        let response= await Axios.get(process.env.URL+'/api/v1/team',{
             headers:{
                 "auth-token":sessionStorage.getItem('token')}
             })
@@ -24,7 +24,7 @@ const Squadre = ()=>{
             temp=temp.filter(function(ele){ 
                 return ele._id != "000000000000000000000000"; 
             });
-            response= await Axios.get('http://localhost:3001/api/v1/user',{
+            response= await Axios.get(process.env.URL+'/api/v1/user',{
             headers:{
                 "auth-token":sessionStorage.getItem('token')}
             })

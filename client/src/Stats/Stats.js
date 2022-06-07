@@ -47,7 +47,7 @@ const Stats = ()=>{
     },[evaluations]);
 
     const getEvaluations = async(handler) => {
-        let response= await Axios.get('http://localhost:3001/api/v2/evaluation',{
+        let response= await Axios.get(process.env.URL+'/api/v2/evaluation',{
             headers:{
                 "auth-token":sessionStorage.getItem('token')}
             })
@@ -65,7 +65,7 @@ const Stats = ()=>{
     },[attendances]);
 
     const getAttendances = async(handler) => {
-        let response= await Axios.get('http://localhost:3001/api/v2/attendance',{
+        let response= await Axios.get(process.env.URL+'/api/v2/attendance',{
         headers:{
             "auth-token":sessionStorage.getItem('token')}
         })

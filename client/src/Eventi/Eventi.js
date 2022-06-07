@@ -23,7 +23,7 @@ const Eventi = ()=>{
     const[eventi,setEventi]=useState([]);
 
     const getAllEventi = async(handler) => {
-        let response= await Axios.get('http://localhost:3001/api/v2/event',{
+        let response= await Axios.get(process.env.URL+'/api/v2/event',{
         headers:{
             "auth-token":sessionStorage.getItem('token')}
         })
@@ -32,7 +32,7 @@ const Eventi = ()=>{
         
     }
     const getEventiByTeam = async(handler) => {
-        let response= await Axios.get('http://localhost:3001/api/v2/event/team/'+user.team_id,{
+        let response= await Axios.get(process.env.URL+'/api/v2/event/team/'+user.team_id,{
         headers:{
             "auth-token":sessionStorage.getItem('token')}
         })

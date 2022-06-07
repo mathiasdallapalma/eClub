@@ -30,7 +30,7 @@ const ModificaProfilo = ()=>{
     const user=JSON.parse(sessionStorage.getItem("user_toModify"))
 
     const salva=()=>{
-        Axios.patch('http://localhost:3001/api/v1/user/'+user._id,{
+        Axios.patch(process.env.URL+'/api/v1/user/'+user._id,{
                 name: nome,
                 surname: cognome,
                 password: "1234567",

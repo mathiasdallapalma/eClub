@@ -23,7 +23,7 @@ const Evento = ()=>{
     const [dateString,setDateString]=useState("");
 
     const fetchData = async(handler) => {
-        let response= await Axios.get('http://localhost:3001/api/v2/event/'+params.id,{
+        let response= await Axios.get(process.env.URL+'/api/v2/event/'+params.id,{
         headers:{
             "auth-token":sessionStorage.getItem('token')}
         })
@@ -77,7 +77,7 @@ const Evento = ()=>{
     const [tesseratiList,settesseratiList]=useState([]);
 
     const getUsers = async(handler) => {
-        let response= await Axios.get('http://localhost:3001/api/v2/summoning/event/'+params.id,{
+        let response= await Axios.get(process.env.URL+'/api/v2/summoning/event/'+params.id,{
         headers:{
             "auth-token":sessionStorage.getItem('token')}
         })
@@ -126,7 +126,7 @@ const Evento = ()=>{
         },[evento]);
 
     const elimina=()=>{
-        Axios.delete('http://localhost:3001/api/v2/event/'+params.id,{
+        Axios.delete(process.env.URL+'/api/v2/event/'+params.id,{
         headers:{
             "auth-token":sessionStorage.getItem('token')},
         params:{
