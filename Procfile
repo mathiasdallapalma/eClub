@@ -1,2 +1,2 @@
 web:node server/index.js
-test:jest
+test:jest rimraf -g
