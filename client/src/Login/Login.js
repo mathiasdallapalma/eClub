@@ -18,7 +18,7 @@ const Login = ()=>{
 
     const login=()=>{
         console.log(email+' '+password);
-        Axios.post('http://localhost:3001/api/v1/auth',{
+        Axios.post('https://is-eclub.herokuapp.com/api/v1/auth',{
             email: email,
             password: password,
         }).then((response)=>{
