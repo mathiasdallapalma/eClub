@@ -1,5 +1,3 @@
-require('dotenv').config()
-
 const express = require('express');
 const app = express();
 const mongoose = require('mongoose');
@@ -14,9 +12,9 @@ app.use(cors());
 
 /* --- Routes v1 --- */
 const authRoute = require('./routes/auth');
-const userRoute = require('./routes/User');
-const userTypeRoute = require('./routes/UserType');
-const teamRoute = require('./routes/Team');
+const userRoute = require('./routes/user');
+const userTypeRoute = require('./routes/usertype');
+const teamRoute = require('./routes/team');
 const passwordResetRoute = require('./routes/password_reset');
 
 app.use("/api/v1/user", userRoute)
@@ -27,11 +25,11 @@ app.use("/api/v1/password_reset", passwordResetRoute)
 
 /* --- Routes v2 --- */
 const eventRoute = require('./routes/event');
-const eventTypeRoute = require('./routes/EventType');
+const eventTypeRoute = require('./routes/eventtype');
 const attendanceRoute = require('./routes/attendance');
 const evaluationRoute = require('./routes/evaluation');
 const summoningRoute = require('./routes/summoning');
-const paymentRoute = require ('./routes/Payment');
+const paymentRoute = require ('./routes/payment');
 const medRoute = require('./routes/med');
 const communicationRoute = require('./routes/communication');
 const materialRoute = require('./routes/material');

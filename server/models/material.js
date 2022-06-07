@@ -1,4 +1,4 @@
-const User = require('./User')
+const User = require('./user.js')
 const mongoose = require('mongoose')
 
 const MaterialSchema = new mongoose.Schema({

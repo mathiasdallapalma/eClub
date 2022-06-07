@@ -1,7 +1,7 @@
 const express = require('express');
 const req = require('express/lib/request');
 const router = express.Router();
-const EventType = require('../models/EventType')
+const EventType = require('../models/eventtype.js')
 const bcrypt = require('bcryptjs')
 const {eventTypeValidation}= require('../validation')
 const verify = require('./verifyToken');

@@ -2,7 +2,7 @@ const app = require('../app');
 const request = require('supertest');
 const jwt = require('jsonwebtoken');
 const mongoose = require("mongoose");
-const UserType = require('../models/UserType');
+const UserType = require('../models/usertype.js');
 
 require("dotenv").config();
 

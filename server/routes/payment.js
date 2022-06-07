@@ -1,9 +1,9 @@
 const express = require('express');
 const req = require('express/lib/request');
 const Joi = require('joi');
-const payment = require('../models/Payment');
+const payment = require('../models/payment.js');
 const router = express.Router();
-const Payment = require('../models/Payment');
+const Payment = require('../models/payment.js');
 const verify = require('./verifyToken');
 const authorization = require('./authToken');
 const {paymentValidation}= require('../validation')

@@ -2,11 +2,11 @@ const app = require('../app')
 const request = require('supertest');
 const jwt = require('jsonwebtoken');
 const mongoose = require("mongoose");
-const Attendance = require('../models/Attendance');
-const Event = require('../models/Event');
-const User = require('../models/User');
-const Team = require('../models/Team');
-const EventType = require('../models/EventType');
+const Attendance = require('../models/attendance.js');
+const Event = require('../models/event.js');
+const User = require('../models/user.js');
+const Team = require('../models/team.js');
+const EventType = require('../models/eventtype.js');
 
 const { EventEmitter } = require('nodemailer/lib/xoauth2');
 

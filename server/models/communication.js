@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
-const Team = require('./Team')
-const User = require('./User')
+const Team = require('./team.js')
+const User = require('./user.js')
 
 
 const CommunicationSchema = new mongoose.Schema({

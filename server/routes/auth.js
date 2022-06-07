@@ -1,9 +1,8 @@
-require('dotenv').config() 
 const bcrypt = require('bcryptjs')
 const express = require('express');
 const req = require('express/lib/request');
 const router = express.Router();
-const User = require('../models/User')
+const User = require('../models/user.js')
 const {loginValidation}= require('../validation')
 const jwt = require('jsonwebtoken');
 

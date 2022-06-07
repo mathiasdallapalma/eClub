@@ -1,8 +1,8 @@
 const { date } = require('joi')
 const mongoose = require('mongoose')
-const User = require('./User')
-const Team = require('./Team')
-const EventType = require('./EventType')
+const User = require('./user.js')
+const Team = require('./team.js')
+const EventType = require('./eventtype.js')
 
 const EventSchema = new mongoose.Schema({
     title:{

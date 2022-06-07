@@ -1,7 +1,7 @@
 const express = require('express');
 const req = require('express/lib/request');
 const router = express.Router();
-const Team = require('../models/Team')
+const Team = require('../models/team.js')
 const {teamValidation}= require('../validation')
 const verify = require('./verifyToken');
 const authorization = require('./authToken');
