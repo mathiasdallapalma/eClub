@@ -11,8 +11,6 @@ import { Checkbox } from '@mui/material';
 import './Login.css';
 const url = process.env.HEROKU
 
-import session from '../index.js';
-
 const Login = ()=>{
     const[email,setEmail]=useState("");
     const[password,setPassword]=useState('');
