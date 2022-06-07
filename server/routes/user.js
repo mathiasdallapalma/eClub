@@ -13,8 +13,8 @@ router.get('/', verify, authorization, async(req, res) => {
 
     try{
         //loading all users
-        const user = await User.find().populate("id_team", ["_id", "category"]).populate("a_type", ["_id", "name"]).populate("added_by", ["_id", "name", "surname"])
-        res.json(user);
+        const user = await User.find().populate("a_type", ["_id", "name","type"]).populate("added_by", ["_id", "name", "surname"])
+        res.status(200).json(user);
     }catch(err){
         res.status(500).json({ message: err });
     }
@@ -23,7 +23,7 @@ router.get('/', verify, authorization, async(req, res) => {
 
 /* --- GET: specific User --- */
 router.get('/:userId', verify, authorization, getUser, async (req, res) => {
-    res.json(res.user)
+    res.status(200).json(res.user)
 })
 
 
@@ -61,7 +61,7 @@ router.post('/', verify, authorization, async (req, res) => {
     })
     try{
         const savedUser = await user.save();
-        res.status(201).json({ user: user._id })
+        res.status(200).json({ user: user._id })
     }catch(err){
         res.status(500).json({ message: err });
     }
@@ -91,22 +91,24 @@ router.patch('/:userId', verify, authorization, async(req,res)=>{
     const emailExist = await User.findOne({email: req.body.email});
     if(emailExist) return res.status(400).send('Email already exists')
 
-    User.findByIdAndUpdate({
-        _id:req.params.userId
-    },{
-        $set:req.body
-    }).then(()=>{
-        res.status(201).json({message:"Success"});
-    }).catch(err => {
-       res.status(500).send(err.message);
-    })
+    try {
+        const user = await User.findById({_id: req.params.userId})
+        if(!user){
+            return res.status(404).json("user not found")
+        }else{
+            User.updateOne({_id: req.params.userId}, {$set:req.body}).exec()
+            res.status(200).json({ message: 'success' })
+        }
+    }catch(err){
+        res.status(500).json({ message: err.message })
+    }
 });
 
 /* --- FUNCTION: get User --- */
 async function getUser(req, res, next) {
     let user
     try {
-        user = await User.findById(req.params.userId).populate("id_team", ["_id", "category"]).populate("a_type", ["_id", "name"]).populate("added_by", ["_id", "name", "surname"])
+        user = await User.findById(req.params.userId).populate("a_type", ["_id", "name"]).populate("added_by", ["_id", "name", "surname"])
         if (user == null) {
             return res.status(404).json({ message: 'Cannot find user' })
         }
